@@ -1,0 +1,53 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+repositories {
+	maven {
+		url = "http://dvs1.progwml6.com/files/maven"
+	}
+}
+
+version = "1.10.2-0.0.0"
+group= "tamaized.TamModized"
+archivesBaseName = "TamModized"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+minecraft {
+    version = "1.10.2-12.18.0.2002-1.10.0"
+    runDir = "run"
+    mappings = "snapshot_20160518"
+    makeObfSourceJar = false
+	useDepAts = true
+}
+
+dependencies {
+	
+}
+
+processResources
+{
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
