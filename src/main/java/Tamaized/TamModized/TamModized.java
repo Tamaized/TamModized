@@ -17,17 +17,17 @@ import org.apache.logging.log4j.Logger;
 
 import Tamaized.TamModized.proxy.AbstractProxy;
 
-@Mod(modid=TamModized.modid, name="VoidCraft", version=TamModized.version)
+@Mod(modid = TamModized.modid, name = "VoidCraft", version = TamModized.version)
 public class TamModized {
-	
+
 	protected final static String version = "0.0.0";
 	public static final String modid = "tammodized";
-	
-	public static String getVersion(){
+
+	public static String getVersion() {
 		return version;
 	}
-	
-	@Instance(modid) 
+
+	@Instance(modid)
 	public static TamModized instance = new TamModized();
 
 	public static FMLEventChannel channel;
@@ -37,30 +37,30 @@ public class TamModized {
 	public static AbstractProxy proxy;
 
 	public static final int WILDCARD_VALUE = OreDictionary.WILDCARD_VALUE;
-	
+
 	public static Logger logger;
 
 	static {
 		FluidRegistry.enableUniversalBucket();
 	}
-	
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		logger = LogManager.getLogger("TamModized");
 		logger.info("Tamaized is now taking over >:)");
-		
+
 		channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(networkChannelName);
-		
+
 		proxy.preInit();
 	}
-	
+
 	@EventHandler
-	public void InitVoidCraft(FMLInitializationEvent event){ 
+	public void InitVoidCraft(FMLInitializationEvent event) {
 		proxy.init();
 	}
 
 	@EventHandler
-	public void postInit(FMLPostInitializationEvent e){ 
+	public void postInit(FMLPostInitializationEvent e) {
 		proxy.postInit();
 	}
 

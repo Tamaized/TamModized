@@ -7,5 +7,5 @@ public abstract class AbstractProxy {
 	public abstract void init();
 
 	public abstract void postInit();
-	
+
 }
