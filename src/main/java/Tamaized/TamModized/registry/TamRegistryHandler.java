@@ -2,6 +2,8 @@ package Tamaized.TamModized.registry;
 
 import java.util.ArrayList;
 
+import Tamaized.TamModized.registry.TamModelResourceHandler.TamModelResource;
+
 public class TamRegistryHandler {
 
 	private ArrayList<ITamRegistry> registry;
@@ -17,7 +19,10 @@ public class TamRegistryHandler {
 	}
 	
 	public void preInit(){
-		for(ITamRegistry reg : registry) reg.preInit();
+		for(ITamRegistry reg : registry){
+			reg.preInit();
+			for(ITamModel model : reg.getModelList()) TamModelResourceHandler.instance.register(TamModelResourceHandler.instance.new TamModelResource(model, reg.getModID()));
+		}
 	}
 	
 	public void init(){

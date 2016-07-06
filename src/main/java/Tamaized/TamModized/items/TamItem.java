@@ -9,10 +9,11 @@ public class TamItem extends Item implements ITamModel {
 
 	private final String name;
 
-	public TamItem(CreativeTabs tab, String n) {
+	public TamItem(CreativeTabs tab, String n, int maxStackSize) {
 		super();
 		name = n;
 		setUnlocalizedName(name);
+		setMaxStackSize(maxStackSize);
 		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + n));
 		this.setCreativeTab(tab);
 	}
