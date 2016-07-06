@@ -11,10 +11,11 @@ public class TamBlockStairs extends BlockStairs implements ITamModel {
 
 	private final String name;
 
-	protected TamBlockStairs(CreativeTabs tab, IBlockState modelState, String n) {
+	public TamBlockStairs(CreativeTabs tab, IBlockState modelState, String n) {
 		super(modelState);
 		name = n;
 		setUnlocalizedName(name);
+		this.useNeighborBrightness = true;
 		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + n));
 		this.setCreativeTab(tab);
 	}
