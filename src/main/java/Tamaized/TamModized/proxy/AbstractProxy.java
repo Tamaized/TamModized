@@ -1,11 +1,19 @@
 package Tamaized.TamModized.proxy;
 
+import Tamaized.TamModized.registry.TamRegistryHandler;
+
 public abstract class AbstractProxy {
 
-	public abstract void preInit();
+	public void preInit(){
+		TamRegistryHandler.instance.preInit();
+	}
 
-	public abstract void init();
+	public void init(){
+		TamRegistryHandler.instance.init();
+	}
 
-	public abstract void postInit();
+	public void postInit(){
+		TamRegistryHandler.instance.postInit();
+	}
 
 }
