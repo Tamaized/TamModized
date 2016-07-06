@@ -13,7 +13,7 @@ public abstract class TamBlockContainer extends BlockContainer implements ITamMo
 
 	private final String name;
 
-	protected TamBlockContainer(CreativeTabs tab, Material material, String n, float hardness) {
+	public TamBlockContainer(CreativeTabs tab, Material material, String n, float hardness) {
 		super(material);
 		name = n;
 		setUnlocalizedName(name);
