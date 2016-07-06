@@ -7,6 +7,7 @@ import net.minecraft.block.BlockFire;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -17,16 +18,26 @@ public abstract class TamBlockFire extends BlockFire implements ITamModel{
 
 	private final String name;
 
-	protected TamBlockFire(CreativeTabs tab, String n) {
+	public TamBlockFire(CreativeTabs tab, String n) {
 		name = n;
 		setUnlocalizedName(name);
-		GameRegistry.register(this.setRegistryName("blocks/" + n));
+		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + n));
 		this.setCreativeTab(tab);
 	}
 	
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public String getModelDir() {
+		return "blocks";
+	}
+
+	@Override
+	public Item getAsItem() {
+		return Item.getItemFromBlock(this);
 	}
 
 	protected boolean canNeighborCatchFire(World worldIn, BlockPos pos){
