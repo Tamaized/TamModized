@@ -1,5 +1,7 @@
 package Tamaized.TamModized.proxy;
 
+import Tamaized.TamModized.registry.TamModelResourceHandler;
+
 public class ClientProxy extends AbstractProxy {
 
 	@Override
@@ -9,7 +11,7 @@ public class ClientProxy extends AbstractProxy {
 
 	@Override
 	public void init() {
-
+		TamModelResourceHandler.instance.compile();
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package Tamaized.TamModized.fluids;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -22,5 +23,15 @@ public class TamFluidBlock extends BlockFluidClassic implements ITamModel{
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public String getModelDir() {
+		return "fluids";
 	} 
+
+	@Override
+	public Item getAsItem() {
+		return Item.getItemFromBlock(this);
+	}
 }

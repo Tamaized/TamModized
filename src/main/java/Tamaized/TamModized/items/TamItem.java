@@ -13,12 +13,22 @@ public class TamItem extends Item implements ITamModel {
 		super();
 		name = n;
 		setUnlocalizedName(name);
-		GameRegistry.register(this.setRegistryName("items/" + n));
+		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + n));
 		this.setCreativeTab(tab);
 	}
 
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public String getModelDir() {
+		return "items";
+	}
+
+	@Override
+	public Item getAsItem() {
+		return this;
 	}
 }

@@ -1,6 +1,7 @@
 package Tamaized.TamModized.tools;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemAxe;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -14,13 +15,23 @@ public class TamAxe extends ItemAxe implements ITamModel {
 		super(material, material.getDamageVsEntity(), -3.0f);
 		name = n;
 		setUnlocalizedName(name);
-		GameRegistry.register(this.setRegistryName("tools/" + n));
+		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + n));
 		this.setCreativeTab(tab);
 	}
 
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public String getModelDir() {
+		return "tool";
+	}
+
+	@Override
+	public Item getAsItem() {
+		return this;
 	}
 
 }

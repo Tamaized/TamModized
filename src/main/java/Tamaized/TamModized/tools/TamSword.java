@@ -1,6 +1,7 @@
 package Tamaized.TamModized.tools;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemSword;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import Tamaized.TamModized.registry.ITamModel;
@@ -13,13 +14,23 @@ public class TamSword extends ItemSword implements ITamModel {
 		super(material);
 		name = n;
 		setUnlocalizedName(name);
-		GameRegistry.register(this.setRegistryName("tools/" + n));
+		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + n));
 		this.setCreativeTab(tab);
 	}
 
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public String getModelDir() {
+		return "tools";
+	}
+
+	@Override
+	public Item getAsItem() {
+		return this;
 	}
 
 }

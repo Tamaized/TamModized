@@ -39,6 +39,16 @@ public abstract class TamBlockSlab extends BlockSlab implements ITamModel {
 	}
 
 	@Override
+	public String getModelDir() {
+		return "blocks";
+	}
+
+	@Override
+	public Item getAsItem() {
+		return Item.getItemFromBlock(this);
+	}
+
+	@Override
 	public String getUnlocalizedName(int meta) {
 		return super.getUnlocalizedName();
 	}
