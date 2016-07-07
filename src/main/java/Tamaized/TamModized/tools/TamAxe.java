@@ -26,7 +26,7 @@ public class TamAxe extends ItemAxe implements ITamModel {
 
 	@Override
 	public String getModelDir() {
-		return "tool";
+		return "tools";
 	}
 
 	@Override

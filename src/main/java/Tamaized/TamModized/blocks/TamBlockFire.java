@@ -8,6 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,7 +22,8 @@ public abstract class TamBlockFire extends BlockFire implements ITamModel{
 	public TamBlockFire(CreativeTabs tab, String n) {
 		name = n;
 		setUnlocalizedName(name);
-		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + n));
+		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + getName()));
+		GameRegistry.register(new ItemBlock(this).setRegistryName(getModelDir() + "/" + getName()));
 		this.setCreativeTab(tab);
 	}
 	
