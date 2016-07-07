@@ -12,6 +12,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -34,7 +35,8 @@ public abstract class TamBlockPortal extends BlockBreakable implements ITamModel
 		this.setLightLevel(0.75F);
 		name = n;
 		setUnlocalizedName(name);
-		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + n));
+		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + getName()));
+		GameRegistry.register(new ItemBlock(this).setRegistryName(getModelDir() + "/" + getName()));
 		this.setCreativeTab(tab);
 	}
 

@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import Tamaized.TamModized.registry.ITamModel;
 
@@ -16,7 +17,8 @@ public class TamBlock extends Block implements ITamModel {
 		name = n;
 		setUnlocalizedName(name);
 		setHardness(hardness);
-		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + n));
+		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + getName()));
+		GameRegistry.register(new ItemBlock(this).setRegistryName(getModelDir() + "/" + getName()));
 		this.setCreativeTab(tab);
 	}
 

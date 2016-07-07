@@ -5,6 +5,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.world.World;
@@ -20,7 +21,8 @@ public abstract class TamBlockContainer extends BlockContainer implements ITamMo
 		name = n;
 		setUnlocalizedName(name);
 		setHardness(hardness);
-		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + n));
+		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + getName()));
+		GameRegistry.register(new ItemBlock(this).setRegistryName(getModelDir() + "/" + getName()));
 		this.setCreativeTab(tab);
 	}
 

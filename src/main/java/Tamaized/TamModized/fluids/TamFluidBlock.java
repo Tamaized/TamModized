@@ -3,6 +3,7 @@ package Tamaized.TamModized.fluids;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -16,7 +17,8 @@ public class TamFluidBlock extends BlockFluidClassic implements ITamModel{
 		super(fluid, material);
 		this.name = name;
 		setUnlocalizedName(name);
-		GameRegistry.register(this.setRegistryName(name));
+		GameRegistry.register(this.setRegistryName(getName()));
+		GameRegistry.register(new ItemBlock(this).setRegistryName(getName()));
 		this.setCreativeTab(tab);
 	}
 
