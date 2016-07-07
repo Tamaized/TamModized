@@ -2,15 +2,14 @@ package Tamaized.TamModized.registry;
 
 import java.util.ArrayList;
 
+import Tamaized.TamModized.TamModized;
 import Tamaized.TamModized.registry.TamModelResourceHandler.TamModelResource;
 
 public class TamRegistryHandler {
 
 	private ArrayList<ITamRegistry> registry;
 
-	public static final TamRegistryHandler instance = new TamRegistryHandler();
-
-	private TamRegistryHandler() {
+	public TamRegistryHandler() {
 		registry = new ArrayList<ITamRegistry>();
 	}
 

@@ -7,18 +7,18 @@ public class ClientProxy extends AbstractProxy {
 
 	@Override
 	public void preInit() {
-		TamRegistryHandler.instance.clientPreInit();
+		super.preInit();
 	}
 
 	@Override
 	public void init() {
-		TamRegistryHandler.instance.clientInit();
+		super.init();
 		TamModelResourceHandler.instance.compile();
 	}
 
 	@Override
 	public void postInit() {
-		TamRegistryHandler.instance.clientPostInit();
+		super.postInit();
 	}
 
 }

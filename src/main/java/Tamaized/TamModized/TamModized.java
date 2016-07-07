@@ -38,7 +38,7 @@ public class TamModized {
 
 	public static final int WILDCARD_VALUE = OreDictionary.WILDCARD_VALUE;
 
-	public static Logger logger;
+	public static final Logger logger = LogManager.getLogger("TamModized");
 
 	static {
 		FluidRegistry.enableUniversalBucket();
@@ -46,7 +46,6 @@ public class TamModized {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		logger = LogManager.getLogger("TamModized");
 		logger.info("Tamaized is now taking over >:)");
 
 		channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(networkChannelName);
