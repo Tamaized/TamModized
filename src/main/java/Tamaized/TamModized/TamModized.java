@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 import Tamaized.TamModized.proxy.AbstractProxy;
 
-@Mod(modid = TamModized.modid, name = "VoidCraft", version = TamModized.version)
+@Mod(modid = TamModized.modid, name = "TamModized", version = TamModized.version)
 public class TamModized {
 
 	public final static String version = "0.1.0";
