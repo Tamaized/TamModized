@@ -5,6 +5,7 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import Tamaized.TamModized.registry.ITamModel;
 
@@ -16,7 +17,8 @@ public class TamBlockFence extends BlockFence implements ITamModel {
 		super(materialIn, mapColor);
 		name = n;
 		setUnlocalizedName(name);
-		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + n));
+		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + getName()));
+		GameRegistry.register(new ItemBlock(this).setRegistryName(getModelDir() + "/" + getName()));
 		this.setCreativeTab(tab);
 	}
 

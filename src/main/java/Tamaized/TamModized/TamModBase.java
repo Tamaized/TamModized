@@ -24,21 +24,21 @@ public abstract class TamModBase {
 	}
 
 	/**
-	 * super this last
+	 * super this first if possible
 	 */
 	public void preInit(FMLPreInitializationEvent event) {
 		registryHandler.preInit();
 	}
 
 	/**
-	 * super this last
+	 * super this first if possible
 	 */
 	public void init(FMLInitializationEvent event) {
 		registryHandler.init();
 	}
 
 	/**
-	 * super this last
+	 * super this first if possible
 	 */
 	public void postInit(FMLPostInitializationEvent e) {
 		registryHandler.postInit();
@@ -46,6 +46,27 @@ public abstract class TamModBase {
 
 	protected void register(ITamRegistry r) {
 		registryHandler.register(r);
+	}
+
+	/**
+	 * call this in clientProxy
+	 */
+	public void clientPreInit() {
+		registryHandler.clientPreInit();
+	}
+
+	/**
+	 * call this in clientProxy
+	 */
+	public void clientInit() {
+		registryHandler.clientInit();
+	}
+
+	/**
+	 * call this in clientProxy
+	 */
+	public void clientPostInit() {
+		registryHandler.clientPostInit();
 	}
 
 }

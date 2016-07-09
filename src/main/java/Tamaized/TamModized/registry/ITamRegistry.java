@@ -16,8 +16,5 @@ public interface ITamRegistry {
 	public ArrayList<ITamModel> getModelList();
 	
 	public String getModID();
-	
-	@SideOnly(Side.CLIENT)
-	public void setupRender();
 
 }

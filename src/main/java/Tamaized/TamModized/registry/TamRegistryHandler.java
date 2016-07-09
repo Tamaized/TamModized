@@ -20,6 +20,7 @@ public class TamRegistryHandler {
 	public void preInit(){
 		for(ITamRegistry reg : registry){
 			reg.preInit();
+			if(reg instanceof TamFluidRegistryBase) continue;
 			for(ITamModel model : reg.getModelList()) TamModelResourceHandler.instance.register(TamModelResourceHandler.instance.new TamModelResource(model, reg.getModID()));
 		}
 	}
@@ -33,15 +34,19 @@ public class TamRegistryHandler {
 	}
 	
 	public void clientPreInit(){
-		//for(ITamRegistry reg : registry) reg.preInit();
+		for(ITamRegistry reg : registry){
+			if(reg instanceof TamFluidRegistryBase){
+				((TamFluidRegistryBase) reg).preInitRender();
+			}
+		}
 	}
 	
 	public void clientInit(){
-		for(ITamRegistry reg : registry) reg.setupRender();
+		
 	}
 	
 	public void clientPostInit(){
-		//for(ITamRegistry reg : registry) reg.postInit();
+		
 	}
 
 }
