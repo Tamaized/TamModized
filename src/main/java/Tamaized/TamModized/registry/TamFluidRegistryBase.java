@@ -18,14 +18,11 @@ public abstract class TamFluidRegistryBase implements ITamRegistry {
 	private ArrayList<BlockFluidBase> fluids = new ArrayList<BlockFluidBase>();
 
 	protected void register(BlockFluidBase fluid) {
-		System.out.println(fluid);
 		fluids.add(fluid);
-		System.out.println(fluids);
 	}
 
 	@SideOnly(Side.CLIENT)
 	public void preInitRender() {
-		System.out.println("Beep Beep "+fluids);
 		for (BlockFluidBase f : fluids) {
 			FluidModelHandler.registerFluidModel(f, getModID());
 		}
@@ -34,7 +31,6 @@ public abstract class TamFluidRegistryBase implements ITamRegistry {
 	protected Fluid createFluid(String name, String textureName, boolean hasFlowIcon) {
 		ResourceLocation still = new ResourceLocation(getModID(), textureName + "_still");
 		ResourceLocation flowing = hasFlowIcon ? new ResourceLocation(getModID(), textureName + "_flow") : still;
-		System.out.println(still);
 		Fluid fluid = new Fluid(name, still, flowing);
 		if (!FluidRegistry.registerFluid(fluid)) fluid = FluidRegistry.getFluid(name);
 		FluidRegistry.addBucketForFluid(fluid);

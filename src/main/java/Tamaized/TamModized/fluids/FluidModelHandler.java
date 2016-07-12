@@ -16,7 +16,6 @@ import Tamaized.TamModized.client.MeshDefinitionFix;
 public class FluidModelHandler {
 
 	public static void registerFluidModel(IFluidBlock fluidBlock, String modid) {
-		System.out.println("Registering "+fluidBlock+" under "+modid);
 		final Item item = Item.getItemFromBlock((Block) fluidBlock);
 
 		ModelBakery.registerItemVariants(item);
