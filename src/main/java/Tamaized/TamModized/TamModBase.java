@@ -1,9 +1,12 @@
 package Tamaized.TamModized;
 
+import net.minecraft.entity.Entity;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.logging.log4j.Logger;
@@ -18,7 +21,9 @@ public abstract class TamModBase {
 	public static Logger logger;
 
 	private TamRegistryHandler registryHandler = new TamRegistryHandler();
-
+	
+	private int modEntityID = 0;
+	
 	static {
 		FluidRegistry.enableUniversalBucket();
 	}
@@ -67,6 +72,11 @@ public abstract class TamModBase {
 	 */
 	public void clientPostInit() {
 		registryHandler.clientPostInit();
+	}
+	
+	protected void registerEntity(Class<? extends Entity> entityClass, String entityName, Object mod, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates){
+		EntityRegistry.registerModEntity(entityClass, entityName, modEntityID, mod, trackingRange, updateFrequency, sendsVelocityUpdates);
+		modEntityID++;
 	}
 
 }

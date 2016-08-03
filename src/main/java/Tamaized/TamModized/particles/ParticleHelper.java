@@ -7,7 +7,9 @@ import io.netty.buffer.Unpooled;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 
+import scala.tools.nsc.settings.Final;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.Vec3d;
@@ -21,23 +23,18 @@ import Tamaized.TamModized.network.ClientPacketHandler;
 
 public class ParticleHelper {
 
-	public static void sendPacketToClients(World world, int id, Vec3d pos, Vec3d target, int range) {
+	public static void sendPacketToClients(World world, int particleID, int handlerID, Vec3d pos, int range, ParticlePacketHelper packetHelper) {
+		System.out.println("sendPacketToClients");
 		ByteBufOutputStream bos = new ByteBufOutputStream(Unpooled.buffer());
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
 			outputStream.writeInt(ClientPacketHandler.TYPE_PARTICLE);
-			outputStream.writeInt(id);
+			outputStream.writeInt(particleID);
+			outputStream.writeInt(handlerID);
 			outputStream.writeDouble(pos.xCoord);
 			outputStream.writeDouble(pos.yCoord);
 			outputStream.writeDouble(pos.zCoord);
-			if (target != null) {
-				outputStream.writeBoolean(true);
-				outputStream.writeDouble(target.xCoord);
-				outputStream.writeDouble(target.yCoord);
-				outputStream.writeDouble(target.zCoord);
-			} else {
-				outputStream.writeBoolean(false);
-			}
+			packetHelper.encode(outputStream);
 			FMLProxyPacket pkt = new FMLProxyPacket(new PacketBuffer(bos.buffer()), TamModized.networkChannelName);
 			if (pkt != null) TamModized.channel.sendToAllAround(pkt, new TargetPoint(world.provider.getDimension(), pos.xCoord, pos.yCoord, pos.zCoord, range));
 			bos.close();
@@ -48,12 +45,12 @@ public class ParticleHelper {
 
 	@SideOnly(Side.CLIENT)
 	public static void decodePacket(ByteBufInputStream packet) {
+		System.out.println("decode");
 		try {
-			int id = packet.readInt();
+			int particleID = packet.readInt();
+			int handlerID = packet.readInt();
 			Vec3d pos = new Vec3d(packet.readDouble(), packet.readDouble(), packet.readDouble());
-			Vec3d target = null;
-			if (packet.readBoolean()) target = new Vec3d(packet.readDouble(), packet.readDouble(), packet.readDouble());
-			spawnParticle(new ParticleContructor(ParticleRegistry.getParticle(id), Minecraft.getMinecraft().theWorld, pos, target));
+			spawnParticle(ParticlePacketHandlerRegistry.getHandler(handlerID).decode(packet, ParticleRegistry.getParticle(particleID), Minecraft.getMinecraft().theWorld, pos));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -61,6 +58,7 @@ public class ParticleHelper {
 
 	@SideOnly(Side.CLIENT)
 	public static void spawnParticle(ParticleContructor particle) {
+		System.out.println("spawnParticle");
 		try {
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle.constructParticle());
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
@@ -71,19 +69,41 @@ public class ParticleHelper {
 	public static class ParticleContructor {
 
 		private final Class<? extends TamParticle> c;
-		private final World worldObj;
-		private final Vec3d pos;
-		private final Vec3d target;
+		private final ArrayList<Class<?>> paramsClass;
+		private final ArrayList<Object> params;
 
-		public ParticleContructor(Class<? extends TamParticle> p, World world, Vec3d pos, Vec3d target) {
+		public ParticleContructor(Class<? extends TamParticle> p, ArrayList<Class<?>> classes, ArrayList<Object> instances) {
 			c = p;
-			worldObj = world;
-			this.pos = pos;
-			this.target = target;
+			paramsClass = classes;
+			params = instances;
 		}
 
 		public TamParticle constructParticle() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-			return c.getDeclaredConstructor(World.class, Vec3d.class, Vec3d.class).newInstance(worldObj, pos, target);
+			return c.getDeclaredConstructor(paramsClass.toArray(new Class<?>[paramsClass.size()])).newInstance(params.toArray(new Object[params.size()]));
+		}
+
+	}
+
+	public static interface IParticlePacketData {
+
+	}
+
+	public static class ParticlePacketHelper {
+
+		private final ParticlePacketBase packetHandler;
+		private final IParticlePacketData data;
+
+		public ParticlePacketHelper(ParticlePacketBase packetBase, IParticlePacketData dat) {
+			packetHandler = packetBase;
+			data = dat;
+		}
+
+		public ParticlePacketHelper(int packetBase, IParticlePacketData dat) {
+			this(ParticlePacketHandlerRegistry.getHandler(packetBase), dat);
+		}
+
+		public final void encode(DataOutputStream stream) throws IOException {
+			packetHandler.encode(stream, data);
 		}
 
 	}
