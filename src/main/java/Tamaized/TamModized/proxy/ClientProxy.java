@@ -1,5 +1,7 @@
 package Tamaized.TamModized.proxy;
 
+import Tamaized.TamModized.TamModized;
+import Tamaized.TamModized.network.ClientPacketHandler;
 import Tamaized.TamModized.registry.TamModelResourceHandler;
 import Tamaized.TamModized.registry.TamRegistryHandler;
 
@@ -19,6 +21,7 @@ public class ClientProxy extends AbstractProxy {
 	@Override
 	public void postInit() {
 		super.postInit();
+		TamModized.channel.register(new ClientPacketHandler());
 	}
 
 }

@@ -22,7 +22,7 @@ public abstract class TamFluidRegistryBase implements ITamRegistry {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void preInitRender() {
+	public void clientPreInit() {
 		for (BlockFluidBase f : fluids) {
 			FluidModelHandler.registerFluidModel(f, getModID());
 		}

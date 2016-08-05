@@ -12,6 +12,15 @@ public interface ITamRegistry {
 	public void init();
 	
 	public void postInit();
+
+	@SideOnly(Side.CLIENT)
+	public void clientPreInit();
+
+	@SideOnly(Side.CLIENT)
+	public void clientInit();
+
+	@SideOnly(Side.CLIENT)
+	public void clientPostInit();
 	
 	public ArrayList<ITamModel> getModelList();
 	

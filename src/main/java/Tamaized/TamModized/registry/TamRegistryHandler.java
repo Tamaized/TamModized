@@ -2,6 +2,8 @@ package Tamaized.TamModized.registry;
 
 import java.util.ArrayList;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import Tamaized.TamModized.TamModized;
 import Tamaized.TamModized.registry.TamModelResourceHandler.TamModelResource;
 
@@ -32,21 +34,20 @@ public class TamRegistryHandler {
 	public void postInit(){
 		for(ITamRegistry reg : registry) reg.postInit();
 	}
-	
+
+	@SideOnly(Side.CLIENT)
 	public void clientPreInit(){
-		for(ITamRegistry reg : registry){
-			if(reg instanceof TamFluidRegistryBase){
-				((TamFluidRegistryBase) reg).preInitRender();
-			}
-		}
+		for(ITamRegistry reg : registry) reg.clientPreInit();
 	}
-	
+
+	@SideOnly(Side.CLIENT)
 	public void clientInit(){
-		
+		for(ITamRegistry reg : registry) reg.clientInit();
 	}
-	
+
+	@SideOnly(Side.CLIENT)
 	public void clientPostInit(){
-		
+		for(ITamRegistry reg : registry) reg.clientPostInit();
 	}
 
 }

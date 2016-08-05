@@ -7,6 +7,8 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.logging.log4j.Logger;
@@ -56,6 +58,7 @@ public abstract class TamModBase {
 	/**
 	 * call this in clientProxy
 	 */
+	@SideOnly(Side.CLIENT)
 	public void clientPreInit() {
 		registryHandler.clientPreInit();
 	}
@@ -63,6 +66,7 @@ public abstract class TamModBase {
 	/**
 	 * call this in clientProxy
 	 */
+	@SideOnly(Side.CLIENT)
 	public void clientInit() {
 		registryHandler.clientInit();
 	}
@@ -70,6 +74,7 @@ public abstract class TamModBase {
 	/**
 	 * call this in clientProxy
 	 */
+	@SideOnly(Side.CLIENT)
 	public void clientPostInit() {
 		registryHandler.clientPostInit();
 	}
