@@ -32,7 +32,6 @@ public class ClientPacketHandler {
 			ByteBufInputStream bbis = new ByteBufInputStream(packet);
 			{
 				int pktType = bbis.readInt();
-				System.out.println(pktType);
 				switch (pktType) {
 					case TYPE_PARTICLE:
 						ParticleHelper.decodePacket(bbis);
