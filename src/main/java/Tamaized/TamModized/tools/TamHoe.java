@@ -14,6 +14,7 @@ public class TamHoe extends ItemHoe implements ITamModel {
 	public TamHoe(CreativeTabs tab, ToolMaterial material, String n) {
 		super(material);
 		name = n;
+		setUnlocalizedName(name);
 		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + n));
 		this.setCreativeTab(tab);
 	}

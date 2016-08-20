@@ -14,6 +14,7 @@ public class TamSpade extends ItemSpade implements ITamModel {
 	public TamSpade(CreativeTabs tab, ToolMaterial material, String n) {
 		super(material);
 		name = n;
+		setUnlocalizedName(name);
 		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + n));
 		this.setCreativeTab(tab);
 	}
