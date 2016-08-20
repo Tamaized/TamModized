@@ -20,7 +20,7 @@ import Tamaized.TamModized.proxy.AbstractProxy;
 @Mod(modid = TamModized.modid, name = "TamModized", version = TamModized.version)
 public class TamModized {
 
-	public final static String version = "0.1.6";
+	public final static String version = "0.1.7";
 	public static final String modid = "tammodized";
 
 	public static String getVersion() {

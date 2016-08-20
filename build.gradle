@@ -18,7 +18,7 @@ repositories {
 	}
 }
 
-version = "1.10.2-0.1.6"
+version = "1.10.2-0.1.7"
 group= "tamaized.TamModized"
 archivesBaseName = "TamModized"
 
