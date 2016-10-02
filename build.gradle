@@ -18,7 +18,7 @@ repositories {
 	}
 }
 
-version = "1.10.2-0.1.7"
+version = "${project.minecraftVersion}-${modVersion}${modVersionValue}"
 group= "tamaized.TamModized"
 archivesBaseName = "TamModized"
 
@@ -26,11 +26,13 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 minecraft {
-    version = "1.10.2-12.18.0.2002-1.10.0"
+    version = "${project.minecraftVersion}-${project.forgeVersion}"
     runDir = "run"
-    mappings = "snapshot_20160518"
+    mappings = "${project.forgeMapping}"
     makeObfSourceJar = false
 	useDepAts = true
+	replaceIn 'TamModized.java'
+	replace '${version}', "${modVersion}${modVersionValue}"
 }
 
 dependencies {
@@ -40,11 +42,11 @@ dependencies {
 processResources
 {
     inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+    inputs.property "mcversion", project.minecraftVersion
 
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand 'version':project.modVersion+""+project.modVersionValue, 'mcversion':project.minecraftVersion
     }
         
     from(sourceSets.main.resources.srcDirs) {
