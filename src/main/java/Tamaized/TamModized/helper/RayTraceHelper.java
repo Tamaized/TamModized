@@ -19,7 +19,7 @@ public class RayTraceHelper {
 	}
 
 	public static Vec3d[] getPlayerTraceVec(EntityPlayer player, int distance) {
-		Vec3d vec3d = player.getPositionEyes(1.0f);
+		Vec3d vec3d = new Vec3d(player.posX, player.posY + (double)player.getEyeHeight(), player.posZ);
 		Vec3d vec3d1 = player.getLook(1.0f);
 		Vec3d vec3d2 = vec3d.addVector(vec3d1.xCoord * distance, vec3d1.yCoord * distance, vec3d1.zCoord * distance);
 		return new Vec3d[] { vec3d, vec3d2 };
