@@ -11,13 +11,19 @@ public abstract class TamTileEntity extends TileEntity implements ITickable {
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
+		readNBT(nbt);
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
+		writeNBT(nbt);
 		return nbt;
 	}
+	
+	protected abstract void readNBT(NBTTagCompound nbt);
+	
+	protected abstract NBTTagCompound writeNBT(NBTTagCompound nbt);
 
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
