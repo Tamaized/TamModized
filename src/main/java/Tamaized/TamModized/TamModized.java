@@ -1,5 +1,9 @@
 package Tamaized.TamModized;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import Tamaized.TamModized.proxy.AbstractProxy;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -11,11 +15,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.FMLEventChannel;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import Tamaized.TamModized.proxy.AbstractProxy;
 
 @Mod(modid = TamModized.modid, name = "TamModized", version = TamModized.version)
 public class TamModized {
