@@ -1,9 +1,12 @@
 package Tamaized.TamModized.blocks;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import Tamaized.TamModized.blocks.TamBlockContainer;
+import Tamaized.TamModized.registry.ITamModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -16,6 +19,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -23,6 +27,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -72,21 +78,21 @@ public abstract class TamBlockFarmland extends TamBlockContainer {
 			updateState(worldIn, pos, state.withProperty(MOISTURE, Integer.valueOf(7)), 2);
 		}
 	}
-
+	
 	private void updateState(World world, BlockPos pos, IBlockState newState, int flag) {
 		TileEntity te1 = world.getTileEntity(pos);
 		world.setBlockState(pos, newState, flag);
 		TileEntity te2 = world.getTileEntity(pos);
 		updateTiles(te1, te2);
 	}
-
+	
 	private void updateState(World world, BlockPos pos, IBlockState newState) {
 		TileEntity te1 = world.getTileEntity(pos);
 		world.setBlockState(pos, newState);
 		TileEntity te2 = world.getTileEntity(pos);
 		updateTiles(te1, te2);
 	}
-
+	
 	protected abstract void updateTiles(TileEntity oldTile, TileEntity newTile);
 
 	/**
@@ -104,6 +110,18 @@ public abstract class TamBlockFarmland extends TamBlockContainer {
 	private boolean hasCrops(World worldIn, BlockPos pos) {
 		Block block = worldIn.getBlockState(pos.up()).getBlock();
 		return block instanceof net.minecraftforge.common.IPlantable && canSustainPlant(worldIn.getBlockState(pos), worldIn, pos, net.minecraft.util.EnumFacing.UP, (net.minecraftforge.common.IPlantable) block);
+	}
+	
+	@Override
+	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, IPlantable plantable) {
+		return getPlantList().contains(plantable);
+	}
+	
+	protected abstract ArrayList<IPlantable> getPlantList();
+
+	@Override
+	public boolean isFertile(World world, BlockPos pos) {
+		return ((Integer) world.getBlockState(pos).getValue(MOISTURE)) > 0;
 	}
 
 	private boolean hasWater(World worldIn, BlockPos pos) {
