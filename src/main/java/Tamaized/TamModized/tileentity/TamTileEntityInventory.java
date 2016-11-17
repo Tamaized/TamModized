@@ -15,6 +15,8 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 
 	public TamTileEntityInventory(int amountOfSlots) {
 		slots = new ItemStack[amountOfSlots];
+		for (int index = 0; index < slots.length; index++)
+			slots[index] = ItemStack.field_190927_a;
 	}
 
 	@Override
@@ -22,6 +24,8 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 		super.readFromNBT(nbt);
 		NBTTagList list = (NBTTagList) nbt.getTag("Items");
 		slots = new ItemStack[getSizeInventory()];
+		for (int index = 0; index < slots.length; index++)
+			slots[index] = ItemStack.field_190927_a;
 		if (list != null) {
 			for (int i = 0; i < list.tagCount(); i++) {
 				NBTTagCompound nbtc = (NBTTagCompound) list.getCompoundTagAt(i);
@@ -39,7 +43,7 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 		super.writeToNBT(nbt);
 		NBTTagList list = new NBTTagList();
 		for (int i = 0; i < slots.length; i++) {
-			if (slots[i] != null) {
+			if (slots[i].func_190926_b()) {
 				NBTTagCompound nbtc = new NBTTagCompound();
 				nbtc.setByte("Slot", (byte) i);
 				slots[i].writeToNBT(nbtc);
@@ -77,23 +81,23 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 				return itemstack;
 			}
 		}
-		return null;
+		return ItemStack.field_190927_a;
 	}
 
 	@Override
 	public ItemStack removeStackFromSlot(int i) {
-		if (slots[i] != null) {
+		if (slots[i].func_190926_b()) {
 			ItemStack itemstack = slots[i];
-			slots[i] = null;
+			slots[i] = ItemStack.field_190927_a;
 			return itemstack;
 		}
-		return null;
+		return ItemStack.field_190927_a;
 	}
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack stack) {
 		slots[i] = stack;
-		if (stack != null && stack.func_190916_E() > getInventoryStackLimit()) {
+		if (stack.func_190926_b() && stack.func_190916_E() > getInventoryStackLimit()) {
 			stack.func_190920_e(getInventoryStackLimit());
 		}
 	}
