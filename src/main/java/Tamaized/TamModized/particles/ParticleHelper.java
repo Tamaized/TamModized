@@ -46,7 +46,7 @@ public class ParticleHelper {
 		try {
 			int handlerID = packet.readInt();
 			Vec3d pos = new Vec3d(packet.readDouble(), packet.readDouble(), packet.readDouble());
-			spawnParticle(ParticlePacketHandlerRegistry.getHandler(handlerID).decode(packet, Minecraft.getMinecraft().world, pos));
+			spawnParticle(ParticlePacketHandlerRegistry.getHandler(handlerID).decode(packet, Minecraft.getMinecraft().theWorld, pos));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

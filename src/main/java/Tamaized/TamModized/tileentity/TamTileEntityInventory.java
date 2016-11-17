@@ -107,7 +107,7 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return world.getTileEntity(pos) != this ? false : player.getDistanceSq((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D) <= 64.0D;
+		return worldObj.getTileEntity(pos) != this ? false : player.getDistanceSq((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D) <= 64.0D;
 	}
 
 	@Override
