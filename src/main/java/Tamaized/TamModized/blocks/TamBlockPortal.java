@@ -108,10 +108,10 @@ public abstract class TamBlockPortal extends BlockBreakable implements ITamModel
 	 * box can change after the pool has been cleared to be reused)
 	 */
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		return null;
 	}
-
+	
 	/**
 	 * Is this block (a) opaque and (B) a full 1m cube? This determines whether
 	 * or not to render the shared face of two adjacent blocks and also whether

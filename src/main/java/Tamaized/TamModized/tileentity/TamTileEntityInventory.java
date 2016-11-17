@@ -27,7 +27,7 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 				NBTTagCompound nbtc = (NBTTagCompound) list.getCompoundTagAt(i);
 				byte b = nbtc.getByte("Slot");
 				if (b >= 0 && b < slots.length) {
-					slots[b] = ItemStack.loadItemStackFromNBT(nbtc);
+					slots[b] = new ItemStack(nbtc);
 				}
 			}
 		}
@@ -65,13 +65,13 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 	public ItemStack decrStackSize(int i, int j) {
 		if (slots[i] != null) {
 			ItemStack itemstack;
-			if (slots[i].stackSize <= j) {
+			if (slots[i].func_190916_E() <= j) {
 				itemstack = slots[i];
 				slots[i] = null;
 				return itemstack;
 			} else {
 				itemstack = slots[i].splitStack(j);
-				if (slots[i].stackSize == 0) {
+				if (slots[i].func_190916_E() == 0) {
 					slots[i] = null;
 				}
 				return itemstack;
@@ -93,8 +93,8 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 	@Override
 	public void setInventorySlotContents(int i, ItemStack stack) {
 		slots[i] = stack;
-		if (stack != null && stack.stackSize > getInventoryStackLimit()) {
-			stack.stackSize = getInventoryStackLimit();
+		if (stack != null && stack.func_190916_E() > getInventoryStackLimit()) {
+			stack.func_190920_e(getInventoryStackLimit());
 		}
 	}
 
@@ -103,7 +103,7 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return worldObj.getTileEntity(pos) != this ? false : player.getDistanceSq((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D) <= 64.0D;
+		return world.getTileEntity(pos) != this ? false : player.getDistanceSq((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D) <= 64.0D;
 	}
 
 	@Override
