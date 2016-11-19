@@ -184,6 +184,13 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 		return false;
 	}
 
+	@Override
+	public boolean isEmpty() {
+		for (ItemStack stack : slots)
+			if (!stack.isEmpty()) return false;
+		return true;
+	}
+
 	protected abstract boolean canExtractSlot(int i);
 
 	protected abstract boolean canInsertSlot(int i);
