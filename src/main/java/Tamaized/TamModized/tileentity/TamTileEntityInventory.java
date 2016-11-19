@@ -86,7 +86,7 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 
 	@Override
 	public ItemStack removeStackFromSlot(int i) {
-		if (slots[i].isEmpty()) {
+		if (!slots[i].isEmpty()) {
 			ItemStack itemstack = slots[i];
 			slots[i] = ItemStack.EMPTY;
 			return itemstack;
@@ -97,7 +97,7 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 	@Override
 	public void setInventorySlotContents(int i, ItemStack stack) {
 		slots[i] = stack;
-		if (stack.isEmpty() && stack.getCount() > getInventoryStackLimit()) {
+		if (!stack.isEmpty() && stack.getCount() > getInventoryStackLimit()) {
 			stack.setCount(getInventoryStackLimit());
 		}
 	}
