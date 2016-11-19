@@ -16,7 +16,7 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 	public TamTileEntityInventory(int amountOfSlots) {
 		slots = new ItemStack[amountOfSlots];
 		for (int index = 0; index < slots.length; index++)
-			slots[index] = ItemStack.field_190927_a;
+			slots[index] = ItemStack.EMPTY;
 	}
 
 	@Override
@@ -25,7 +25,7 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 		NBTTagList list = (NBTTagList) nbt.getTag("Items");
 		slots = new ItemStack[getSizeInventory()];
 		for (int index = 0; index < slots.length; index++)
-			slots[index] = ItemStack.field_190927_a;
+			slots[index] = ItemStack.EMPTY;
 		if (list != null) {
 			for (int i = 0; i < list.tagCount(); i++) {
 				NBTTagCompound nbtc = (NBTTagCompound) list.getCompoundTagAt(i);
@@ -43,7 +43,7 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 		super.writeToNBT(nbt);
 		NBTTagList list = new NBTTagList();
 		for (int i = 0; i < slots.length; i++) {
-			if (slots[i].func_190926_b()) {
+			if (!slots[i].isEmpty()) {
 				NBTTagCompound nbtc = new NBTTagCompound();
 				nbtc.setByte("Slot", (byte) i);
 				slots[i].writeToNBT(nbtc);
@@ -69,36 +69,36 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 	public ItemStack decrStackSize(int i, int j) {
 		if (slots[i] != null) {
 			ItemStack itemstack;
-			if (slots[i].func_190916_E() <= j) {
+			if (slots[i].getCount() <= j) {
 				itemstack = slots[i];
-				slots[i] = null;
+				slots[i] = ItemStack.EMPTY;
 				return itemstack;
 			} else {
 				itemstack = slots[i].splitStack(j);
-				if (slots[i].func_190916_E() == 0) {
-					slots[i] = null;
+				if (slots[i].getCount() == 0) {
+					slots[i] = ItemStack.EMPTY;
 				}
 				return itemstack;
 			}
 		}
-		return ItemStack.field_190927_a;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public ItemStack removeStackFromSlot(int i) {
-		if (slots[i].func_190926_b()) {
+		if (slots[i].isEmpty()) {
 			ItemStack itemstack = slots[i];
-			slots[i] = ItemStack.field_190927_a;
+			slots[i] = ItemStack.EMPTY;
 			return itemstack;
 		}
-		return ItemStack.field_190927_a;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack stack) {
 		slots[i] = stack;
-		if (stack.func_190926_b() && stack.func_190916_E() > getInventoryStackLimit()) {
-			stack.func_190920_e(getInventoryStackLimit());
+		if (stack.isEmpty() && stack.getCount() > getInventoryStackLimit()) {
+			stack.setCount(getInventoryStackLimit());
 		}
 	}
 
@@ -106,7 +106,7 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 	public abstract int getInventoryStackLimit();
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		return world.getTileEntity(pos) != this ? false : player.getDistanceSq((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D) <= 64.0D;
 	}
 

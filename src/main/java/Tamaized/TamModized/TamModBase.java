@@ -1,6 +1,7 @@
 package Tamaized.TamModized;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -79,8 +80,8 @@ public abstract class TamModBase {
 		registryHandler.clientPostInit();
 	}
 	
-	protected void registerEntity(Class<? extends Entity> entityClass, String entityName, Object mod, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates){
-		EntityRegistry.registerModEntity(entityClass, entityName, modEntityID, mod, trackingRange, updateFrequency, sendsVelocityUpdates);
+	protected void registerEntity(Class<? extends Entity> entityClass, String entityName, Object mod, String modid, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, int eggPrimaryColor, int eggSecondaryColor){
+		EntityRegistry.registerModEntity(new ResourceLocation(modid, entityName), entityClass, entityName, modEntityID, mod, trackingRange, updateFrequency, sendsVelocityUpdates, eggPrimaryColor, eggSecondaryColor);
 		modEntityID++;
 	}
 

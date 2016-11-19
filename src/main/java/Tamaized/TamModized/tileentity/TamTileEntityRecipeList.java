@@ -38,14 +38,14 @@ public abstract class TamTileEntityRecipeList<T extends TamTERecipe> {
 		for (T r : recipes) {
 			if (isInput(item)) return r.getOutput();
 		}
-		return ItemStack.field_190927_a;
+		return ItemStack.EMPTY;
 	}
 
 	public ItemStack getOutput(ItemStack stack) {
 		for (T r : recipes) {
 			if (isInput(stack)) return r.getOutput();
 		}
-		return ItemStack.field_190927_a;
+		return ItemStack.EMPTY;
 	}
 
 	protected abstract String getName();

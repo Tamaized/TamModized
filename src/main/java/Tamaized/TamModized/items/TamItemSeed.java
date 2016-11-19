@@ -31,7 +31,7 @@ public class TamItemSeed extends TamItem implements net.minecraftforge.common.IP
 		net.minecraft.block.state.IBlockState state = worldIn.getBlockState(pos);
 		if (facing == EnumFacing.UP && playerIn.canPlayerEdit(pos.offset(facing), facing, stack) && soil.contains(state.getBlock()) && state.getBlock().canSustainPlant(state, worldIn, pos, EnumFacing.UP, crop) && worldIn.isAirBlock(pos.up())) {
 			worldIn.setBlockState(pos.up(), this.crop.getDefaultState());
-			stack.func_190918_g(1);
+			stack.shrink(1);
 			return EnumActionResult.SUCCESS;
 		} else {
 			return EnumActionResult.FAIL;
