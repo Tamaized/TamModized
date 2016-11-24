@@ -27,7 +27,9 @@ public class TamItemSeed extends TamItem implements net.minecraftforge.common.IP
 	/**
 	 * Called when a Block is right-clicked with this Item
 	 */
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	@Override
+	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack stack = playerIn.getHeldItem(hand);
 		net.minecraft.block.state.IBlockState state = worldIn.getBlockState(pos);
 		if (facing == EnumFacing.UP && playerIn.canPlayerEdit(pos.offset(facing), facing, stack) && soil.contains(state.getBlock()) && state.getBlock().canSustainPlant(state, worldIn, pos, EnumFacing.UP, crop) && worldIn.isAirBlock(pos.up())) {
 			worldIn.setBlockState(pos.up(), this.crop.getDefaultState());
