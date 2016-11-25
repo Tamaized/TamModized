@@ -121,9 +121,6 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 	}
 
 	@Override
-	public abstract boolean isItemValidForSlot(int i, ItemStack stack);
-
-	@Override
 	public int getField(int id) {
 		switch (id) {
 			default:
@@ -165,9 +162,10 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 	public abstract int[] getSlotsForFace(EnumFacing side);
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-		for (int i : getSlotsForFace(direction)) {
-			if (index == i) {
+	public final boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+		int[] array = getSlotsForFace(direction);
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] == index) {
 				return isItemValidForSlot(index, itemStackIn);
 			}
 		}
@@ -175,14 +173,20 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-		for (int i : getSlotsForFace(direction)) {
-			if (index == i) {
-				return canExtractSlot(index);
+	public final boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+		int[] array = getSlotsForFace(direction);
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] == index) {
+				return canExtractSlot(index, stack);
 			}
 		}
 		return false;
 	}
+
+	@Override
+	public abstract boolean isItemValidForSlot(int i, ItemStack stack);
+
+	protected abstract boolean canExtractSlot(int i, ItemStack stack);
 
 	@Override
 	public boolean isEmpty() {
@@ -190,9 +194,5 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 			if (!stack.isEmpty()) return false;
 		return true;
 	}
-
-	protected abstract boolean canExtractSlot(int i);
-
-	protected abstract boolean canInsertSlot(int i);
 
 }

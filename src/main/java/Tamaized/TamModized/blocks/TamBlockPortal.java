@@ -129,12 +129,8 @@ public abstract class TamBlockPortal extends BlockBreakable implements ITamModel
 
 	public abstract boolean tryToCreatePortal(World par1World, BlockPos pos);
 
-	@Deprecated
-	public void func_189540_a(IBlockState p_189540_1_, World p_189540_2_, BlockPos p_189540_3_, Block p_189540_4_) {
-		onNeighborBlockChange(p_189540_1_, p_189540_2_, p_189540_3_, p_189540_4_);
-	}
-
-	public abstract void onNeighborBlockChange(IBlockState p_189540_1_, World p_189540_2_, BlockPos p_189540_3_, Block p_189540_4_);
+	@Override
+	public abstract void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos p_189540_5_);
 
 	/**
 	 * A randomly called display update to be able to add particles or other
