@@ -1,11 +1,10 @@
 package Tamaized.TamModized.network;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufInputStream;
-
 import java.io.IOException;
 
 import Tamaized.TamModized.particles.ParticleHelper;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
@@ -15,6 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ClientPacketHandler {
 
 	public static final int TYPE_PARTICLE = 0;
+	public static final int TYPE_PARTICLE_VANILLA = 1;
 
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
@@ -35,6 +35,9 @@ public class ClientPacketHandler {
 				switch (pktType) {
 					case TYPE_PARTICLE:
 						ParticleHelper.decodePacket(bbis);
+						break;
+					case TYPE_PARTICLE_VANILLA:
+						ParticleHelper.decodePacketVanillaParticle(bbis);
 						break;
 					default:
 						break;
