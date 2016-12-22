@@ -66,13 +66,22 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 	}
 
 	@Override
-	public ItemStack decrStackSize(int slot, int amount) {
-		if (slot < getSizeInventory() && slot >= 0) {
-			getStackInSlot(slot).shrink(amount);
-			return getStackInSlot(slot);
+	public ItemStack decrStackSize(int i, int j) {
+		if (!slots[i].isEmpty()) {
+			ItemStack itemstack;
+			if (slots[i].getCount() <= j) {
+				itemstack = slots[i];
+				slots[i] = ItemStack.EMPTY;
+				return itemstack;
+			} else {
+				itemstack = slots[i].splitStack(j);
+				if (slots[i].getCount() == 0) {
+					slots[i] = ItemStack.EMPTY;
+				}
+				return itemstack;
+			}
 		}
 		return ItemStack.EMPTY;
-
 	}
 
 	@Override
