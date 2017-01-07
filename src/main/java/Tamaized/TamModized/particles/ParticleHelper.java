@@ -4,6 +4,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import Tamaized.TamModized.TamModized;
+import Tamaized.TamModized.helper.PacketHelper;
+import Tamaized.TamModized.helper.PacketHelper.PacketWrapper;
 import Tamaized.TamModized.network.ClientPacketHandler;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
@@ -21,18 +23,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ParticleHelper {
 
 	public static void sendPacketToClients(World world, int handlerID, Vec3d pos, int range, ParticlePacketHelper packetHelper) {
-		ByteBufOutputStream bos = new ByteBufOutputStream(Unpooled.buffer());
-		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
-			outputStream.writeInt(ClientPacketHandler.TYPE_PARTICLE);
-			outputStream.writeInt(handlerID);
-			outputStream.writeDouble(pos.xCoord);
-			outputStream.writeDouble(pos.yCoord);
-			outputStream.writeDouble(pos.zCoord);
-			packetHelper.encode(outputStream);
-			FMLProxyPacket pkt = new FMLProxyPacket(new PacketBuffer(bos.buffer()), TamModized.networkChannelName);
-			if (pkt != null) TamModized.channel.sendToAllAround(pkt, new TargetPoint(world.provider.getDimension(), pos.xCoord, pos.yCoord, pos.zCoord, range));
-			bos.close();
+			PacketWrapper packet = PacketHelper.createPacket(TamModized.channel, TamModized.networkChannelName, ClientPacketHandler.TYPE_PARTICLE);
+			DataOutputStream stream = packet.getStream();
+			stream.writeInt(handlerID);
+			stream.writeDouble(pos.xCoord);
+			stream.writeDouble(pos.yCoord);
+			stream.writeDouble(pos.zCoord);
+			packetHelper.encode(stream);
+			packet.sendPacket(new TargetPoint(world.provider.getDimension(), pos.xCoord, pos.yCoord, pos.zCoord, range));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -55,20 +54,17 @@ public class ParticleHelper {
 	}
 
 	public static void spawnVanillaParticleOnServer(World world, EnumParticleTypes particle, double x, double y, double z, double xS, double yS, double zS) {
-		ByteBufOutputStream bos = new ByteBufOutputStream(Unpooled.buffer());
-		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
-			outputStream.writeInt(ClientPacketHandler.TYPE_PARTICLE_VANILLA);
-			outputStream.writeInt(particle.getParticleID());
-			outputStream.writeDouble(x);
-			outputStream.writeDouble(y);
-			outputStream.writeDouble(z);
-			outputStream.writeDouble(xS);
-			outputStream.writeDouble(yS);
-			outputStream.writeDouble(zS);
-			FMLProxyPacket packet = new FMLProxyPacket(new PacketBuffer(bos.buffer()), TamModized.networkChannelName);
-			if (TamModized.channel != null && packet != null) TamModized.channel.sendToAllAround(packet, new TargetPoint(world.provider.getDimension(), x, y, z, 64));
-			bos.close();
+			PacketWrapper packet = PacketHelper.createPacket(TamModized.channel, TamModized.networkChannelName, ClientPacketHandler.TYPE_PARTICLE_VANILLA);
+			DataOutputStream stream = packet.getStream();
+			stream.writeInt(particle.getParticleID());
+			stream.writeDouble(x);
+			stream.writeDouble(y);
+			stream.writeDouble(z);
+			stream.writeDouble(xS);
+			stream.writeDouble(yS);
+			stream.writeDouble(zS);
+			packet.sendPacket(new TargetPoint(world.provider.getDimension(), x, y, z, 64));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
