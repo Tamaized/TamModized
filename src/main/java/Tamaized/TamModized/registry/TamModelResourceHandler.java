@@ -22,7 +22,7 @@ public class TamModelResourceHandler {
 	}
 
 	public void compile() {
-		TamModized.logger.info("Registering Models");
+		TamModized.instance.logger.info("Registering Models");
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 		for (TamModelResource resource : models) {
 			renderItem.getItemModelMesher().register(resource.model.getAsItem(), 0, new TamModelResourceLocation(resource.modid, resource.model.getModelDir() + "/", resource.model.getName(), "inventory"));
