@@ -22,6 +22,9 @@ public class ParticleFluff extends TamParticle {
 
 	public ParticleFluff(World world, Vec3d pos, Vec3d target, int life, float gravity, float scale, int color) {
 		super(world, pos, target);
+		motionX = target.xCoord;
+		motionY = target.yCoord;
+		motionZ = target.zCoord;
 		particleMaxAge = life;
 		particleGravity = gravity;
 		particleScale = scale;
