@@ -28,12 +28,12 @@ public abstract class TamFluidRegistryBase implements ITamRegistry {
 		}
 	}
 
-	protected Fluid createFluid(String name, String textureName, boolean hasFlowIcon) {
+	protected Fluid createFluid(String name, String textureName, boolean hasFlowIcon, boolean hasBucket) {
 		ResourceLocation still = new ResourceLocation(getModID(), textureName + "_still");
 		ResourceLocation flowing = hasFlowIcon ? new ResourceLocation(getModID(), textureName + "_flow") : still;
 		Fluid fluid = new Fluid(name, still, flowing);
 		if (!FluidRegistry.registerFluid(fluid)) fluid = FluidRegistry.getFluid(name);
-		FluidRegistry.addBucketForFluid(fluid);
+		if (hasBucket) FluidRegistry.addBucketForFluid(fluid);
 		return fluid;
 	}
 
