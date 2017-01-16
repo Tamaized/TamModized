@@ -1,10 +1,11 @@
 package Tamaized.TamModized;
 
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
+import Tamaized.TamModized.events.DragonDeathEvent;
 import Tamaized.TamModized.proxy.AbstractProxy;
 import Tamaized.TamModized.registry.TamModizedParticles;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -15,7 +16,6 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.FMLEventChannel;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 
 @Mod(modid = TamModized.modid, name = "TamModized", version = TamModized.version)
 public class TamModized extends TamModBase {
@@ -50,8 +50,10 @@ public class TamModized extends TamModBase {
 		register(particles = new TamModizedParticles());
 		
 		super.preInit(event);
-
+		
 		channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(networkChannelName);
+		
+		MinecraftForge.EVENT_BUS.register(new DragonDeathEvent());
 
 		proxy.preInit();
 	}
