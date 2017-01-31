@@ -108,7 +108,7 @@ public abstract class TamBlockPortal extends BlockBreakable implements ITamModel
 	 * box can change after the pool has been cleared to be reused)
 	 */
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
 		return null;
 	}
 	
@@ -128,9 +128,9 @@ public abstract class TamBlockPortal extends BlockBreakable implements ITamModel
 	}
 
 	public abstract boolean tryToCreatePortal(World par1World, BlockPos pos);
-
+	
 	@Override
-	public abstract void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos p_189540_5_);
+	public abstract void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn);
 
 	/**
 	 * A randomly called display update to be able to add particles or other

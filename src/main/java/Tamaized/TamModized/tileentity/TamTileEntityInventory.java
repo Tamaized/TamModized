@@ -16,7 +16,7 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 	public TamTileEntityInventory(int amountOfSlots) {
 		slots = new ItemStack[amountOfSlots];
 		for (int index = 0; index < slots.length; index++)
-			slots[index] = ItemStack.EMPTY;
+			slots[index] = null;
 	}
 
 	@Override
@@ -25,13 +25,13 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 		NBTTagList list = (NBTTagList) nbt.getTag("Items");
 		slots = new ItemStack[getSizeInventory()];
 		for (int index = 0; index < slots.length; index++)
-			slots[index] = ItemStack.EMPTY;
+			slots[index] = null;
 		if (list != null) {
 			for (int i = 0; i < list.tagCount(); i++) {
 				NBTTagCompound nbtc = (NBTTagCompound) list.getCompoundTagAt(i);
 				byte b = nbtc.getByte("Slot");
 				if (b >= 0 && b < slots.length) {
-					slots[b] = new ItemStack(nbtc);
+					slots[b] = ItemStack.func_77949_a(nbtc);
 				}
 			}
 		}
@@ -43,7 +43,7 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 		super.writeToNBT(nbt);
 		NBTTagList list = new NBTTagList();
 		for (int i = 0; i < slots.length; i++) {
-			if (!slots[i].isEmpty()) {
+			if (slots[i] == null) {
 				NBTTagCompound nbtc = new NBTTagCompound();
 				nbtc.setByte("Slot", (byte) i);
 				slots[i].writeToNBT(nbtc);
@@ -62,36 +62,36 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		return (slot < getSizeInventory() && slot >= 0) ? slots[slot] : ItemStack.EMPTY;
+		return (slot < getSizeInventory() && slot >= 0) ? slots[slot] : null;
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
-		if (!slots[i].isEmpty()) {
+		if (slots[i] == null) {
 			ItemStack itemstack;
-			if (slots[i].getCount() <= j) {
+			if (slots[i].stackSize <= j) {
 				itemstack = slots[i];
-				slots[i] = ItemStack.EMPTY;
+				slots[i] = null;
 				return itemstack;
 			} else {
 				itemstack = slots[i].splitStack(j);
-				if (slots[i].getCount() == 0) {
-					slots[i] = ItemStack.EMPTY;
+				if (slots[i].stackSize == 0) {
+					slots[i] = null;
 				}
 				return itemstack;
 			}
 		}
-		return ItemStack.EMPTY;
+		return null;
 	}
 
 	@Override
 	public ItemStack removeStackFromSlot(int slot) {
 		if (slot < getSizeInventory() && slot >= 0) {
 			ItemStack itemstack = getStackInSlot(slot);
-			setInventorySlotContents(slot, ItemStack.EMPTY);
+			setInventorySlotContents(slot, null);
 			return itemstack;
 		}
-		return ItemStack.EMPTY;
+		return null;
 	}
 
 	@Override
@@ -184,12 +184,5 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 	public abstract boolean isItemValidForSlot(int i, ItemStack stack);
 
 	protected abstract boolean canExtractSlot(int i, ItemStack stack);
-
-	@Override
-	public boolean isEmpty() {
-		for (ItemStack stack : slots)
-			if (!stack.isEmpty()) return false;
-		return true;
-	}
 
 }

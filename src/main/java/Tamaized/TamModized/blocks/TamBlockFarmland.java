@@ -140,8 +140,8 @@ public abstract class TamBlockFarmland extends TamBlockContainer {
 	 * Called when a neighboring block was changed and marks that this state should perform any checks during a neighbor change. Cases may include when redstone power is updated, cactus blocks popping off due to a neighboring solid block, etc.
 	 */
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos p_189540_5_) {
-		super.neighborChanged(state, worldIn, pos, blockIn, p_189540_5_);
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+		super.neighborChanged(state, worldIn, pos, blockIn);
 
 		if (worldIn.getBlockState(pos.up()).getMaterial().isSolid()) {
 			updateState(worldIn, pos, getParentBlockState());

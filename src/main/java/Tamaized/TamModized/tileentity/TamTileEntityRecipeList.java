@@ -60,14 +60,14 @@ public abstract class TamTileEntityRecipeList<T extends TamTERecipe> {
 		for (T r : recipes) {
 			if (isInput(item)) return r.getOutput();
 		}
-		return ItemStack.EMPTY;
+		return null;
 	}
 
 	public final ItemStack getOutput(ItemStack stack) {
 		for (T r : recipes) {
 			if (isInput(stack)) return r.getOutput();
 		}
-		return ItemStack.EMPTY;
+		return null;
 	}
 
 	public final ItemStack getOutput(ItemStack[] stacks) {
@@ -85,7 +85,7 @@ public abstract class TamTileEntityRecipeList<T extends TamTERecipe> {
 			}
 			return recipe.getOutput();
 		}
-		return ItemStack.EMPTY;
+		return null;
 	}
 
 	public final T getRecipe(ItemStack[] stacks) {

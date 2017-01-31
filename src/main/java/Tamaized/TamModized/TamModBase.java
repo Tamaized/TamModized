@@ -81,12 +81,12 @@ public abstract class TamModBase {
 	}
 
 	protected void registerEntity(Class<? extends Entity> entityClass, String entityName, Object mod, String modid, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates) {
-		EntityRegistry.registerModEntity(new ResourceLocation(modid, entityName), entityClass, entityName, modEntityID, mod, trackingRange, updateFrequency, sendsVelocityUpdates);
+		EntityRegistry.registerModEntity(entityClass, entityName, modEntityID, mod, trackingRange, updateFrequency, sendsVelocityUpdates);
 		modEntityID++;
 	}
 
 	protected void registerEntityWithEgg(Class<? extends Entity> entityClass, String entityName, Object mod, String modid, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, int eggPrimaryColor, int eggSecondaryColor) {
-		EntityRegistry.registerModEntity(new ResourceLocation(modid, entityName), entityClass, entityName, modEntityID, mod, trackingRange, updateFrequency, sendsVelocityUpdates, eggPrimaryColor, eggSecondaryColor);
+		EntityRegistry.registerModEntity(entityClass, entityName, modEntityID, mod, trackingRange, updateFrequency, sendsVelocityUpdates, eggPrimaryColor, eggSecondaryColor);
 		modEntityID++;
 	}
 
