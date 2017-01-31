@@ -147,7 +147,7 @@ public abstract class TamBlockCrops extends BlockBush implements ITamModel, IGro
 	}
 
 	protected int getBonemealAgeIncrease(World worldIn, BlockPos pos, IBlockState state) {
-		return isCorrectLightLevel(worldIn, pos) ? MathHelper.getRandomIntegerInRange(worldIn.rand, 2, 5) : 0;
+		return isCorrectLightLevel(worldIn, pos) ? MathHelper.getInt(worldIn.rand, 2, 5) : 0;
 	}
 
 	protected static float getGrowthChance(Block blockIn, World worldIn, BlockPos pos) {

@@ -78,21 +78,21 @@ public abstract class TamBlockFarmland extends TamBlockContainer {
 			updateState(worldIn, pos, state.withProperty(MOISTURE, Integer.valueOf(7)), 2);
 		}
 	}
-	
+
 	private void updateState(World world, BlockPos pos, IBlockState newState, int flag) {
 		TileEntity te1 = world.getTileEntity(pos);
 		world.setBlockState(pos, newState, flag);
 		TileEntity te2 = world.getTileEntity(pos);
 		updateTiles(te1, te2);
 	}
-	
+
 	private void updateState(World world, BlockPos pos, IBlockState newState) {
 		TileEntity te1 = world.getTileEntity(pos);
 		world.setBlockState(pos, newState);
 		TileEntity te2 = world.getTileEntity(pos);
 		updateTiles(te1, te2);
 	}
-	
+
 	protected abstract void updateTiles(TileEntity oldTile, TileEntity newTile);
 
 	/**
@@ -111,12 +111,12 @@ public abstract class TamBlockFarmland extends TamBlockContainer {
 		Block block = worldIn.getBlockState(pos.up()).getBlock();
 		return block instanceof net.minecraftforge.common.IPlantable && canSustainPlant(worldIn.getBlockState(pos), worldIn, pos, net.minecraft.util.EnumFacing.UP, (net.minecraftforge.common.IPlantable) block);
 	}
-	
+
 	@Override
 	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, IPlantable plantable) {
 		return getPlantList().contains(plantable);
 	}
-	
+
 	protected abstract ArrayList<IPlantable> getPlantList();
 
 	@Override
@@ -140,8 +140,8 @@ public abstract class TamBlockFarmland extends TamBlockContainer {
 	 * Called when a neighboring block was changed and marks that this state should perform any checks during a neighbor change. Cases may include when redstone power is updated, cactus blocks popping off due to a neighboring solid block, etc.
 	 */
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
-		super.neighborChanged(state, worldIn, pos, blockIn);
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos p_189540_5_) {
+		super.neighborChanged(state, worldIn, pos, blockIn, p_189540_5_);
 
 		if (worldIn.getBlockState(pos.up()).getMaterial().isSolid()) {
 			updateState(worldIn, pos, getParentBlockState());

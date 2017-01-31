@@ -8,15 +8,19 @@ import net.minecraft.item.ItemStack;
 
 public abstract class TamTileEntityRecipeList<T extends TamTERecipe> {
 
-	protected ArrayList<T> recipes = new ArrayList<T>();
+	private ArrayList<T> recipes = new ArrayList<T>();
 
-	public boolean registerRecipe(T recipe) {
+	public final boolean registerRecipe(T recipe) {
 		if (recipes.contains(recipe)) return false;
 		recipes.add(recipe);
 		return true;
 	}
 
-	public boolean isInput(Item item) {
+	public final ArrayList<T> getList() {
+		return recipes;
+	}
+
+	public final boolean isInput(Item item) {
 		for (T r : recipes) {
 			for (ItemStack stack : r.getInput()) {
 				if (stack.getItem() == item) return true;
@@ -25,7 +29,25 @@ public abstract class TamTileEntityRecipeList<T extends TamTERecipe> {
 		return false;
 	}
 
-	public boolean isInput(ItemStack stack) {
+	public final boolean isInput(ItemStack[] stacks) {
+		loop: for (T recipe : recipes) {
+			if (recipe.getInput().length != stacks.length) continue;
+			for (ItemStack stack : stacks) {
+				boolean flag2 = false;
+				for (ItemStack checkStack : recipe.getInput()) {
+					if (stack.getItem() == checkStack.getItem()) {
+						flag2 = true;
+						break;
+					}
+				}
+				if (!flag2) continue loop;
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public final boolean isInput(ItemStack stack) {
 		for (T r : recipes) {
 			for (ItemStack checkStack : r.getInput()) {
 				if (checkStack.areItemStacksEqual(checkStack, stack)) return true;
@@ -34,16 +56,52 @@ public abstract class TamTileEntityRecipeList<T extends TamTERecipe> {
 		return false;
 	}
 
-	public ItemStack getOutput(Item item) {
+	public final ItemStack getOutput(Item item) {
 		for (T r : recipes) {
 			if (isInput(item)) return r.getOutput();
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
-	public ItemStack getOutput(ItemStack stack) {
+	public final ItemStack getOutput(ItemStack stack) {
 		for (T r : recipes) {
 			if (isInput(stack)) return r.getOutput();
+		}
+		return ItemStack.EMPTY;
+	}
+
+	public final ItemStack getOutput(ItemStack[] stacks) {
+		loop: for (T recipe : recipes) {
+			if (recipe.getInput().length != stacks.length) continue;
+			for (ItemStack stack : stacks) {
+				boolean flag2 = false;
+				for (ItemStack checkStack : recipe.getInput()) {
+					if (stack.getItem() == checkStack.getItem()) {
+						flag2 = true;
+						break;
+					}
+				}
+				if (!flag2) continue loop;
+			}
+			return recipe.getOutput();
+		}
+		return ItemStack.EMPTY;
+	}
+
+	public final T getRecipe(ItemStack[] stacks) {
+		loop: for (T recipe : recipes) {
+			if (recipe.getInput().length != stacks.length) continue;
+			for (ItemStack stack : stacks) {
+				boolean flag2 = false;
+				for (ItemStack checkStack : recipe.getInput()) {
+					if (stack.getItem() == checkStack.getItem()) {
+						flag2 = true;
+						break;
+					}
+				}
+				if (!flag2) continue loop;
+			}
+			return recipe;
 		}
 		return null;
 	}

@@ -15,6 +15,8 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 
 	public TamTileEntityInventory(int amountOfSlots) {
 		slots = new ItemStack[amountOfSlots];
+		for (int index = 0; index < slots.length; index++)
+			slots[index] = ItemStack.EMPTY;
 	}
 
 	@Override
@@ -22,12 +24,14 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 		super.readFromNBT(nbt);
 		NBTTagList list = (NBTTagList) nbt.getTag("Items");
 		slots = new ItemStack[getSizeInventory()];
+		for (int index = 0; index < slots.length; index++)
+			slots[index] = ItemStack.EMPTY;
 		if (list != null) {
 			for (int i = 0; i < list.tagCount(); i++) {
 				NBTTagCompound nbtc = (NBTTagCompound) list.getCompoundTagAt(i);
 				byte b = nbtc.getByte("Slot");
 				if (b >= 0 && b < slots.length) {
-					slots[b] = ItemStack.loadItemStackFromNBT(nbtc);
+					slots[b] = new ItemStack(nbtc);
 				}
 			}
 		}
@@ -39,7 +43,7 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 		super.writeToNBT(nbt);
 		NBTTagList list = new NBTTagList();
 		for (int i = 0; i < slots.length; i++) {
-			if (slots[i] != null) {
+			if (!slots[i].isEmpty()) {
 				NBTTagCompound nbtc = new NBTTagCompound();
 				nbtc.setByte("Slot", (byte) i);
 				slots[i].writeToNBT(nbtc);
@@ -57,53 +61,50 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int index) {
-		return slots[index];
+	public ItemStack getStackInSlot(int slot) {
+		return (slot < getSizeInventory() && slot >= 0) ? slots[slot] : ItemStack.EMPTY;
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
-		if (slots[i] != null) {
+		if (!slots[i].isEmpty()) {
 			ItemStack itemstack;
-			if (slots[i].stackSize <= j) {
+			if (slots[i].getCount() <= j) {
 				itemstack = slots[i];
-				slots[i] = null;
+				slots[i] = ItemStack.EMPTY;
 				return itemstack;
 			} else {
 				itemstack = slots[i].splitStack(j);
-				if (slots[i].stackSize == 0) {
-					slots[i] = null;
+				if (slots[i].getCount() == 0) {
+					slots[i] = ItemStack.EMPTY;
 				}
 				return itemstack;
 			}
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int i) {
-		if (slots[i] != null) {
-			ItemStack itemstack = slots[i];
-			slots[i] = null;
+	public ItemStack removeStackFromSlot(int slot) {
+		if (slot < getSizeInventory() && slot >= 0) {
+			ItemStack itemstack = getStackInSlot(slot);
+			setInventorySlotContents(slot, ItemStack.EMPTY);
 			return itemstack;
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
-	public void setInventorySlotContents(int i, ItemStack stack) {
-		slots[i] = stack;
-		if (stack != null && stack.stackSize > getInventoryStackLimit()) {
-			stack.stackSize = getInventoryStackLimit();
-		}
+	public void setInventorySlotContents(int slot, ItemStack stack) {
+		if (slot < getSizeInventory() && slot >= 0) slots[slot] = stack;
 	}
 
 	@Override
 	public abstract int getInventoryStackLimit();
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return worldObj.getTileEntity(pos) != this ? false : player.getDistanceSq((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D) <= 64.0D;
+	public boolean isUsableByPlayer(EntityPlayer player) {
+		return world.getTileEntity(pos) != this ? false : player.getDistanceSq((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D) <= 64.0D;
 	}
 
 	@Override
@@ -115,9 +116,6 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 	public void closeInventory(EntityPlayer player) {
 
 	}
-
-	@Override
-	public abstract boolean isItemValidForSlot(int i, ItemStack stack);
 
 	@Override
 	public int getField(int id) {
@@ -161,9 +159,10 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 	public abstract int[] getSlotsForFace(EnumFacing side);
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-		for (int i : getSlotsForFace(direction)) {
-			if (index == i) {
+	public final boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+		int[] array = getSlotsForFace(direction);
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] == index) {
 				return isItemValidForSlot(index, itemStackIn);
 			}
 		}
@@ -171,17 +170,26 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-		for (int i : getSlotsForFace(direction)) {
-			if (index == i) {
-				return canExtractSlot(index);
+	public final boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+		int[] array = getSlotsForFace(direction);
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] == index) {
+				return canExtractSlot(index, stack);
 			}
 		}
 		return false;
 	}
 
-	protected abstract boolean canExtractSlot(int i);
+	@Override
+	public abstract boolean isItemValidForSlot(int i, ItemStack stack);
 
-	protected abstract boolean canInsertSlot(int i);
+	protected abstract boolean canExtractSlot(int i, ItemStack stack);
+
+	@Override
+	public boolean isEmpty() {
+		for (ItemStack stack : slots)
+			if (!stack.isEmpty()) return false;
+		return true;
+	}
 
 }

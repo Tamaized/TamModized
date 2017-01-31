@@ -1,6 +1,7 @@
 package Tamaized.TamModized;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -20,32 +21,32 @@ public abstract class TamModBase {
 
 	public static final int WILDCARD_VALUE = OreDictionary.WILDCARD_VALUE;
 
-	public static Logger logger;
+	public Logger logger;
 
 	private TamRegistryHandler registryHandler = new TamRegistryHandler();
-	
+
 	private int modEntityID = 0;
-	
+
 	static {
 		FluidRegistry.enableUniversalBucket();
 	}
 
 	/**
-	 * super this first if possible
+	 * super this after the registry
 	 */
 	public void preInit(FMLPreInitializationEvent event) {
 		registryHandler.preInit();
 	}
 
 	/**
-	 * super this first if possible
+	 * super this first
 	 */
 	public void init(FMLInitializationEvent event) {
 		registryHandler.init();
 	}
 
 	/**
-	 * super this first if possible
+	 * super this first
 	 */
 	public void postInit(FMLPostInitializationEvent e) {
 		registryHandler.postInit();
@@ -78,9 +79,14 @@ public abstract class TamModBase {
 	public void clientPostInit() {
 		registryHandler.clientPostInit();
 	}
-	
-	protected void registerEntity(Class<? extends Entity> entityClass, String entityName, Object mod, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates){
-		EntityRegistry.registerModEntity(entityClass, entityName, modEntityID, mod, trackingRange, updateFrequency, sendsVelocityUpdates);
+
+	protected void registerEntity(Class<? extends Entity> entityClass, String entityName, Object mod, String modid, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates) {
+		EntityRegistry.registerModEntity(new ResourceLocation(modid, entityName), entityClass, entityName, modEntityID, mod, trackingRange, updateFrequency, sendsVelocityUpdates);
+		modEntityID++;
+	}
+
+	protected void registerEntityWithEgg(Class<? extends Entity> entityClass, String entityName, Object mod, String modid, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, int eggPrimaryColor, int eggSecondaryColor) {
+		EntityRegistry.registerModEntity(new ResourceLocation(modid, entityName), entityClass, entityName, modEntityID, mod, trackingRange, updateFrequency, sendsVelocityUpdates, eggPrimaryColor, eggSecondaryColor);
 		modEntityID++;
 	}
 

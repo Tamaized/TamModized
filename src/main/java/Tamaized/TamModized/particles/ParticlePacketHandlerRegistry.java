@@ -10,7 +10,7 @@ public class ParticlePacketHandlerRegistry {
 
 	public static int register(ParticlePacketBase handler) {
 		if (registry.contains(handler)) {
-			TamModized.logger.info("Attempted to register an already registered ParticlePacketHandler: " + handler);
+			TamModized.instance.logger.info("Attempted to register an already registered ParticlePacketHandler: " + handler);
 		} else {
 			registry.add(handler);
 		}
