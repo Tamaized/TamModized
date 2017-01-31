@@ -43,7 +43,7 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 		super.writeToNBT(nbt);
 		NBTTagList list = new NBTTagList();
 		for (int i = 0; i < slots.length; i++) {
-			if (slots[i] == null) {
+			if (slots[i] != null) {
 				NBTTagCompound nbtc = new NBTTagCompound();
 				nbtc.setByte("Slot", (byte) i);
 				slots[i].writeToNBT(nbtc);
@@ -67,7 +67,7 @@ public abstract class TamTileEntityInventory extends TamTileEntity implements IS
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
-		if (slots[i] == null) {
+		if (slots[i] != null) {
 			ItemStack itemstack;
 			if (slots[i].stackSize <= j) {
 				itemstack = slots[i];
