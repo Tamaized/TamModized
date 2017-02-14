@@ -1,5 +1,6 @@
 package Tamaized.TamModized.events;
 
+import Tamaized.TamModized.TamModized;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityItem;
@@ -16,7 +17,7 @@ public class DragonDeathEvent {
 	public void onDeath(LivingDeathEvent e) {
 		EntityLivingBase entity = e.getEntityLiving();
 		World world = entity.world;
-		if (!world.isRemote && world.provider instanceof WorldProviderEnd && entity instanceof EntityDragon && ((WorldProviderEnd) world.provider).getDragonFightManager().hasPreviouslyKilledDragon()) {
+		if (!world.isRemote && world.provider instanceof WorldProviderEnd && entity instanceof EntityDragon && TamModized.config.getDragonEggConfig() && ((WorldProviderEnd) world.provider).getDragonFightManager().hasPreviouslyKilledDragon()) {
 			world.spawnEntity(new EntityItem(world, entity.posX, entity.posY, entity.posZ, new ItemStack(Blocks.DRAGON_EGG)));
 		}
 	}

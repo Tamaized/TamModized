@@ -37,7 +37,7 @@ public abstract class TamModBase {
 
 	protected abstract AbstractProxy getProxy();
 
-	protected abstract String getModID();
+	public abstract String getModID();
 
 	/**
 	 * Override and Super this with @EventHandler
