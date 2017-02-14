@@ -4,16 +4,12 @@ import Tamaized.TamModized.registry.TamRegistryHandler;
 
 public abstract class AbstractProxy {
 
-	public void preInit(){
-		
-	}
+	public abstract void preRegisters();
 
-	public void init(){
-		
-	}
+	public abstract void preInit();
 
-	public void postInit(){
-		
-	}
+	public abstract void init();
+
+	public abstract void postInit();
 
 }
