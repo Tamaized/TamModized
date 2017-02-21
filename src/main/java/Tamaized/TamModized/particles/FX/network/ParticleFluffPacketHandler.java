@@ -20,8 +20,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ParticleFluffPacketHandler extends ParticlePacketBase {
 
-	public static void spawnOnServer(World world, Vec3d pos, int life, float gravity, float scale, int color) {
-		ParticleFluffData data = ((ParticleFluffPacketHandler) ParticlePacketHandlerRegistry.getHandler(TamModized.particles.fluff)).new ParticleFluffData(null, life, gravity, scale, color);
+	public static void spawnOnServer(World world, Vec3d pos, Vec3d target, int life, float gravity, float scale, int color) {
+		ParticleFluffData data = ((ParticleFluffPacketHandler) ParticlePacketHandlerRegistry.getHandler(TamModized.particles.fluff)).new ParticleFluffData(target == null ? Vec3d.ZERO : target, life, gravity, scale, color);
 		ParticleHelper.sendPacketToClients(world, TamModized.particles.fluff, pos, 64, new ParticleHelper.ParticlePacketHelper(TamModized.particles.fluff, data));
 	}
 
@@ -29,13 +29,9 @@ public class ParticleFluffPacketHandler extends ParticlePacketBase {
 	public void encode(DataOutputStream packet, IParticlePacketData data) throws IOException {
 		if (!(data instanceof ParticleFluffData)) throw new IOException("Incorrect IParticlePacketData type: " + data);
 		ParticleFluffData dat = (ParticleFluffData) data;
-		boolean flag = dat.target != null;
-		packet.writeBoolean(flag);
-		if (flag) {
-			packet.writeDouble(dat.target.xCoord);
-			packet.writeDouble(dat.target.yCoord);
-			packet.writeDouble(dat.target.zCoord);
-		}
+		packet.writeDouble(dat.target.xCoord);
+		packet.writeDouble(dat.target.yCoord);
+		packet.writeDouble(dat.target.zCoord);
 		packet.writeInt(dat.life);
 		packet.writeFloat(dat.gravity);
 		packet.writeFloat(dat.scale);
@@ -46,7 +42,7 @@ public class ParticleFluffPacketHandler extends ParticlePacketBase {
 	@SideOnly(Side.CLIENT)
 	public TamParticle decode(ByteBufInputStream packet, WorldClient world, Vec3d pos) {
 		try {
-			return new ParticleFluff(world, pos, packet.readBoolean() ? new Vec3d(packet.readDouble(), packet.readDouble(), packet.readDouble()) : null, packet.readInt(), packet.readFloat(), packet.readFloat(), packet.readInt());
+			return new ParticleFluff(world, pos, new Vec3d(packet.readDouble(), packet.readDouble(), packet.readDouble()), packet.readInt(), packet.readFloat(), packet.readFloat(), packet.readInt());
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
