@@ -1,12 +1,9 @@
 package Tamaized.TamModized;
 
-import org.apache.logging.log4j.LogManager;
-
 import Tamaized.TamModized.events.DragonDeathEvent;
 import Tamaized.TamModized.proxy.AbstractProxy;
 import Tamaized.TamModized.registry.TamModizedParticles;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -38,36 +35,53 @@ public class TamModized extends TamModBase {
 
 	public static TamModizedParticles particles;
 
-	static {
-		FluidRegistry.enableUniversalBucket();
+	@Override
+	protected AbstractProxy getProxy() {
+		return proxy;
 	}
 
+	@Override
+	protected String getModID() {
+		return modid;
+	}
+
+	@Override
 	@EventHandler
+	public void FMLpreInit(FMLPreInitializationEvent event) {
+		super.FMLpreInit(event);
+	}
+
+	@Override
+	@EventHandler
+	public void FMLinit(FMLInitializationEvent event) {
+		super.FMLinit(event);
+	}
+
+	@Override
+	@EventHandler
+	public void FMLpostInit(FMLPostInitializationEvent event) {
+		super.FMLpostInit(event);
+	}
+
+	@Override
 	public void preInit(FMLPreInitializationEvent event) {
-		logger = LogManager.getLogger("TamModized");
 		logger.info("Tamaized is now taking over >:)");
 
 		register(particles = new TamModizedParticles());
-		
-		super.preInit(event);
-		
+
 		channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(networkChannelName);
-		
+
 		MinecraftForge.EVENT_BUS.register(new DragonDeathEvent());
-
-		proxy.preInit();
 	}
 
-	@EventHandler
-	public void InitVoidCraft(FMLInitializationEvent event) {
-		super.init(event);
-		proxy.init();
+	@Override
+	public void init(FMLInitializationEvent event) {
+
 	}
 
-	@EventHandler
+	@Override
 	public void postInit(FMLPostInitializationEvent e) {
-		super.postInit(e);
-		proxy.postInit();
+
 	}
 
 }
