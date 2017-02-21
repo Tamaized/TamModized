@@ -1,9 +1,14 @@
 package Tamaized.TamModized;
 
+import java.io.File;
+
+import Tamaized.TamModized.config.AbstractConfigHandler;
+import Tamaized.TamModized.config.ConfigHandler;
 import Tamaized.TamModized.events.DragonDeathEvent;
 import Tamaized.TamModized.proxy.AbstractProxy;
 import Tamaized.TamModized.registry.TamModizedParticles;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -14,7 +19,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.FMLEventChannel;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
-@Mod(modid = TamModized.modid, name = "TamModized", version = TamModized.version)
+@Mod(modid = TamModized.modid, name = "TamModized", guiFactory = "Tamaized.TamModized.config.GUIConfigFactory", version = TamModized.version)
 public class TamModized extends TamModBase {
 
 	public final static String version = "${version}";
@@ -30,6 +35,8 @@ public class TamModized extends TamModBase {
 		return version;
 	}
 
+	public static ConfigHandler config;
+
 	public static FMLEventChannel channel;
 	public static final String networkChannelName = "TamModized";
 
@@ -41,7 +48,7 @@ public class TamModized extends TamModBase {
 	}
 
 	@Override
-	protected String getModID() {
+	public String getModID() {
 		return modid;
 	}
 
@@ -66,6 +73,9 @@ public class TamModized extends TamModBase {
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
 		logger.info("Tamaized is now taking over >:)");
+
+		File file = event.getSuggestedConfigurationFile();
+		config = new ConfigHandler(this, file, new Configuration(file));
 
 		register(particles = new TamModizedParticles());
 
