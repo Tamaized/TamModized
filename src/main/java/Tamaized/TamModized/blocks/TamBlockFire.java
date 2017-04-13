@@ -4,6 +4,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFire;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -19,12 +20,13 @@ public abstract class TamBlockFire extends BlockFire implements ITamModel{
 
 	private final String name;
 
-	public TamBlockFire(CreativeTabs tab, String n) {
+	public TamBlockFire(CreativeTabs tab, String n, SoundType sound) {
 		name = n;
 		setUnlocalizedName(name);
 		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + getName()));
 		GameRegistry.register(new ItemBlock(this).setRegistryName(getModelDir() + "/" + getName()));
-		this.setCreativeTab(tab);
+		setCreativeTab(tab);
+		setSoundType(sound);
 	}
 	
 	@Override

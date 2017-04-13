@@ -4,6 +4,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBreakable;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -28,7 +29,7 @@ public abstract class TamBlockPortal extends BlockBreakable implements ITamModel
 	private final String name;
 	public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.<EnumFacing.Axis> create("axis", EnumFacing.Axis.class, new EnumFacing.Axis[] { EnumFacing.Axis.X, EnumFacing.Axis.Z });
 
-	public TamBlockPortal(CreativeTabs tab, String n, boolean hasAxis) {
+	public TamBlockPortal(CreativeTabs tab, String n, boolean hasAxis, SoundType sound) {
 		super(Material.PORTAL, false);
 		if (hasAxis) this.setDefaultState(this.blockState.getBaseState().withProperty(AXIS, EnumFacing.Axis.X));
 		this.setTickRandomly(true);
@@ -37,7 +38,8 @@ public abstract class TamBlockPortal extends BlockBreakable implements ITamModel
 		setUnlocalizedName(name);
 		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + getName()));
 		GameRegistry.register(new ItemBlock(this).setRegistryName(getModelDir() + "/" + getName()));
-		this.setCreativeTab(tab);
+		setCreativeTab(tab);
+		setSoundType(sound);
 	}
 
 	@Override

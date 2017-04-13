@@ -1,6 +1,7 @@
 package Tamaized.TamModized.blocks;
 
 import net.minecraft.block.BlockStairs;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -12,14 +13,15 @@ public class TamBlockStairs extends BlockStairs implements ITamModel {
 
 	private final String name;
 
-	public TamBlockStairs(CreativeTabs tab, IBlockState modelState, String n) {
+	public TamBlockStairs(CreativeTabs tab, IBlockState modelState, String n, SoundType sound) {
 		super(modelState);
 		name = n;
 		setUnlocalizedName(name);
 		this.useNeighborBrightness = true;
 		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + getName()));
 		GameRegistry.register(new ItemBlock(this).setRegistryName(getModelDir() + "/" + getName()));
-		this.setCreativeTab(tab);
+		setCreativeTab(tab);
+		setSoundType(sound);
 	}
 
 	@Override
