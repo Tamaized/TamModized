@@ -1,6 +1,7 @@
 package Tamaized.TamModized.blocks;
 
 import net.minecraft.block.BlockFence;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -13,13 +14,14 @@ public class TamBlockFence extends BlockFence implements ITamModel {
 
 	private final String name;
 
-	public TamBlockFence(CreativeTabs tab, Material materialIn, MapColor mapColor, String n) {
+	public TamBlockFence(CreativeTabs tab, Material materialIn, MapColor mapColor, String n, SoundType sound) {
 		super(materialIn, mapColor);
 		name = n;
 		setUnlocalizedName(name);
 		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + getName()));
 		GameRegistry.register(new ItemBlock(this).setRegistryName(getModelDir() + "/" + getName()));
-		this.setCreativeTab(tab);
+		setCreativeTab(tab);
+		setSoundType(sound);
 	}
 
 	@Override

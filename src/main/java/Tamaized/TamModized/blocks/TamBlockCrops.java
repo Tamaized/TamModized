@@ -9,6 +9,7 @@ import Tamaized.TamModized.registry.ITamModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
@@ -31,14 +32,15 @@ public abstract class TamBlockCrops extends BlockBush implements ITamModel, IGro
 
 	public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 7);
 
-	public TamBlockCrops(CreativeTabs tab, Material material, String n, float hardness) {
+	public TamBlockCrops(CreativeTabs tab, Material material, String n, float hardness, SoundType sound) {
 		super();
 		name = n;
 		setUnlocalizedName(name);
 		setHardness(hardness);
 		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + getName()));
 		GameRegistry.register(new ItemBlock(this).setRegistryName(getModelDir() + "/" + getName()));
-		this.setCreativeTab(tab);
+		setCreativeTab(tab);
+		setSoundType(sound);
 	}
 
 	@Override

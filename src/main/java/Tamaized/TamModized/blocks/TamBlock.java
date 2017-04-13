@@ -1,6 +1,7 @@
 package Tamaized.TamModized.blocks;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -12,14 +13,15 @@ public class TamBlock extends Block implements ITamModel {
 
 	private final String name;
 
-	public TamBlock(CreativeTabs tab, Material material, String n, float hardness) {
+	public TamBlock(CreativeTabs tab, Material material, String n, float hardness, SoundType sound) {
 		super(material);
 		name = n;
 		setUnlocalizedName(name);
 		setHardness(hardness);
 		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + getName()));
 		GameRegistry.register(new ItemBlock(this).setRegistryName(getModelDir() + "/" + getName()));
-		this.setCreativeTab(tab);
+		setCreativeTab(tab);
+		setSoundType(sound);
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import Tamaized.TamModized.blocks.TamBlockContainer;
 import Tamaized.TamModized.registry.ITamModel;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
@@ -37,8 +38,8 @@ public abstract class TamBlockFarmland extends TamBlockContainer {
 	public static final PropertyInteger MOISTURE = PropertyInteger.create("moisture", 0, 7);
 	protected static final AxisAlignedBB FARMLAND_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.9375D, 1.0D);
 
-	public TamBlockFarmland(CreativeTabs tab, Material material, String n, float hardness) {
-		super(tab, material, n, hardness);
+	public TamBlockFarmland(CreativeTabs tab, Material material, String n, float hardness, SoundType sound) {
+		super(tab, material, n, hardness, sound);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(MOISTURE, Integer.valueOf(0)));
 		this.setTickRandomly(true);
 		this.setLightOpacity(255);
