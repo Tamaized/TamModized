@@ -27,7 +27,7 @@ public abstract class TamModBase {
 
 	public Logger logger;
 
-	private TamRegistryHandler registryHandler = new TamRegistryHandler();
+	private final TamRegistryHandler registryHandler = new TamRegistryHandler();
 
 	private int modEntityID = 0;
 
@@ -48,6 +48,7 @@ public abstract class TamModBase {
 		preInit(event);
 		registryHandler.preInit();
 		getProxy().preInit();
+		getProxy().registryHandlerPreInit(registryHandler);
 	}
 
 	/**
@@ -57,6 +58,7 @@ public abstract class TamModBase {
 		init(event);
 		registryHandler.init();
 		getProxy().init();
+		getProxy().registryHandlerInit(registryHandler);
 	}
 
 	/**
@@ -66,6 +68,7 @@ public abstract class TamModBase {
 		postInit(event);
 		registryHandler.postInit();
 		getProxy().postInit();
+		getProxy().registryHandlerPostInit(registryHandler);
 	}
 
 	protected abstract void preInit(FMLPreInitializationEvent event);
@@ -76,30 +79,6 @@ public abstract class TamModBase {
 
 	protected void register(ITamRegistry r) {
 		registryHandler.register(r);
-	}
-
-	/**
-	 * call this in clientProxy
-	 */
-	@SideOnly(Side.CLIENT)
-	public void clientPreInit() {
-		registryHandler.clientPreInit();
-	}
-
-	/**
-	 * call this in clientProxy
-	 */
-	@SideOnly(Side.CLIENT)
-	public void clientInit() {
-		registryHandler.clientInit();
-	}
-
-	/**
-	 * call this in clientProxy
-	 */
-	@SideOnly(Side.CLIENT)
-	public void clientPostInit() {
-		registryHandler.clientPostInit();
 	}
 
 	protected void registerEntity(Class<? extends Entity> entityClass, String entityName, Object mod, String modid, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates) {
