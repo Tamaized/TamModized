@@ -33,7 +33,7 @@ public class ContributorHandler {
 			UUID key = UUID.fromString(s);
 			String value = props.getProperty(s);
 			try {
-				int color = (int) Long.parseLong(value, 24);
+				int color = Integer.parseUnsignedInt(value, 16);
 				TamModized.instance.logger.info(key + " -> " + color);
 				fluff.put(key, color);
 			} catch (NumberFormatException e) {
