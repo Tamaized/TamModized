@@ -2,9 +2,9 @@ package Tamaized.TamModized;
 
 import java.io.File;
 
-import Tamaized.TamModized.config.AbstractConfigHandler;
 import Tamaized.TamModized.config.ConfigHandler;
 import Tamaized.TamModized.events.DragonDeathEvent;
+import Tamaized.TamModized.handler.ContributorHandler;
 import Tamaized.TamModized.proxy.AbstractProxy;
 import Tamaized.TamModized.registry.TamModizedParticles;
 import net.minecraftforge.common.MinecraftForge;
@@ -76,6 +76,8 @@ public class TamModized extends TamModBase {
 
 		File file = event.getSuggestedConfigurationFile();
 		config = new ConfigHandler(this, file, new Configuration(file));
+		
+		ContributorHandler.start();
 
 		register(particles = new TamModizedParticles());
 

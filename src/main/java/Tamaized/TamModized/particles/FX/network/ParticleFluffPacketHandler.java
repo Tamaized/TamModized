@@ -1,5 +1,6 @@
 package Tamaized.TamModized.particles.FX.network;
 
+import java.awt.Color;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
@@ -10,7 +11,6 @@ import Tamaized.TamModized.particles.ParticlePacketBase;
 import Tamaized.TamModized.particles.ParticlePacketHandlerRegistry;
 import Tamaized.TamModized.particles.TamParticle;
 import Tamaized.TamModized.particles.FX.ParticleFluff;
-import Tamaized.TamModized.particles.FX.network.ParticleFluffPacketHandler.ParticleFluffData;
 import io.netty.buffer.ByteBufInputStream;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.util.math.Vec3d;
