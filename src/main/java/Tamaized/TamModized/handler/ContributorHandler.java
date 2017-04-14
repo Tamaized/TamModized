@@ -13,7 +13,7 @@ import Tamaized.TamModized.TamModized;
 
 public class ContributorHandler {
 
-	private static final String URL_FLUFF = "https://raw.githubusercontent.com/Tamaized/TamModized/1.10.2/contributors/fluff.properties";
+	private static final String URL_FLUFF = "https://raw.githubusercontent.com/Tamaized/TamModized/1.11.2/contributors/fluff.properties";
 
 	public static volatile Map<UUID, Integer> fluff = new HashMap<UUID, Integer>();
 
