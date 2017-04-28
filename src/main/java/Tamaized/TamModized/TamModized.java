@@ -2,12 +2,17 @@ package Tamaized.TamModized;
 
 import java.io.File;
 
+import Tamaized.TamModized.capabilities.dimTracker.DimensionCapabilityHandler;
+import Tamaized.TamModized.capabilities.dimTracker.DimensionCapabilityStorage;
+import Tamaized.TamModized.capabilities.dimTracker.IDimensionCapability;
 import Tamaized.TamModized.config.ConfigHandler;
 import Tamaized.TamModized.events.DragonDeathEvent;
 import Tamaized.TamModized.handler.ContributorHandler;
 import Tamaized.TamModized.proxy.AbstractProxy;
+import Tamaized.TamModized.registry.PortalHandlerRegistry;
 import Tamaized.TamModized.registry.TamModizedParticles;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -76,7 +81,7 @@ public class TamModized extends TamModBase {
 
 		File file = event.getSuggestedConfigurationFile();
 		config = new ConfigHandler(this, file, new Configuration(file));
-		
+
 		ContributorHandler.start();
 
 		register(particles = new TamModizedParticles());
@@ -84,6 +89,10 @@ public class TamModized extends TamModBase {
 		channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(networkChannelName);
 
 		MinecraftForge.EVENT_BUS.register(new DragonDeathEvent());
+		MinecraftForge.EVENT_BUS.register(new PortalHandlerRegistry());
+
+		CapabilityManager.INSTANCE.register(IDimensionCapability.class, new DimensionCapabilityStorage(), DimensionCapabilityHandler.class);
+		MinecraftForge.EVENT_BUS.register(new Tamaized.TamModized.capabilities.EventHandler());
 	}
 
 	@Override
