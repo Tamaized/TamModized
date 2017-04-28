@@ -2,6 +2,8 @@ package Tamaized.TamModized.network;
 
 import java.io.IOException;
 
+import Tamaized.TamModized.capabilities.CapabilityList;
+import Tamaized.TamModized.capabilities.dimTracker.IDimensionCapability;
 import Tamaized.TamModized.helper.FloatyTextHelper;
 import Tamaized.TamModized.helper.MotionHelper;
 import Tamaized.TamModized.particles.ParticleHelper;
@@ -19,6 +21,7 @@ public class ClientPacketHandler {
 	public static final int TYPE_PARTICLE_VANILLA = 1;
 	public static final int PLAYER_MOTION = 2;
 	public static final int FloatyText = 3;
+	public static final int DimensionCap = 4;
 
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
@@ -48,6 +51,10 @@ public class ClientPacketHandler {
 						break;
 					case FloatyText:
 						FloatyTextHelper.decode(bbis);
+						break;
+					case DimensionCap:
+						IDimensionCapability cap = Minecraft.getMinecraft().player.getCapability(CapabilityList.DIMENSION, null);
+						if(cap != null) cap.decodePacket(bbis);
 						break;
 					default:
 						break;
