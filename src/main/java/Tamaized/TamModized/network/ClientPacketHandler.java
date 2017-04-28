@@ -2,6 +2,7 @@ package Tamaized.TamModized.network;
 
 import java.io.IOException;
 
+import Tamaized.TamModized.helper.FloatyTextHelper;
 import Tamaized.TamModized.helper.MotionHelper;
 import Tamaized.TamModized.particles.ParticleHelper;
 import io.netty.buffer.ByteBuf;
@@ -17,6 +18,7 @@ public class ClientPacketHandler {
 	public static final int TYPE_PARTICLE = 0;
 	public static final int TYPE_PARTICLE_VANILLA = 1;
 	public static final int PLAYER_MOTION = 2;
+	public static final int FloatyText = 3;
 
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
@@ -43,6 +45,9 @@ public class ClientPacketHandler {
 						break;
 					case PLAYER_MOTION:
 						MotionHelper.updatePlayerMotion(bbis.readDouble(), bbis.readDouble(), bbis.readDouble());
+						break;
+					case FloatyText:
+						FloatyTextHelper.decode(bbis);
 						break;
 					default:
 						break;

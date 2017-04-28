@@ -1,6 +1,7 @@
 package Tamaized.TamModized.proxy;
 
 import Tamaized.TamModized.TamModized;
+import Tamaized.TamModized.client.FloatyTextOverlay;
 import Tamaized.TamModized.client.RenderContributors;
 import Tamaized.TamModized.network.ClientPacketHandler;
 import Tamaized.TamModized.registry.TamModelResourceHandler;
@@ -25,6 +26,7 @@ public class ClientProxy extends AbstractProxy {
 	public void init() {
 		TamModelResourceHandler.instance.compile();
 		MinecraftForge.EVENT_BUS.register(new RenderContributors());
+		MinecraftForge.EVENT_BUS.register(new FloatyTextOverlay());
 	}
 
 	@Override
