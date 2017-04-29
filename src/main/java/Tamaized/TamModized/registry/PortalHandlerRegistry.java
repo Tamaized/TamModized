@@ -76,15 +76,17 @@ public class PortalHandlerRegistry {
 
 	public static void doTeleport(IDimensionCapability cap, EntityPlayerMP player, TeleporterWrapper teleporter) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		if (player.world == null || !(player.world instanceof WorldServer)) return;
-		TeleportLoc port = new TeleportLoc(teleporter.getTeleporter().getConstructor(WorldServer.class).newInstance((WorldServer) player.world));
 		if (player.dimension != teleporter.getDimension() && player.dimension != 1) {
 			cap.setLastDimension(player.dimension);
+			TeleportLoc port = new TeleportLoc(teleporter.getTeleporter().getConstructor(WorldServer.class).newInstance(player.mcServer.worldServerForDimension(teleporter.getDimension())));
 			transferPlayerToDimension(player.mcServer, player, teleporter.getDimension(), port);
 		} else if (player.dimension == 1) { // From end
 			cap.setLastDimension(player.dimension);
+			TeleportLoc port = new TeleportLoc(teleporter.getTeleporter().getConstructor(WorldServer.class).newInstance(player.mcServer.worldServerForDimension(teleporter.getDimension())));
 			transferPlayerToDimension(player.mcServer, player, teleporter.getDimension(), port);
 			transferPlayerToDimension(player.mcServer, player, teleporter.getDimension(), port);
 		} else {
+			TeleportLoc port = new TeleportLoc(teleporter.getTeleporter().getConstructor(WorldServer.class).newInstance(player.mcServer.worldServerForDimension(cap.getLastDimension() == teleporter.getDimension() ? 0 : cap.getLastDimension())));
 			transferPlayerToDimension(player.mcServer, player, cap.getLastDimension() == teleporter.getDimension() ? 0 : cap.getLastDimension(), port);
 			cap.setLastDimension(teleporter.getDimension());
 		}
