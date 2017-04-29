@@ -2,6 +2,7 @@ package Tamaized.TamModized.capabilities.dimTracker;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import Tamaized.TamModized.TamModized;
 import Tamaized.TamModized.helper.PacketHelper;
@@ -35,10 +36,14 @@ public class DimensionCapabilityHandler implements IDimensionCapability {
 				tick++;
 				if (!hasTeleported && tick % (20 * 5) == 0) {
 					hasTeleported = true;
-					PortalHandlerRegistry.doTeleport(this, (EntityPlayerMP) player, PortalHandlerRegistry.getTeleporter(player.world.getBlockState(player.getPosition())));
+					try {
+						PortalHandlerRegistry.doTeleport(this, (EntityPlayerMP) player, PortalHandlerRegistry.getTeleporter(player.world.getBlockState(player.getPosition())));
+					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+						e.printStackTrace();
+					}
 				}
 			} else {
-				tick--;
+				if (tick > 0) tick--;
 				hasTeleported = false;
 			}
 		}

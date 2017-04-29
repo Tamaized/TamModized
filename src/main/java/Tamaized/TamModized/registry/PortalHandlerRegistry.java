@@ -1,5 +1,6 @@
 package Tamaized.TamModized.registry;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -32,9 +33,9 @@ public class PortalHandlerRegistry {
 	private static class TeleporterWrapper {
 
 		private final int dim;
-		private final Teleporter teleporter;
+		private final Class<? extends Teleporter> teleporter;
 
-		public TeleporterWrapper(int dimension, Teleporter t) {
+		public TeleporterWrapper(int dimension, Class<? extends Teleporter> t) {
 			dim = dimension;
 			teleporter = t;
 		}
@@ -43,17 +44,17 @@ public class PortalHandlerRegistry {
 			return dim;
 		}
 
-		public Teleporter getTeleporter() {
+		public Class<? extends Teleporter> getTeleporter() {
 			return teleporter;
 		}
 
 	}
 
-	public static void register(IBlockState state, int dimension, Teleporter teleporter) {
+	public static void register(IBlockState state, int dimension, Class<? extends Teleporter> teleporter) {
 		register(state.getBlock(), dimension, teleporter);
 	}
 
-	public static void register(Block block, int dimension, Teleporter teleporter) {
+	public static void register(Block block, int dimension, Class<? extends Teleporter> teleporter) {
 		map.put(block, new TeleporterWrapper(dimension, teleporter));
 	}
 
@@ -73,20 +74,22 @@ public class PortalHandlerRegistry {
 		return map.containsKey(block);
 	}
 
-	public static void doTeleport(IDimensionCapability cap, EntityPlayerMP player, TeleporterWrapper teleporter) {
-		if (player.dimension != teleporter.getDimension() && player.dimension != 1) { 
+	public static void doTeleport(IDimensionCapability cap, EntityPlayerMP player, TeleporterWrapper teleporter) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		if (player.world == null || !(player.world instanceof WorldServer)) return;
+		TeleportLoc port = new TeleportLoc(teleporter.getTeleporter().getConstructor(WorldServer.class).newInstance((WorldServer) player.world));
+		if (player.dimension != teleporter.getDimension() && player.dimension != 1) {
 			cap.setLastDimension(player.dimension);
-			transferPlayerToDimension(player.mcServer, player, teleporter.getDimension(), new TeleportLoc(teleporter.getTeleporter()));
+			transferPlayerToDimension(player.mcServer, player, teleporter.getDimension(), port);
 		} else if (player.dimension == 1) { // From end
 			cap.setLastDimension(player.dimension);
-			transferPlayerToDimension(player.mcServer, player, teleporter.getDimension(), new TeleportLoc(teleporter.getTeleporter()));
-			transferPlayerToDimension(player.mcServer, player, teleporter.getDimension(), new TeleportLoc(teleporter.getTeleporter()));
+			transferPlayerToDimension(player.mcServer, player, teleporter.getDimension(), port);
+			transferPlayerToDimension(player.mcServer, player, teleporter.getDimension(), port);
 		} else {
+			transferPlayerToDimension(player.mcServer, player, cap.getLastDimension() == teleporter.getDimension() ? 0 : cap.getLastDimension(), port);
 			cap.setLastDimension(teleporter.getDimension());
-			transferPlayerToDimension(player.mcServer, player, cap.getLastDimension(), new TeleportLoc(teleporter.getTeleporter()));
 		}
 	}
-	
+
 	private static void transferPlayerToDimension(MinecraftServer mcServer, EntityPlayerMP player, int dimId, TeleportLoc teleporter) { // Custom Made to handle teleporting to and from The End (DIM 1)
 		int j = player.dimension;
 		WorldServer worldserver = mcServer.worldServerForDimension(player.dimension);
@@ -110,7 +113,7 @@ public class PortalHandlerRegistry {
 		}
 		FMLCommonHandler.instance().firePlayerChangedDimensionEvent(player, j, dimId);
 	}
-	
+
 	private static void transferEntityToWorld(Entity p_82448_1_, int p_82448_2_, WorldServer p_82448_3_, WorldServer p_82448_4_, TeleportLoc teleporter) { // Custom Made to handle teleporting to and from The End (DIM 1)
 		WorldProvider pOld = p_82448_3_.provider;
 		WorldProvider pNew = p_82448_4_.provider;
@@ -138,7 +141,7 @@ public class PortalHandlerRegistry {
 		p_82448_3_.theProfiler.endSection();
 		p_82448_1_.setWorld(p_82448_4_);
 	}
-	
+
 	private static class TeleportLoc {
 
 		public final Teleporter teleporter;
