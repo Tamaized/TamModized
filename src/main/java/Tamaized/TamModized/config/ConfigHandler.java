@@ -12,10 +12,17 @@ public class ConfigHandler extends AbstractConfigHandler {
 		super(instance, file, c);
 	}
 
+	@Override
+	protected void init() {
+		
+	}
+
+	@Override
 	protected void loadData(boolean firstLoad) {
 		
 	}
 
+	@Override
 	protected void cleanup() throws IOException {
 		
 	}

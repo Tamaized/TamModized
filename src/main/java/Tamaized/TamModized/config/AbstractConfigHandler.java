@@ -6,6 +6,7 @@ import java.io.IOException;
 import Tamaized.TamModized.TamModBase;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.event.terraingen.WorldTypeEvent.InitBiomeGens;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -20,9 +21,15 @@ public abstract class AbstractConfigHandler {
 		configFile = file;
 		config = c;
 		config.load();
+		init();
 		sync(true);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
+
+	/**
+	 * Use this to initialize default variables as they will be null otherwise during the first load
+	 */
+	protected abstract void init();
 
 	public final Configuration getConfig() {
 		return config;
