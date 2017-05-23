@@ -6,6 +6,7 @@ import Tamaized.TamModized.capabilities.dimTracker.DimensionCapabilityHandler;
 import Tamaized.TamModized.capabilities.dimTracker.DimensionCapabilityStorage;
 import Tamaized.TamModized.capabilities.dimTracker.IDimensionCapability;
 import Tamaized.TamModized.config.ConfigHandler;
+import Tamaized.TamModized.entity.dragon.EntityDragonOld;
 import Tamaized.TamModized.handler.ContributorHandler;
 import Tamaized.TamModized.proxy.AbstractProxy;
 import Tamaized.TamModized.registry.PortalHandlerRegistry;
@@ -95,7 +96,7 @@ public class TamModized extends TamModBase {
 
 	@Override
 	public void init(FMLInitializationEvent event) {
-
+		registerEntity(EntityDragonOld.class, "DragonOld", this, modid, 64, 1, true);
 	}
 
 	@Override
