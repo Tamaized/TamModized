@@ -2,6 +2,7 @@ package Tamaized.TamModized.client;
 
 import java.util.ArrayList;
 
+import Tamaized.TamModized.helper.TranslateHelper;
 import Tamaized.TamModized.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -20,7 +21,7 @@ public class FloatyTextOverlay extends Gui {
 	private static volatile FloatyText[] floatyText = new FloatyText[11];
 
 	public static void addFloatyText(String s) {
-		textSpooler.add(s);
+		textSpooler.add(TranslateHelper.translate(s));
 	}
 
 	@SubscribeEvent
