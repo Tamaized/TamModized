@@ -75,7 +75,6 @@ public class PortalHandlerRegistry {
 	}
 
 	public static void doTeleport(IDimensionCapability cap, EntityPlayerMP player, TeleporterWrapper teleporter) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		if (player.world == null || !(player.world instanceof WorldServer)) return;
 		if (player.dimension != teleporter.getDimension() && player.dimension != 1) {
 			cap.setLastDimension(player.dimension);
 			TeleportLoc port = new TeleportLoc(teleporter.getTeleporter().getConstructor(WorldServer.class).newInstance(player.mcServer.worldServerForDimension(teleporter.getDimension())));
