@@ -6,7 +6,7 @@ import Tamaized.TamModized.entity.dragon.EntityDragonOld;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
@@ -16,7 +16,7 @@ public class LayerEnderDragonOldDeath implements LayerRenderer<EntityDragonOld> 
 	public void doRenderLayer(EntityDragonOld entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		if (entitylivingbaseIn.deathTicks > 0) {
 			Tessellator tessellator = Tessellator.getInstance();
-			VertexBuffer vertexbuffer = tessellator.getBuffer();
+			BufferBuilder vertexbuffer = tessellator.getBuffer();
 			RenderHelper.disableStandardItemLighting();
 			float f = ((float) entitylivingbaseIn.deathTicks + partialTicks) / 200.0F;
 			float f1 = 0.0F;

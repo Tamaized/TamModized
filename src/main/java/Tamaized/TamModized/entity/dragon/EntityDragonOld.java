@@ -26,6 +26,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+
 public class EntityDragonOld extends EntityLiving implements IEntityMultiPartOld, IMob {
 
 	public double targetX;
@@ -267,7 +269,7 @@ public class EntityDragonOld extends EntityLiving implements IEntityMultiPartOld
 				this.rotationYaw += this.randomYawVelocity * 0.1F;
 				float f7 = (float) (2.0D / (d9 + 1.0D));
 				float f8 = 0.06F;
-				this.moveRelative(0.0F, -1.0F, f8 * (f5 * f7 + (1.0F - f7)));
+				this.func_191958_b(0.0F, 0.0F, -1.0F, f8 * (f5 * f7 + (1.0F - f7))); // Was moveRelative
 
 				if (this.slowed) {
 					this.move(MoverType.SELF, this.motionX * 0.800000011920929D, this.motionY * 0.800000011920929D, this.motionZ * 0.800000011920929D);
@@ -589,7 +591,7 @@ public class EntityDragonOld extends EntityLiving implements IEntityMultiPartOld
 	}
 
 	@Override
-	protected SoundEvent getHurtSound() {
+	protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
 		return SoundEvents.ENTITY_ENDERDRAGON_HURT;
 	}
 

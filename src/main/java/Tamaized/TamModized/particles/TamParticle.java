@@ -1,7 +1,7 @@
 package Tamaized.TamModized.particles;
 
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -28,15 +28,15 @@ public abstract class TamParticle extends Particle {
 	}
 	
 	@Override
-	public void renderParticle(VertexBuffer buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		if (render(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ)) {
 			super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
 		}
 	}
 
 	/**
-	 * Return true if you wish to super call {@link Particle#renderParticle(VertexBuffer, Entity, float, float, float, float, float, float)}
+	 * Return true if you wish to super call {@link Particle#renderParticle(BufferBuilder, Entity, float, float, float, float, float, float)}
 	 */
-	public abstract boolean render(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ);
+	public abstract boolean render(BufferBuilder worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ);
 
 }

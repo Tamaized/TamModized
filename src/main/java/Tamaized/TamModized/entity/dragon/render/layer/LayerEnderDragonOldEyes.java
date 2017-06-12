@@ -31,7 +31,7 @@ public class LayerEnderDragonOldEyes implements LayerRenderer<EntityDragonOld> {
 		GlStateManager.enableLighting();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		this.dragonRenderer.getMainModel().render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-		this.dragonRenderer.setLightmap(entitylivingbaseIn, partialTicks);
+		this.dragonRenderer.setLightmap(entitylivingbaseIn);
 		GlStateManager.disableBlend();
 		GlStateManager.enableAlpha();
 		GlStateManager.depthFunc(515);

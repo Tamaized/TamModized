@@ -7,9 +7,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -58,7 +58,7 @@ public class RenderPortalOverlay {
 			float f3 = texture.getMaxV();
 
 			Tessellator tessellator = Tessellator.getInstance();
-			VertexBuffer worldrenderer = tessellator.getBuffer();
+			BufferBuilder worldrenderer = tessellator.getBuffer();
 			worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
 			worldrenderer.pos(0.0D, (double) scaledRes.getScaledHeight(), -90.0D).tex((double) f, (double) f3).endVertex();
 			worldrenderer.pos((double) scaledRes.getScaledWidth(), (double) scaledRes.getScaledHeight(), -90.0D).tex((double) f2, (double) f3).endVertex();

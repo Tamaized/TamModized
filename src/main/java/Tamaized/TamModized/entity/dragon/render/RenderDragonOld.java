@@ -7,7 +7,7 @@ import Tamaized.TamModized.entity.dragon.render.layer.LayerEnderDragonOldEyes;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -112,7 +112,7 @@ public class RenderDragonOld<T extends EntityDragonOld> extends RenderLiving<T> 
 		GlStateManager.rotate((float) (-Math.atan2((double) f2, (double) f)) * (180F / (float) Math.PI) - 90.0F, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate((float) (-Math.atan2((double) f3, (double) f1)) * (180F / (float) Math.PI) - 90.0F, 1.0F, 0.0F, 0.0F);
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer vertexbuffer = tessellator.getBuffer();
+		BufferBuilder vertexbuffer = tessellator.getBuffer();
 		RenderHelper.disableStandardItemLighting();
 		GlStateManager.disableCull();
 		GlStateManager.shadeModel(7425);

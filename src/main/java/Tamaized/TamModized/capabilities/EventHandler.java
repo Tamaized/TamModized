@@ -2,6 +2,7 @@ package Tamaized.TamModized.capabilities;
 
 import Tamaized.TamModized.capabilities.dimTracker.DimensionCapabilityHandler;
 import Tamaized.TamModized.capabilities.dimTracker.IDimensionCapability;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -14,8 +15,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class EventHandler {
 
 	@SubscribeEvent
-	public void attachCapabilityEntity(AttachCapabilitiesEvent.Entity e) {
-		if (e.getEntity() instanceof EntityPlayer) {
+	public void attachCapabilityEntity(AttachCapabilitiesEvent<Entity> e) {
+		if (e.getObject() instanceof EntityPlayer) {
 			e.addCapability(DimensionCapabilityHandler.ID, new ICapabilitySerializable<NBTTagCompound>() {
 
 				IDimensionCapability inst = CapabilityList.DIMENSION.getDefaultInstance();
