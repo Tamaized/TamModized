@@ -1,6 +1,7 @@
 package Tamaized.TamModized.handler;
 
-import java.awt.Color;
+import Tamaized.TamModized.TamModized;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -9,11 +10,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
-import Tamaized.TamModized.TamModized;
-
 public class ContributorHandler {
 
-	private static final String URL_FLUFF = "https://raw.githubusercontent.com/Tamaized/TamModized/1.11.2/contributors/fluff.properties";
+	private static final String URL_FLUFF = "https://raw.githubusercontent.com/Tamaized/TamModized/1.12/contributors/fluff.properties";
 
 	public static volatile Map<UUID, Integer> fluff = new HashMap<UUID, Integer>();
 
