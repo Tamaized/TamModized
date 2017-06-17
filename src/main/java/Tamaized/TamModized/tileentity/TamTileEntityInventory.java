@@ -141,6 +141,10 @@ public abstract class TamTileEntityInventory extends TamTileEntity {
 			return stack;
 		}
 
+		public ItemStack extractBypass(int slot, int amount, boolean simulate) {
+			return super.extractItem(slot, amount, simulate);
+		}
+
 		@Nonnull
 		@Override
 		public ItemStack extractItem(int slot, int amount, boolean simulate) {
