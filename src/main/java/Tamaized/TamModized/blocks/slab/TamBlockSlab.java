@@ -2,27 +2,33 @@ package Tamaized.TamModized.blocks.slab;
 
 import java.util.Random;
 
+import Tamaized.TamModized.registry.ITamRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
-import Tamaized.TamModized.registry.ITamModel;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.event.RegistryEvent;
 
-public abstract class TamBlockSlab extends BlockSlab implements ITamModel {
+public abstract class TamBlockSlab extends BlockSlab implements ITamRegistry {
 
 	private final String name;
-	private static final PropertyEnum<TamBlockSlab.Variant> VARIANT = PropertyEnum.<TamBlockSlab.Variant> create("variant", TamBlockSlab.Variant.class);
+	private static final PropertyEnum<TamBlockSlab.Variant> VARIANT = PropertyEnum.create("variant", TamBlockSlab.Variant.class);
 	private static final int HALF_META_BIT = 8;
 
 	public TamBlockSlab(CreativeTabs tab, Material materialIn, String n) {
 		super(materialIn);
 		name = n;
+		setRegistryName(getModelDir() + "/" + name);
 		setUnlocalizedName(name);
 		IBlockState blockState = this.blockState.getBaseState();
 		if (!isDouble()) {
@@ -34,16 +40,24 @@ public abstract class TamBlockSlab extends BlockSlab implements ITamModel {
 	}
 
 	@Override
-	public String getName() {
-		return name;
+	public void registerItem(RegistryEvent.Register<Item> e) {
+
 	}
 
 	@Override
+	public void registerBlock(RegistryEvent.Register<Block> e) {
+		e.getRegistry().register(this);
+	}
+
+	@Override
+	public void registerModel(ModelRegistryEvent e) {
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+	}
+
 	public String getModelDir() {
 		return "blocks";
 	}
 
-	@Override
 	public Item getAsItem() {
 		return Item.getItemFromBlock(this);
 	}

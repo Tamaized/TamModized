@@ -1,13 +1,17 @@
 package Tamaized.TamModized.armors;
 
+import Tamaized.TamModized.registry.ITamRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import Tamaized.TamModized.registry.ITamModel;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.event.RegistryEvent;
 
-public class TamArmor extends ItemArmor implements ITamModel {
+public class TamArmor extends ItemArmor implements ITamRegistry {
 
 	private final String name;
 
@@ -15,24 +19,28 @@ public class TamArmor extends ItemArmor implements ITamModel {
 		super(armorMaterial, par3, par4);
 		name = n;
 		setUnlocalizedName(name);
-		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + n));
+		setRegistryName(getModelDir() + "/" + n);
 		this.setMaxStackSize(1);
 		this.setCreativeTab(tab);
 	}
 
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
 	public String getModelDir() {
 		return "armors";
 	}
 
 	@Override
-	public Item getAsItem() {
-		return this;
+	public void registerBlock(RegistryEvent.Register<Block> e) {
+
+	}
+
+	@Override
+	public void registerItem(RegistryEvent.Register<Item> e) {
+		e.getRegistry().register(this);
+	}
+
+	@Override
+	public void registerModel(ModelRegistryEvent e) {
+		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
 	}
 
 }

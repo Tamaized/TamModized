@@ -1,39 +1,60 @@
 package Tamaized.TamModized.fluids;
 
+import Tamaized.TamModized.client.MeshDefinitionFix;
+import Tamaized.TamModized.registry.ITamRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import Tamaized.TamModized.registry.ITamModel;
 
-public class TamFluidBlock extends BlockFluidClassic implements ITamModel{
-	
+public class TamFluidBlock extends BlockFluidClassic implements ITamRegistry {
+
 	private final String name;
 
 	public TamFluidBlock(CreativeTabs tab, Fluid fluid, Material material, String name) {
 		super(fluid, material);
 		this.name = name;
 		setUnlocalizedName(name);
-		GameRegistry.register(this.setRegistryName(getName()));
-		GameRegistry.register(new ItemBlock(this).setRegistryName(getName()));
-		this.setCreativeTab(tab);
+		setRegistryName(name);
+		setCreativeTab(tab);
 	}
 
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
 	public String getModelDir() {
 		return "fluids";
-	} 
+	}
 
 	@Override
-	public Item getAsItem() {
-		return Item.getItemFromBlock(this);
+	public void registerBlock(RegistryEvent.Register<Block> e) {
+		e.getRegistry().register(this);
+	}
+
+	@Override
+	public void registerItem(RegistryEvent.Register<Item> e) {
+		e.getRegistry().register(new ItemBlock(this).setRegistryName(name));
+	}
+
+	@Override
+	public void registerModel(ModelRegistryEvent e) {
+		final Item item = Item.getItemFromBlock(this);
+		ModelBakery.registerItemVariants(item);
+		String domain = getRegistryName() == null ? "minecraft" : getRegistryName().getResourceDomain();
+		ModelResourceLocation modelResourceLocation = new ModelResourceLocation(domain + ":blocks/fluids", getFluid().getName());
+		ModelLoader.setCustomMeshDefinition(item, MeshDefinitionFix.create(stack -> modelResourceLocation));
+		ModelLoader.setCustomStateMapper(this, new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState p_178132_1_) {
+				return modelResourceLocation;
+			}
+		});
 	}
 }

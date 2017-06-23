@@ -1,8 +1,5 @@
 package Tamaized.TamModized.proxy;
 
-/**
- * This will only run on a dedicated server
- */
 public class ServerProxy extends AbstractProxy {
 
 	public ServerProxy() {

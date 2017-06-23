@@ -1,13 +1,16 @@
 package Tamaized.TamModized.tools;
 
+import Tamaized.TamModized.registry.ITamRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import Tamaized.TamModized.registry.ITamModel;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.event.RegistryEvent;
 
-public class TamSpade extends ItemSpade implements ITamModel {
+public class TamSpade extends ItemSpade implements ITamRegistry {
 
 	private final String name;
 
@@ -15,23 +18,27 @@ public class TamSpade extends ItemSpade implements ITamModel {
 		super(material);
 		name = n;
 		setUnlocalizedName(name);
-		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + n));
-		this.setCreativeTab(tab);
+		setRegistryName(getModelDir() + "/" + n);
+		setCreativeTab(tab);
 	}
 
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
 	public String getModelDir() {
 		return "tools";
 	}
 
 	@Override
-	public Item getAsItem() {
-		return this;
+	public void registerBlock(RegistryEvent.Register<Block> e) {
+
+	}
+
+	@Override
+	public void registerItem(RegistryEvent.Register<Item> e) {
+		e.getRegistry().register(this);
+	}
+
+	@Override
+	public void registerModel(ModelRegistryEvent e) {
+		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
 	}
 
 }

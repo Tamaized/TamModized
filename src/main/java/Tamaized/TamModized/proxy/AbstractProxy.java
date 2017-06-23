@@ -1,7 +1,5 @@
 package Tamaized.TamModized.proxy;
 
-import Tamaized.TamModized.registry.TamRegistryHandler;
-
 public abstract class AbstractProxy {
 
 	protected static enum Side {
@@ -21,17 +19,5 @@ public abstract class AbstractProxy {
 	public abstract void init();
 
 	public abstract void postInit();
-
-	public final void registryHandlerPreInit(TamRegistryHandler handler) {
-		if (side == Side.CLIENT) handler.clientPreInit();
-	}
-
-	public final void registryHandlerInit(TamRegistryHandler handler) {
-		if (side == Side.CLIENT) handler.clientInit();
-	}
-
-	public final void registryHandlerPostInit(TamRegistryHandler handler) {
-		if (side == Side.CLIENT) handler.clientPostInit();
-	}
 
 }

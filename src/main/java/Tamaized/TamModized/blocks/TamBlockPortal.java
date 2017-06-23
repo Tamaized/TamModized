@@ -1,7 +1,6 @@
 package Tamaized.TamModized.blocks;
 
-import java.util.Random;
-
+import Tamaized.TamModized.registry.ITamRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBreakable;
 import net.minecraft.block.SoundType;
@@ -10,6 +9,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
@@ -19,42 +19,53 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import Tamaized.TamModized.registry.ITamModel;
 
-public abstract class TamBlockPortal extends BlockBreakable implements ITamModel {
+import java.util.Random;
 
+public abstract class TamBlockPortal extends BlockBreakable implements ITamRegistry {
+
+	public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.<EnumFacing.Axis>create("axis", EnumFacing.Axis.class, new EnumFacing.Axis[]{EnumFacing.Axis.X, EnumFacing.Axis.Z});
 	private final String name;
-	public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.<EnumFacing.Axis> create("axis", EnumFacing.Axis.class, new EnumFacing.Axis[] { EnumFacing.Axis.X, EnumFacing.Axis.Z });
 
 	public TamBlockPortal(CreativeTabs tab, String n, boolean hasAxis, SoundType sound) {
 		super(Material.PORTAL, false);
-		if (hasAxis) this.setDefaultState(this.blockState.getBaseState().withProperty(AXIS, EnumFacing.Axis.X));
+		if (hasAxis)
+			this.setDefaultState(this.blockState.getBaseState().withProperty(AXIS, EnumFacing.Axis.X));
 		this.setTickRandomly(true);
 		this.setLightLevel(0.75F);
 		name = n;
 		setUnlocalizedName(name);
-		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + getName()));
-		GameRegistry.register(new ItemBlock(this).setRegistryName(getModelDir() + "/" + getName()));
+		setRegistryName(getModelDir() + "/" + name);
 		setCreativeTab(tab);
 		setSoundType(sound);
 	}
 
-	@Override
-	public String getName() {
-		return name;
+	public static int getMetaForAxis(EnumFacing.Axis axis) {
+		return axis == EnumFacing.Axis.X ? 1 : (axis == EnumFacing.Axis.Z ? 2 : 0);
 	}
 
-	@Override
 	public String getModelDir() {
 		return "blocks";
 	}
 
 	@Override
-	public Item getAsItem() {
-		return Item.getItemFromBlock(this);
+	public void registerModel(ModelRegistryEvent e) {
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+	}
+
+	@Override
+	public void registerBlock(RegistryEvent.Register<Block> e) {
+		e.getRegistry().register(this);
+	}
+
+	@Override
+	public void registerItem(RegistryEvent.Register<Item> e) {
+		e.getRegistry().register(new ItemBlock(this).setRegistryName(getModelDir() + "/" + name));
 	}
 
 	/**
@@ -79,11 +90,7 @@ public abstract class TamBlockPortal extends BlockBreakable implements ITamModel
 	 */
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { AXIS });
-	}
-
-	public static int getMetaForAxis(EnumFacing.Axis axis) {
-		return axis == EnumFacing.Axis.X ? 1 : (axis == EnumFacing.Axis.Z ? 2 : 0);
+		return new BlockStateContainer(this, new IProperty[]{AXIS});
 	}
 
 	/**
@@ -113,7 +120,7 @@ public abstract class TamBlockPortal extends BlockBreakable implements ITamModel
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		return null;
 	}
-	
+
 	/**
 	 * Is this block (a) opaque and (B) a full 1m cube? This determines whether
 	 * or not to render the shared face of two adjacent blocks and also whether

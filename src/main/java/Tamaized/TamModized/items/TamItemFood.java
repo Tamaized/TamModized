@@ -1,15 +1,20 @@
 package Tamaized.TamModized.items;
 
-import Tamaized.TamModized.registry.ITamModel;
+import Tamaized.TamModized.registry.ITamRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public abstract class TamItemFood extends ItemFood implements ITamModel {
+public abstract class TamItemFood extends ItemFood implements ITamRegistry {
 
 	private final String name;
 
@@ -18,7 +23,7 @@ public abstract class TamItemFood extends ItemFood implements ITamModel {
 		name = n;
 		setUnlocalizedName(name);
 		setMaxStackSize(maxStackSize);
-		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + n));
+		setRegistryName(getModelDir() + "/" + name);
 		this.setCreativeTab(tab);
 	}
 	
@@ -29,20 +34,24 @@ public abstract class TamItemFood extends ItemFood implements ITamModel {
 	}
 	
 	protected abstract void doneEating(ItemStack stack, World worldIn, EntityLivingBase entityLiving);
-	
-	@Override
-	public String getName() {
-		return name;
-	}
 
-	@Override
 	public String getModelDir() {
 		return "items";
 	}
 
 	@Override
-	public Item getAsItem() {
-		return this;
+	public void registerBlock(RegistryEvent.Register<Block> e) {
+
+	}
+
+	@Override
+	public void registerItem(RegistryEvent.Register<Item> e) {
+		e.getRegistry().register(this);
+	}
+
+	@Override
+	public void registerModel(ModelRegistryEvent e) {
+		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
 	}
 
 }

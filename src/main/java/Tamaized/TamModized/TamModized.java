@@ -1,7 +1,5 @@
 package Tamaized.TamModized;
 
-import java.io.File;
-
 import Tamaized.TamModized.capabilities.dimTracker.DimensionCapabilityHandler;
 import Tamaized.TamModized.capabilities.dimTracker.DimensionCapabilityStorage;
 import Tamaized.TamModized.capabilities.dimTracker.IDimensionCapability;
@@ -24,28 +22,26 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.FMLEventChannel;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
+import java.io.File;
+
 @Mod(modid = TamModized.modid, name = "TamModized", guiFactory = "Tamaized.TamModized.config.GUIConfigFactory", version = TamModized.version)
 public class TamModized extends TamModBase {
 
 	public final static String version = "${version}";
 	public static final String modid = "tammodized";
-
+	public static final String networkChannelName = "TamModized";
 	@SidedProxy(clientSide = "Tamaized.TamModized.proxy.ClientProxy", serverSide = "Tamaized.TamModized.proxy.ServerProxy")
 	public static AbstractProxy proxy;
-
 	@Instance(modid)
 	public static TamModized instance = new TamModized();
+	public static ConfigHandler config;
+
+	public static FMLEventChannel channel;
+	public static TamModizedParticles particles;
 
 	public static String getVersion() {
 		return version;
 	}
-
-	public static ConfigHandler config;
-
-	public static FMLEventChannel channel;
-	public static final String networkChannelName = "TamModized";
-
-	public static TamModizedParticles particles;
 
 	@Override
 	protected AbstractProxy getProxy() {
@@ -84,7 +80,7 @@ public class TamModized extends TamModBase {
 
 		ContributorHandler.start();
 
-		register(particles = new TamModizedParticles());
+		TamModizedParticles.register();
 
 		channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(networkChannelName);
 

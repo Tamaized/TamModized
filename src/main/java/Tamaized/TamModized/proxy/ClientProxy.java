@@ -7,7 +7,6 @@ import Tamaized.TamModized.client.RenderPortalOverlay;
 import Tamaized.TamModized.entity.dragon.EntityDragonOld;
 import Tamaized.TamModized.entity.dragon.render.RenderDragonOld;
 import Tamaized.TamModized.network.ClientPacketHandler;
-import Tamaized.TamModized.registry.TamModelResourceHandler;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -27,17 +26,11 @@ public class ClientProxy extends AbstractProxy {
 
 	@Override
 	public void preInit() {
-		RenderingRegistry.registerEntityRenderingHandler(EntityDragonOld.class, new IRenderFactory<EntityDragonOld>() {
-			@Override
-			public Render<? super EntityDragonOld> createRenderFor(RenderManager manager) {
-				return new RenderDragonOld(manager);
-			}
-		});
+		RenderingRegistry.registerEntityRenderingHandler(EntityDragonOld.class, RenderDragonOld::new);
 	}
 
 	@Override
 	public void init() {
-		TamModelResourceHandler.instance.compile();
 		MinecraftForge.EVENT_BUS.register(new RenderContributors());
 		MinecraftForge.EVENT_BUS.register(new FloatyTextOverlay());
 		MinecraftForge.EVENT_BUS.register(new RenderPortalOverlay());

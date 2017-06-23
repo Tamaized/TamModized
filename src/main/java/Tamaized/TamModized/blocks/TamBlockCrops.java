@@ -1,11 +1,6 @@
 package Tamaized.TamModized.blocks;
 
-import java.util.ArrayList;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
-import Tamaized.TamModized.registry.ITamModel;
+import Tamaized.TamModized.registry.ITamRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
@@ -15,6 +10,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -24,38 +20,76 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.event.RegistryEvent;
 
-public abstract class TamBlockCrops extends BlockBush implements ITamModel, IGrowable {
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Random;
 
-	private final String name;
+public abstract class TamBlockCrops extends BlockBush implements IGrowable, ITamRegistry {
 
 	public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 7);
+	private final String name;
 
 	public TamBlockCrops(CreativeTabs tab, Material material, String n, float hardness, SoundType sound) {
 		super();
 		name = n;
 		setUnlocalizedName(name);
 		setHardness(hardness);
-		GameRegistry.register(this.setRegistryName(getModelDir() + "/" + getName()));
-		GameRegistry.register(new ItemBlock(this).setRegistryName(getModelDir() + "/" + getName()));
+		setRegistryName(getModelDir() + "/" + name);
 		setCreativeTab(tab);
 		setSoundType(sound);
 	}
 
-	@Override
-	public String getName() {
-		return name;
+	protected static float getGrowthChance(Block blockIn, World worldIn, BlockPos pos) {
+		float f = 1.0F;
+		BlockPos blockpos = pos.down();
+
+		for (int i = -1; i <= 1; ++i) {
+			for (int j = -1; j <= 1; ++j) {
+				float f1 = 0.0F;
+				IBlockState iblockstate = worldIn.getBlockState(blockpos.add(i, 0, j));
+
+				if (iblockstate.getBlock().canSustainPlant(iblockstate, worldIn, blockpos.add(i, 0, j), net.minecraft.util.EnumFacing.UP, (net.minecraftforge.common.IPlantable) blockIn)) {
+					f1 = 1.0F;
+
+					if (iblockstate.getBlock().isFertile(worldIn, blockpos.add(i, 0, j))) {
+						f1 = 3.0F;
+					}
+				}
+
+				if (i != 0 || j != 0) {
+					f1 /= 4.0F;
+				}
+
+				f += f1;
+			}
+		}
+
+		BlockPos blockpos1 = pos.north();
+		BlockPos blockpos2 = pos.south();
+		BlockPos blockpos3 = pos.west();
+		BlockPos blockpos4 = pos.east();
+		boolean flag = blockIn == worldIn.getBlockState(blockpos3).getBlock() || blockIn == worldIn.getBlockState(blockpos4).getBlock();
+		boolean flag1 = blockIn == worldIn.getBlockState(blockpos1).getBlock() || blockIn == worldIn.getBlockState(blockpos2).getBlock();
+
+		if (flag && flag1) {
+			f /= 2.0F;
+		} else {
+			boolean flag2 = blockIn == worldIn.getBlockState(blockpos3.north()).getBlock() || blockIn == worldIn.getBlockState(blockpos4.north()).getBlock() || blockIn == worldIn.getBlockState(blockpos4.south()).getBlock() || blockIn == worldIn.getBlockState(blockpos3.south()).getBlock();
+
+			if (flag2) {
+				f /= 2.0F;
+			}
+		}
+
+		return f;
 	}
 
-	@Override
 	public String getModelDir() {
 		return "crops";
-	}
-
-	@Override
-	public Item getAsItem() {
-		return Item.getItemFromBlock(this);
 	}
 
 	@Override
@@ -65,6 +99,7 @@ public abstract class TamBlockCrops extends BlockBush implements ITamModel, IGro
 
 	protected abstract AxisAlignedBB[] getBounds();
 
+	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		IBlockState soil = worldIn.getBlockState(pos.down());
 		return super.canPlaceBlockAt(worldIn, pos) && canSustainBush(soil) && soil.getBlock().canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this);
@@ -152,51 +187,6 @@ public abstract class TamBlockCrops extends BlockBush implements ITamModel, IGro
 		return isCorrectLightLevel(worldIn, pos) ? MathHelper.getInt(worldIn.rand, 2, 5) : 0;
 	}
 
-	protected static float getGrowthChance(Block blockIn, World worldIn, BlockPos pos) {
-		float f = 1.0F;
-		BlockPos blockpos = pos.down();
-
-		for (int i = -1; i <= 1; ++i) {
-			for (int j = -1; j <= 1; ++j) {
-				float f1 = 0.0F;
-				IBlockState iblockstate = worldIn.getBlockState(blockpos.add(i, 0, j));
-
-				if (iblockstate.getBlock().canSustainPlant(iblockstate, worldIn, blockpos.add(i, 0, j), net.minecraft.util.EnumFacing.UP, (net.minecraftforge.common.IPlantable) blockIn)) {
-					f1 = 1.0F;
-
-					if (iblockstate.getBlock().isFertile(worldIn, blockpos.add(i, 0, j))) {
-						f1 = 3.0F;
-					}
-				}
-
-				if (i != 0 || j != 0) {
-					f1 /= 4.0F;
-				}
-
-				f += f1;
-			}
-		}
-
-		BlockPos blockpos1 = pos.north();
-		BlockPos blockpos2 = pos.south();
-		BlockPos blockpos3 = pos.west();
-		BlockPos blockpos4 = pos.east();
-		boolean flag = blockIn == worldIn.getBlockState(blockpos3).getBlock() || blockIn == worldIn.getBlockState(blockpos4).getBlock();
-		boolean flag1 = blockIn == worldIn.getBlockState(blockpos1).getBlock() || blockIn == worldIn.getBlockState(blockpos2).getBlock();
-
-		if (flag && flag1) {
-			f /= 2.0F;
-		} else {
-			boolean flag2 = blockIn == worldIn.getBlockState(blockpos3.north()).getBlock() || blockIn == worldIn.getBlockState(blockpos4.north()).getBlock() || blockIn == worldIn.getBlockState(blockpos4.south()).getBlock() || blockIn == worldIn.getBlockState(blockpos3.south()).getBlock();
-
-			if (flag2) {
-				f /= 2.0F;
-			}
-		}
-
-		return f;
-	}
-
 	@Override
 	public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
 		IBlockState soil = worldIn.getBlockState(pos.down());
@@ -238,6 +228,7 @@ public abstract class TamBlockCrops extends BlockBush implements ITamModel, IGro
 	/**
 	 * Convert the given metadata into a BlockState for this Block
 	 */
+	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return this.withAge(meta);
 	}
@@ -245,12 +236,29 @@ public abstract class TamBlockCrops extends BlockBush implements ITamModel, IGro
 	/**
 	 * Convert the BlockState into the correct metadata value
 	 */
+	@Override
 	public int getMetaFromState(IBlockState state) {
 		return this.getAge(state);
 	}
 
+	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { AGE });
+		return new BlockStateContainer(this, new IProperty[]{AGE});
+	}
+
+	@Override
+	public void registerBlock(RegistryEvent.Register<Block> e) {
+		e.getRegistry().register(this);
+	}
+
+	@Override
+	public void registerItem(RegistryEvent.Register<Item> e) {
+		e.getRegistry().register(new ItemBlock(this).setRegistryName(getModelDir() + "/" + name));
+	}
+
+	@Override
+	public void registerModel(ModelRegistryEvent e) {
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
 	}
 
 }
