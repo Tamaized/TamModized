@@ -46,7 +46,7 @@ public class FloatyTextOverlay extends Gui {
 	@SubscribeEvent
 	public void render(RenderGameOverlayEvent e) {
 		if (e.isCancelable() || e.getType() != e.getType().EXPERIENCE) return;
-		FontRenderer fontRender = mc.fontRendererObj;
+		FontRenderer fontRender = mc.fontRenderer;
 		ScaledResolution sr = new ScaledResolution(mc);
 		int sW = sr.getScaledWidth() / 2;
 

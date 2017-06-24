@@ -77,15 +77,15 @@ public class PortalHandlerRegistry {
 	public static void doTeleport(IDimensionCapability cap, EntityPlayerMP player, TeleporterWrapper teleporter) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		if (player.dimension != teleporter.getDimension() && player.dimension != 1) {
 			cap.setLastDimension(player.dimension);
-			TeleportLoc port = new TeleportLoc(teleporter.getTeleporter().getConstructor(WorldServer.class).newInstance(player.mcServer.worldServerForDimension(teleporter.getDimension())));
+			TeleportLoc port = new TeleportLoc(teleporter.getTeleporter().getConstructor(WorldServer.class).newInstance(player.mcServer.getWorld(teleporter.getDimension())));
 			transferPlayerToDimension(player.mcServer, player, teleporter.getDimension(), port);
 		} else if (player.dimension == 1) { // From end
 			cap.setLastDimension(player.dimension);
-			TeleportLoc port = new TeleportLoc(teleporter.getTeleporter().getConstructor(WorldServer.class).newInstance(player.mcServer.worldServerForDimension(teleporter.getDimension())));
+			TeleportLoc port = new TeleportLoc(teleporter.getTeleporter().getConstructor(WorldServer.class).newInstance(player.mcServer.getWorld(teleporter.getDimension())));
 			transferPlayerToDimension(player.mcServer, player, teleporter.getDimension(), port);
 			transferPlayerToDimension(player.mcServer, player, teleporter.getDimension(), port);
 		} else {
-			TeleportLoc port = new TeleportLoc(teleporter.getTeleporter().getConstructor(WorldServer.class).newInstance(player.mcServer.worldServerForDimension(cap.getLastDimension() == teleporter.getDimension() ? 0 : cap.getLastDimension())));
+			TeleportLoc port = new TeleportLoc(teleporter.getTeleporter().getConstructor(WorldServer.class).newInstance(player.mcServer.getWorld(cap.getLastDimension() == teleporter.getDimension() ? 0 : cap.getLastDimension())));
 			transferPlayerToDimension(player.mcServer, player, cap.getLastDimension() == teleporter.getDimension() ? 0 : cap.getLastDimension(), port);
 			cap.setLastDimension(teleporter.getDimension());
 		}
@@ -93,9 +93,9 @@ public class PortalHandlerRegistry {
 
 	private static void transferPlayerToDimension(MinecraftServer mcServer, EntityPlayerMP player, int dimId, TeleportLoc teleporter) { // Custom Made to handle teleporting to and from The End (DIM 1)
 		int j = player.dimension;
-		WorldServer worldserver = mcServer.worldServerForDimension(player.dimension);
+		WorldServer worldserver = mcServer.getWorld(player.dimension);
 		player.dimension = dimId;
-		WorldServer worldserver1 = mcServer.worldServerForDimension(player.dimension);
+		WorldServer worldserver1 = mcServer.getWorld(player.dimension);
 		player.connection.sendPacket(new SPacketRespawn(player.dimension, worldserver1.getDifficulty(), worldserver1.getWorldInfo().getTerrainType(), player.interactionManager.getGameType())); // Forge: Use new dimensions information
 		mcServer.getPlayerList().updatePermissionLevel(player);
 		worldserver.removeEntityDangerously(player);
@@ -125,10 +125,10 @@ public class PortalHandlerRegistry {
 		double d4 = p_82448_1_.posY;
 		double d5 = p_82448_1_.posZ;
 		float f = p_82448_1_.rotationYaw;
-		p_82448_3_.theProfiler.startSection("moving");
-		p_82448_3_.theProfiler.endSection();
+		p_82448_3_.profiler.startSection("moving");
+		p_82448_3_.profiler.endSection();
 
-		p_82448_3_.theProfiler.startSection("placing");
+		p_82448_3_.profiler.startSection("placing");
 		d0 = (double) MathHelper.clamp((int) d0, -29999872, 29999872);
 		d1 = (double) MathHelper.clamp((int) d1, -29999872, 29999872);
 
@@ -139,7 +139,7 @@ public class PortalHandlerRegistry {
 			p_82448_4_.spawnEntity(p_82448_1_);
 			p_82448_4_.updateEntityWithOptionalForce(p_82448_1_, false);
 		}
-		p_82448_3_.theProfiler.endSection();
+		p_82448_3_.profiler.endSection();
 		p_82448_1_.setWorld(p_82448_4_);
 	}
 

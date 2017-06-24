@@ -21,7 +21,7 @@ public class RayTraceHelper {
 	public static Vec3d[] getPlayerTraceVec(EntityPlayer player, int distance) {
 		Vec3d vec3d = new Vec3d(player.posX, player.posY + (double)player.getEyeHeight(), player.posZ);
 		Vec3d vec3d1 = player.getLook(1.0f);
-		Vec3d vec3d2 = vec3d.addVector(vec3d1.xCoord * distance, vec3d1.yCoord * distance, vec3d1.zCoord * distance);
+		Vec3d vec3d2 = vec3d.addVector(vec3d1.x * distance, vec3d1.y * distance, vec3d1.z * distance);
 		return new Vec3d[] { vec3d, vec3d2 };
 	}
 
@@ -49,7 +49,7 @@ public class RayTraceHelper {
 	 * @return
 	 */
 	public static RayTraceResult tracePath(World world, Vec3d vec1, Vec3d vec2, float borderSize, HashSet<Entity> excluded) {
-		return tracePath(world, (float) vec1.xCoord, (float) vec1.yCoord, (float) vec1.zCoord, (float) vec2.xCoord, (float) vec2.yCoord, (float) vec2.zCoord, borderSize, excluded);
+		return tracePath(world, (float) vec1.x, (float) vec1.y, (float) vec1.z, (float) vec2.x, (float) vec2.y, (float) vec2.z, borderSize, excluded);
 	}
 
 	/**
@@ -58,9 +58,9 @@ public class RayTraceHelper {
 	 * @param x
 	 * @param y
 	 * @param z
-	 * @param targetX
-	 * @param targetY
-	 * @param targetZ
+	 * @param tx
+	 * @param ty
+	 * @param tz
 	 * @param borderSize
 	 * @param excluded if null, doesn't check for entities, only blocks
 	 * @return

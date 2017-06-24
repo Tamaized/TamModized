@@ -27,11 +27,11 @@ public class ParticleHelper {
 			PacketWrapper packet = PacketHelper.createPacket(TamModized.channel, TamModized.networkChannelName, ClientPacketHandler.TYPE_PARTICLE);
 			DataOutputStream stream = packet.getStream();
 			stream.writeInt(handlerID);
-			stream.writeDouble(pos.xCoord);
-			stream.writeDouble(pos.yCoord);
-			stream.writeDouble(pos.zCoord);
+			stream.writeDouble(pos.x);
+			stream.writeDouble(pos.y);
+			stream.writeDouble(pos.z);
 			packetHelper.encode(stream);
-			packet.sendPacket(new TargetPoint(world.provider.getDimension(), pos.xCoord, pos.yCoord, pos.zCoord, range));
+			packet.sendPacket(new TargetPoint(world.provider.getDimension(), pos.x, pos.y, pos.z, range));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

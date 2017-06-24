@@ -82,6 +82,8 @@ public class TamModized extends TamModBase {
 
 		TamModizedParticles.register();
 
+		registerEntity(EntityDragonOld.class, "DragonOld", this, modid, 64, 1, true);
+
 		channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(networkChannelName);
 
 		MinecraftForge.EVENT_BUS.register(new PortalHandlerRegistry());
@@ -92,7 +94,7 @@ public class TamModized extends TamModBase {
 
 	@Override
 	public void init(FMLInitializationEvent event) {
-		registerEntity(EntityDragonOld.class, "DragonOld", this, modid, 64, 1, true);
+
 	}
 
 	@Override

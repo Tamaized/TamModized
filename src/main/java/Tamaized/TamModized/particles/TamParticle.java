@@ -11,7 +11,7 @@ public abstract class TamParticle extends Particle {
 	private Vec3d location;
 
 	public TamParticle(World world, Vec3d pos) {
-		super(world, pos.xCoord, pos.yCoord, pos.zCoord);
+		super(world, pos.x, pos.y, pos.z);
 	}
 
 	public TamParticle(World world, Vec3d pos, Vec3d target) {

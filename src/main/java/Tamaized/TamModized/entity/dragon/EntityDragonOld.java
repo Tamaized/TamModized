@@ -269,7 +269,7 @@ public class EntityDragonOld extends EntityLiving implements IEntityMultiPartOld
 				this.rotationYaw += this.randomYawVelocity * 0.1F;
 				float f7 = (float) (2.0D / (d9 + 1.0D));
 				float f8 = 0.06F;
-				this.func_191958_b(0.0F, 0.0F, -1.0F, f8 * (f5 * f7 + (1.0F - f7))); // Was moveRelative
+				this.moveRelative(0.0F, 0.0F, -1.0F, f8 * (f5 * f7 + (1.0F - f7)));
 
 				if (this.slowed) {
 					this.move(MoverType.SELF, this.motionX * 0.800000011920929D, this.motionY * 0.800000011920929D, this.motionZ * 0.800000011920929D);
@@ -482,7 +482,7 @@ public class EntityDragonOld extends EntityLiving implements IEntityMultiPartOld
 		this.targetZ = this.posZ - (double) (f3 * 5.0F) + (double) ((this.rand.nextFloat() - 0.5F) * 2.0F);
 		this.target = null;
 
-		if (p_70965_2_.getEntity() instanceof EntityPlayer || p_70965_2_.isExplosion()) {
+		if (p_70965_2_.getTrueSource() instanceof EntityPlayer || p_70965_2_.isExplosion()) {
 			this.func_82195_e(p_70965_2_, p_70965_3_);
 		}
 

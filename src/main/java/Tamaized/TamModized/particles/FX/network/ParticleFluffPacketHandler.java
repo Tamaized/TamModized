@@ -1,22 +1,21 @@
 package Tamaized.TamModized.particles.FX.network;
 
-import java.awt.Color;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
 import Tamaized.TamModized.TamModized;
+import Tamaized.TamModized.particles.FX.ParticleFluff;
 import Tamaized.TamModized.particles.ParticleHelper;
 import Tamaized.TamModized.particles.ParticleHelper.IParticlePacketData;
 import Tamaized.TamModized.particles.ParticlePacketBase;
 import Tamaized.TamModized.particles.ParticlePacketHandlerRegistry;
 import Tamaized.TamModized.particles.TamParticle;
-import Tamaized.TamModized.particles.FX.ParticleFluff;
 import io.netty.buffer.ByteBufInputStream;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class ParticleFluffPacketHandler extends ParticlePacketBase {
 
@@ -29,9 +28,9 @@ public class ParticleFluffPacketHandler extends ParticlePacketBase {
 	public void encode(DataOutputStream packet, IParticlePacketData data) throws IOException {
 		if (!(data instanceof ParticleFluffData)) throw new IOException("Incorrect IParticlePacketData type: " + data);
 		ParticleFluffData dat = (ParticleFluffData) data;
-		packet.writeDouble(dat.target.xCoord);
-		packet.writeDouble(dat.target.yCoord);
-		packet.writeDouble(dat.target.zCoord);
+		packet.writeDouble(dat.target.x);
+		packet.writeDouble(dat.target.y);
+		packet.writeDouble(dat.target.z);
 		packet.writeInt(dat.life);
 		packet.writeFloat(dat.gravity);
 		packet.writeFloat(dat.scale);
