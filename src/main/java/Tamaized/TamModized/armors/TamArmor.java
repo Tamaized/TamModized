@@ -19,7 +19,7 @@ public class TamArmor extends ItemArmor implements ITamRegistry {
 		super(armorMaterial, par3, par4);
 		name = n;
 		setUnlocalizedName(name);
-		setRegistryName(getModelDir() + "/" + n);
+		setRegistryName(n);
 		this.setMaxStackSize(1);
 		this.setCreativeTab(tab);
 	}
@@ -40,7 +40,7 @@ public class TamArmor extends ItemArmor implements ITamRegistry {
 
 	@Override
 	public void registerModel(ModelRegistryEvent e) {
-		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName().getResourceDomain() + ":" + getModelDir() + "/" + getRegistryName().getResourcePath(), "inventory"));
 	}
 
 }

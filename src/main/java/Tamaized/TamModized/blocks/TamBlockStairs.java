@@ -22,7 +22,7 @@ public class TamBlockStairs extends BlockStairs implements ITamRegistry {
 		name = n;
 		setUnlocalizedName(name);
 		this.useNeighborBrightness = true;
-		setRegistryName(getModelDir() + "/" + name);
+		setRegistryName(name);
 		setCreativeTab(tab);
 		setSoundType(sound);
 	}
@@ -38,12 +38,12 @@ public class TamBlockStairs extends BlockStairs implements ITamRegistry {
 
 	@Override
 	public void registerItem(RegistryEvent.Register<Item> e) {
-		e.getRegistry().register(new ItemBlock(this).setRegistryName(getModelDir() + "/" + name));
+		e.getRegistry().register(new ItemBlock(this).setRegistryName(name));
 	}
 
 	@Override
 	public void registerModel(ModelRegistryEvent e) {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName().getResourceDomain() + ":" + getModelDir() + "/" + getRegistryName().getResourcePath(), "inventory"));
 	}
 
 }

@@ -18,7 +18,7 @@ public class TamItem extends Item implements ITamRegistry {
 		name = n;
 		setUnlocalizedName(name);
 		setMaxStackSize(maxStackSize);
-		setRegistryName(getModelDir() + "/" + name);
+		setRegistryName(name);
 		this.setCreativeTab(tab);
 	}
 
@@ -38,6 +38,6 @@ public class TamItem extends Item implements ITamRegistry {
 
 	@Override
 	public void registerModel(ModelRegistryEvent e) {
-		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName().getResourceDomain() + ":" + getModelDir() + "/" + getRegistryName().getResourcePath(), "inventory"));
 	}
 }

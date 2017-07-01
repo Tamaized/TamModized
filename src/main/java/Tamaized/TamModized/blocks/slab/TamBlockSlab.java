@@ -1,7 +1,5 @@
 package Tamaized.TamModized.blocks.slab;
 
-import java.util.Random;
-
 import Tamaized.TamModized.registry.ITamRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
@@ -19,16 +17,18 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
 
+import java.util.Random;
+
 public abstract class TamBlockSlab extends BlockSlab implements ITamRegistry {
 
-	private final String name;
 	private static final PropertyEnum<TamBlockSlab.Variant> VARIANT = PropertyEnum.create("variant", TamBlockSlab.Variant.class);
 	private static final int HALF_META_BIT = 8;
+	private final String name;
 
 	public TamBlockSlab(CreativeTabs tab, Material materialIn, String n) {
 		super(materialIn);
 		name = n;
-		setRegistryName(getModelDir() + "/" + name);
+		setRegistryName(name);
 		setUnlocalizedName(name);
 		IBlockState blockState = this.blockState.getBaseState();
 		if (!isDouble()) {
@@ -51,7 +51,7 @@ public abstract class TamBlockSlab extends BlockSlab implements ITamRegistry {
 
 	@Override
 	public void registerModel(ModelRegistryEvent e) {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName().getResourceDomain() + ":" + getModelDir() + "/" + getRegistryName().getResourcePath(), "inventory"));
 	}
 
 	public String getModelDir() {
@@ -111,7 +111,16 @@ public abstract class TamBlockSlab extends BlockSlab implements ITamRegistry {
 
 	@Override
 	protected final BlockStateContainer createBlockState() {
-		return this.isDouble() ? new BlockStateContainer(this, new IProperty[] { VARIANT }) : new BlockStateContainer(this, new IProperty[] { HALF, VARIANT });
+		return this.isDouble() ? new BlockStateContainer(this, new IProperty[]{VARIANT}) : new BlockStateContainer(this, new IProperty[]{HALF, VARIANT});
+	}
+
+	public static enum Variant implements IStringSerializable {
+		DEFAULT;
+
+		@Override
+		public String getName() {
+			return "default";
+		}
 	}
 
 	public static abstract class Double extends TamBlockSlab {
@@ -133,15 +142,6 @@ public abstract class TamBlockSlab extends BlockSlab implements ITamRegistry {
 		@Override
 		public boolean isDouble() {
 			return false;
-		}
-	}
-
-	public static enum Variant implements IStringSerializable {
-		DEFAULT;
-
-		@Override
-		public String getName() {
-			return "default";
 		}
 	}
 }
