@@ -1,17 +1,17 @@
 package tamaized.tammodized.common.capabilities.dimTracker;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-
-import Tamaized.TamModized.TamModized;
-import tamaized.tammodized.common.helper.PacketHelper;
-import tamaized.tammodized.network.ClientPacketHandler;
-import tamaized.tammodized.registry.PortalHandlerRegistry;
 import io.netty.buffer.ByteBufInputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
+import tamaized.tammodized.TamModized;
+import tamaized.tammodized.common.helper.PacketHelper;
+import tamaized.tammodized.network.ClientPacketHandler;
+import tamaized.tammodized.registry.PortalHandlerRegistry;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 public class DimensionCapabilityHandler implements IDimensionCapability {
 

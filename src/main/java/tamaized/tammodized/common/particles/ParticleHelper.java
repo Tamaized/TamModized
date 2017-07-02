@@ -1,11 +1,5 @@
 package tamaized.tammodized.common.particles;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-
-import Tamaized.TamModized.TamModized;
-import tamaized.tammodized.common.helper.PacketHelper;
-import tamaized.tammodized.network.ClientPacketHandler;
 import io.netty.buffer.ByteBufInputStream;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumParticleTypes;
@@ -14,6 +8,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import tamaized.tammodized.TamModized;
+import tamaized.tammodized.common.helper.PacketHelper;
+import tamaized.tammodized.network.ClientPacketHandler;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class ParticleHelper {
 

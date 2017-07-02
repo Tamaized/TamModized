@@ -1,17 +1,17 @@
 package tamaized.tammodized.common.particles.network;
 
-import Tamaized.TamModized.TamModized;
-import tamaized.tammodized.client.particles.ParticleFluff;
-import tamaized.tammodized.common.particles.ParticleHelper;
-import tamaized.tammodized.common.particles.ParticlePacketBase;
-import tamaized.tammodized.common.particles.ParticlePacketHandlerRegistry;
-import tamaized.tammodized.common.particles.TamParticle;
 import io.netty.buffer.ByteBufInputStream;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import tamaized.tammodized.TamModized;
+import tamaized.tammodized.client.particles.ParticleFluff;
+import tamaized.tammodized.common.particles.ParticleHelper;
+import tamaized.tammodized.common.particles.ParticlePacketBase;
+import tamaized.tammodized.common.particles.ParticlePacketHandlerRegistry;
+import tamaized.tammodized.common.particles.TamParticle;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

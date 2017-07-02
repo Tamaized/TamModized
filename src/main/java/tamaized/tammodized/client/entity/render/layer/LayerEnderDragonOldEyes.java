@@ -1,12 +1,12 @@
 package tamaized.tammodized.client.entity.render.layer;
 
-import Tamaized.TamModized.TamModized;
-import tamaized.tammodized.common.entity.EntityDragonOld;
-import tamaized.tammodized.client.entity.render.RenderDragonOld;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
+import tamaized.tammodized.TamModized;
+import tamaized.tammodized.client.entity.render.RenderDragonOld;
+import tamaized.tammodized.common.entity.EntityDragonOld;
 
 public class LayerEnderDragonOldEyes implements LayerRenderer<EntityDragonOld> {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(TamModized.modid, "textures/entity/entity/dragon_eyes.png");

@@ -1,6 +1,7 @@
 package tamaized.tammodized.common.handler;
 
-import Tamaized.TamModized.TamModized;
+
+import tamaized.tammodized.TamModized;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

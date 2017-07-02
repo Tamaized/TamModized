@@ -1,10 +1,5 @@
 package tamaized.tammodized.common.blocks;
 
-import java.util.ArrayList;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -28,6 +23,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Random;
 
 public abstract class TamBlockFarmland extends TamBlockContainer {
 
@@ -195,7 +194,7 @@ public abstract class TamBlockFarmland extends TamBlockContainer {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { MOISTURE });
+		return new BlockStateContainer(this, new IProperty[]{MOISTURE});
 	}
 
 }

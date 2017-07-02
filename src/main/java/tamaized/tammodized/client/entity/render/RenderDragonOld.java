@@ -1,18 +1,18 @@
 package tamaized.tammodized.client.entity.render;
 
-import Tamaized.TamModized.TamModized;
-import tamaized.tammodized.client.entity.render.layer.LayerEnderDragonOldDeath;
-import tamaized.tammodized.client.entity.render.layer.LayerEnderDragonOldEyes;
-import tamaized.tammodized.common.entity.EntityDragonOld;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import tamaized.tammodized.TamModized;
+import tamaized.tammodized.client.entity.render.layer.LayerEnderDragonOldDeath;
+import tamaized.tammodized.client.entity.render.layer.LayerEnderDragonOldEyes;
+import tamaized.tammodized.common.entity.EntityDragonOld;
 
 public class RenderDragonOld<T extends EntityDragonOld> extends RenderLiving<T> {
 

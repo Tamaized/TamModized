@@ -2,8 +2,8 @@ package tamaized.tammodized.client;
 
 import java.util.Random;
 
-import tamaized.tammodized.common.handler.ContributorHandler;
 import tamaized.tammodized.client.particles.ParticleFluff;
+import tamaized.tammodized.common.handler.ContributorHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;

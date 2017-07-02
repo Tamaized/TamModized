@@ -11,13 +11,13 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.FMLEventChannel;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import tamaized.tammodized.registry.PortalHandlerRegistry;
 import tamaized.tammodized.common.capabilities.dimTracker.DimensionCapabilityHandler;
 import tamaized.tammodized.common.capabilities.dimTracker.DimensionCapabilityStorage;
 import tamaized.tammodized.common.capabilities.dimTracker.IDimensionCapability;
 import tamaized.tammodized.common.entity.EntityDragonOld;
 import tamaized.tammodized.common.handler.ContributorHandler;
 import tamaized.tammodized.proxy.AbstractProxy;
-import tamaized.tammodized.registry.PortalHandlerRegistry;
 import tamaized.tammodized.registry.TamModizedParticles;
 
 @Mod(modid = TamModized.modid, name = "TamModized", guiFactory = "Tamaized.TamModized.config.GUIConfigFactory", version = TamModized.version)

@@ -1,14 +1,14 @@
 package tamaized.tammodized.common.helper;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-
-import Tamaized.TamModized.TamModized;
-import tamaized.tammodized.network.ClientPacketHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import tamaized.tammodized.TamModized;
+import tamaized.tammodized.network.ClientPacketHandler;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class MotionHelper {
 

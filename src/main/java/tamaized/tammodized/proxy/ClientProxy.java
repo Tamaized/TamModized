@@ -1,14 +1,14 @@
 package tamaized.tammodized.proxy;
 
-import Tamaized.TamModized.TamModized;
-import tamaized.tammodized.client.FloatyTextOverlay;
-import tamaized.tammodized.client.RenderContributors;
-import tamaized.tammodized.network.ClientPacketHandler;
-import tamaized.tammodized.client.RenderPortalOverlay;
-import tamaized.tammodized.common.entity.EntityDragonOld;
-import tamaized.tammodized.client.entity.render.RenderDragonOld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import tamaized.tammodized.TamModized;
+import tamaized.tammodized.client.FloatyTextOverlay;
+import tamaized.tammodized.client.RenderContributors;
+import tamaized.tammodized.client.RenderPortalOverlay;
+import tamaized.tammodized.client.entity.render.RenderDragonOld;
+import tamaized.tammodized.common.entity.EntityDragonOld;
+import tamaized.tammodized.network.ClientPacketHandler;
 
 public class ClientProxy extends AbstractProxy {
 

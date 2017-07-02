@@ -1,18 +1,18 @@
 package tamaized.tammodized.common.helper;
 
-import java.io.IOException;
-
-import Tamaized.TamModized.TamModized;
-import tamaized.tammodized.network.ClientPacketHandler;
 import io.netty.buffer.ByteBufInputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import tamaized.tammodized.TamModized;
+import tamaized.tammodized.network.ClientPacketHandler;
+
+import java.io.IOException;
 
 public class FloatyTextHelper {
 
 	public static void sendText(EntityPlayer player, String text) {
 		if (player == null || player.world == null || player.world.isRemote) {
-			Tamaized.TamModized.client.FloatyTextOverlay.addFloatyText(text);
+			tamaized.tammodized.client.FloatyTextOverlay.addFloatyText(text);
 		} else {
 			try {
 				encode(player, text);

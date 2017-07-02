@@ -1,8 +1,9 @@
 package tamaized.tammodized.common.particles;
 
+import tamaized.tammodized.TamModized;
+
 import java.util.ArrayList;
 
-import Tamaized.TamModized.TamModized;
 
 public class ParticlePacketHandlerRegistry {
 
