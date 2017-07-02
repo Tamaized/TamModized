@@ -20,13 +20,13 @@ import tamaized.tammodized.common.handler.ContributorHandler;
 import tamaized.tammodized.proxy.AbstractProxy;
 import tamaized.tammodized.registry.TamModizedParticles;
 
-@Mod(modid = TamModized.modid, name = "TamModized", guiFactory = "Tamaized.TamModized.config.GUIConfigFactory", version = TamModized.version)
+@Mod(modid = TamModized.modid, name = "TamModized", version = TamModized.version)
 public class TamModized extends TamModBase {
 
 	public final static String version = "${version}";
 	public static final String modid = "tammodized";
 	public static final String networkChannelName = "TamModized";
-	@SidedProxy(clientSide = "ClientProxy", serverSide = "ServerProxy")
+	@SidedProxy(clientSide = "tamaized.tammodized.proxy.ClientProxy", serverSide = "tamaized.tammodized.proxy.ServerProxy")
 	public static AbstractProxy proxy;
 	@Instance(modid)
 	public static TamModized instance = new TamModized();
