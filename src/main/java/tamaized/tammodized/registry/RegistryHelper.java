@@ -1,34 +1,26 @@
 package tamaized.tammodized.registry;
 
-import tamaized.tammodized.client.MeshDefinitionFix;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class RegistryHelper {
 
-	@Deprecated
 	@SideOnly(Side.CLIENT)
-	public static void registerFluidModel(IFluidBlock fluidBlock, String modid) {
-		final Item item = Item.getItemFromBlock((Block) fluidBlock);
-
-		ModelBakery.registerItemVariants(item);
-
-		ModelResourceLocation modelResourceLocation = new ModelResourceLocation(modid + ":blocks/fluids", fluidBlock.getFluid().getName());
-
-		ModelLoader.setCustomMeshDefinition(item, MeshDefinitionFix.create(stack -> modelResourceLocation));
-
-		ModelLoader.setCustomStateMapper((Block) fluidBlock, new StateMapperBase() {
+	public static void registerFluidModel(BlockFluidBase fluid) {
+		final Item item = Item.getItemFromBlock(fluid);
+		net.minecraft.client.renderer.block.model.ModelBakery.registerItemVariants(item);
+		String domain = fluid.getRegistryName() == null ? "minecraft" : fluid.getRegistryName().getResourceDomain();
+		ModelResourceLocation modelResourceLocation = new ModelResourceLocation(new ResourceLocation(domain, "blocks/fluids"), fluid.getFluid().getName());
+		ModelLoader.setCustomMeshDefinition(item, tamaized.tammodized.client.MeshDefinitionFix.create(stack -> modelResourceLocation));
+		ModelLoader.setCustomStateMapper(fluid, new net.minecraft.client.renderer.block.statemap.StateMapperBase() {
 			@Override
 			protected ModelResourceLocation getModelResourceLocation(IBlockState p_178132_1_) {
 				return modelResourceLocation;
