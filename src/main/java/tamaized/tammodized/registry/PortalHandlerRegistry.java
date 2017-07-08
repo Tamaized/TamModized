@@ -1,12 +1,5 @@
 package tamaized.tammodized.registry;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import tamaized.tammodized.common.capabilities.CapabilityList;
-import tamaized.tammodized.common.capabilities.dimTracker.IDimensionCapability;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -25,10 +18,17 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import tamaized.tammodized.common.capabilities.CapabilityList;
+import tamaized.tammodized.common.capabilities.dimTracker.IDimensionCapability;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class PortalHandlerRegistry {
 
-	private static Map<Block, TeleporterWrapper> map = new HashMap<Block, TeleporterWrapper>();
+	private static Map<Block, TeleporterWrapper> map = new HashMap<>();
 
 	private static class TeleporterWrapper {
 

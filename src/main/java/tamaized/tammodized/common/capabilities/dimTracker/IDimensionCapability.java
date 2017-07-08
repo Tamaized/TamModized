@@ -1,10 +1,10 @@
 package tamaized.tammodized.common.capabilities.dimTracker;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-
 import io.netty.buffer.ByteBufInputStream;
 import net.minecraft.entity.player.EntityPlayer;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public interface IDimensionCapability {
 
@@ -15,8 +15,10 @@ public interface IDimensionCapability {
 	int getTick();
 
 	int getLastDimension();
-	
+
 	void setLastDimension(int dim);
+
+	boolean hasTeleported();
 
 	void copyFrom(IDimensionCapability cap);
 
