@@ -4,7 +4,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import tamaized.tammodized.TamModized;
 import tamaized.tammodized.client.FloatyTextOverlay;
-import tamaized.tammodized.client.RenderContributors;
 import tamaized.tammodized.client.RenderPortalOverlay;
 import tamaized.tammodized.client.entity.render.RenderDragonOld;
 import tamaized.tammodized.common.entity.EntityDragonOld;
@@ -28,7 +27,6 @@ public class ClientProxy extends AbstractProxy {
 
 	@Override
 	public void init() {
-		MinecraftForge.EVENT_BUS.register(new RenderContributors());
 		MinecraftForge.EVENT_BUS.register(new FloatyTextOverlay());
 		MinecraftForge.EVENT_BUS.register(new RenderPortalOverlay());
 	}
