@@ -60,7 +60,11 @@ public abstract class TamBlockFire extends BlockFire implements ITamRegistry {
 		return false;
 	}
 
-	protected abstract boolean canBeOnBlock(Block block);
+	protected abstract boolean canBeOnBlock(IBlockState state);
+
+	protected abstract boolean isFireSource(IBlockState state);
+
+	protected abstract boolean isVanillaSource();
 
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
@@ -70,7 +74,7 @@ public abstract class TamBlockFire extends BlockFire implements ITamRegistry {
 			}
 
 			Block block = worldIn.getBlockState(pos.down()).getBlock();
-			boolean flag = block.isFireSource(worldIn, pos.down(), EnumFacing.UP);
+			boolean flag = (isVanillaSource() && block.isFireSource(worldIn, pos.down(), EnumFacing.UP)) || isFireSource(worldIn.getBlockState(pos.down()));
 
 			int i = state.getValue(AGE);
 
@@ -86,7 +90,7 @@ public abstract class TamBlockFire extends BlockFire implements ITamRegistry {
 
 				if (!flag) {
 					if (!this.canNeighborCatchFire(worldIn, pos)) {
-						if (!worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP) || i > 3) {
+						if (!worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP) || i > 3 && !canBeOnBlock(worldIn.getBlockState(pos.down()))) {
 							worldIn.setBlockToAir(pos);
 						}
 
