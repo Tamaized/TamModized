@@ -17,8 +17,8 @@ import tamaized.tammodized.common.entity.EntityDragonOld;
 public class RenderDragonOld<T extends EntityDragonOld> extends RenderLiving<T> {
 
 	public static final ResourceLocation ENDERCRYSTAL_BEAM_TEXTURES = new ResourceLocation("textures/entity/endercrystal/endercrystal_beam.png");
-	private static final ResourceLocation DRAGON_EXPLODING_TEXTURES = new ResourceLocation(TamModized.modid, "textures/entity/entity/dragon_exploding.png");
-	private static final ResourceLocation DRAGON_TEXTURES = new ResourceLocation(TamModized.modid, "textures/entity/entity/entity.png");
+	private static final ResourceLocation DRAGON_EXPLODING_TEXTURES = new ResourceLocation(TamModized.modid, "textures/entity/dragon/dragon_exploding.png");
+	private static final ResourceLocation DRAGON_TEXTURES = new ResourceLocation(TamModized.modid, "textures/entity/dragon/dragon.png");
 
 	public RenderDragonOld(RenderManager renderManagerIn) {
 		super(renderManagerIn, new ModelDragonOld(0.0F), 0.5F);

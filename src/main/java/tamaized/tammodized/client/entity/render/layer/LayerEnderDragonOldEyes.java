@@ -9,7 +9,7 @@ import tamaized.tammodized.client.entity.render.RenderDragonOld;
 import tamaized.tammodized.common.entity.EntityDragonOld;
 
 public class LayerEnderDragonOldEyes implements LayerRenderer<EntityDragonOld> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(TamModized.modid, "textures/entity/entity/dragon_eyes.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation(TamModized.modid, "textures/entity/dragon/dragon_eyes.png");
 	private final RenderDragonOld dragonRenderer;
 
 	public LayerEnderDragonOldEyes(RenderDragonOld dragonRendererIn) {
