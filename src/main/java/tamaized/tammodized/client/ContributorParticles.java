@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import tamaized.tammodized.TamModized;
 import tamaized.tammodized.client.particles.ParticleFluff;
+import tamaized.tammodized.common.config.ConfigHandler;
 import tamaized.tammodized.common.handler.ContributorHandler;
 
 import java.util.Random;
@@ -21,7 +22,7 @@ public class ContributorParticles {
 	@SubscribeEvent
 	public static void tick(TickEvent.PlayerTickEvent e) {
 		EntityPlayer player = e.player;
-		if (!player.world.isRemote)
+		if (!player.world.isRemote || !ConfigHandler.patreonClient)
 			return;
 		if (!Minecraft.getMinecraft().isGamePaused() && rand.nextInt(20 * 3) == 0 && ContributorHandler.fluff.containsKey(player.getGameProfile().getId())) {
 			double dx = player.posX + rand.nextDouble() - 0.5D;
