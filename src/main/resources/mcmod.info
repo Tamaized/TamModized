@@ -4,7 +4,7 @@
   "name": "TamModized",
   "description": "Library mod for all of Tamaized's mods",
   "version": "${version}",
-  "mcversion": "${mcversion}",
+  "mcversion": "[1.12,)",
   "url": "",
   "updateUrl": "",
   "authorList": ["Tamaized"],

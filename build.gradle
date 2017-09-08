@@ -37,6 +37,22 @@ minecraft {
 	replace '${version}', "${modVersion}${modVersionValue}"
 }
 
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier = 'sources'
+}
+
+artifacts {
+    archives deobfJar
+    archives sourcesJar
+}
+
+
 dependencies {
 	
 }
