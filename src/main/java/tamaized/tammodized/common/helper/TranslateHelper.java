@@ -9,7 +9,7 @@ public class TranslateHelper {
 
 	@SideOnly(Side.CLIENT)
 	public static String translate(String key) {
-		return I18n.format(key, new Object[0]).toString().trim();
+		return I18n.format(key).trim();
 	}
 
 }
