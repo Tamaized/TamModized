@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import tamaized.tammodized.TamModized;
+import tamaized.tammodized.common.config.ConfigHandler;
 import tamaized.tammodized.common.helper.PacketHelper;
 import tamaized.tammodized.network.ClientPacketHandler;
 import tamaized.tammodized.registry.PortalHandlerRegistry;
@@ -33,7 +34,7 @@ public class DimensionCapabilityHandler implements IDimensionCapability {
 			if (PortalHandlerRegistry.contains(player.world.getBlockState(player.getPosition()))) {
 				if (!hasTeleported) {
 					tick++;
-					if (tick % teleportTick == 0) {
+					if (tick % teleportTick == 0 || ConfigHandler.instantPortal == ConfigHandler.InstantPortal.ALWAYS || ((player.isCreative() || player.isSpectator()) && ConfigHandler.instantPortal == ConfigHandler.InstantPortal.CREATIVE)) {
 						hasTeleported = true;
 						try {
 							PortalHandlerRegistry.doTeleport(this, (EntityPlayerMP) player, PortalHandlerRegistry.getTeleporter(player.world.getBlockState(player.getPosition())));
@@ -44,7 +45,7 @@ public class DimensionCapabilityHandler implements IDimensionCapability {
 				}
 			} else {
 				if (tick > 0)
-					tick -= 2;
+					tick -= Math.min(2, tick);
 				else
 					hasTeleported = false;
 			}

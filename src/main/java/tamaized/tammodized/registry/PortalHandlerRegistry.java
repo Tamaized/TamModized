@@ -30,26 +30,6 @@ public class PortalHandlerRegistry {
 
 	private static Map<Block, TeleporterWrapper> map = new HashMap<>();
 
-	private static class TeleporterWrapper {
-
-		private final int dim;
-		private final Class<? extends Teleporter> teleporter;
-
-		public TeleporterWrapper(int dimension, Class<? extends Teleporter> t) {
-			dim = dimension;
-			teleporter = t;
-		}
-
-		public int getDimension() {
-			return dim;
-		}
-
-		public Class<? extends Teleporter> getTeleporter() {
-			return teleporter;
-		}
-
-	}
-
 	public static void register(IBlockState state, int dimension, Class<? extends Teleporter> teleporter) {
 		register(state.getBlock(), dimension, teleporter);
 	}
@@ -134,13 +114,44 @@ public class PortalHandlerRegistry {
 
 		if (p_82448_1_.isEntityAlive()) {
 			p_82448_1_.setLocationAndAngles(d0, p_82448_1_.posY, d1, p_82448_1_.rotationYaw, p_82448_1_.rotationPitch);
-			if (teleporter.teleporter != null) teleporter.teleporter.placeInPortal(p_82448_1_, f);
-			else p_82448_1_.setPositionAndUpdate(teleporter.pos.getX(), teleporter.pos.getY(), teleporter.pos.getZ());
+			if (teleporter.teleporter != null)
+				teleporter.teleporter.placeInPortal(p_82448_1_, f);
+			else
+				p_82448_1_.setPositionAndUpdate(teleporter.pos.getX(), teleporter.pos.getY(), teleporter.pos.getZ());
 			p_82448_4_.spawnEntity(p_82448_1_);
 			p_82448_4_.updateEntityWithOptionalForce(p_82448_1_, false);
 		}
 		p_82448_3_.profiler.endSection();
 		p_82448_1_.setWorld(p_82448_4_);
+	}
+
+	@SubscribeEvent
+	public void update(PlayerTickEvent e) {
+		if (e.phase == Phase.END) {
+			IDimensionCapability cap = e.player.getCapability(CapabilityList.DIMENSION, null);
+			if (cap != null)
+				cap.update(e.player);
+		}
+	}
+
+	private static class TeleporterWrapper {
+
+		private final int dim;
+		private final Class<? extends Teleporter> teleporter;
+
+		public TeleporterWrapper(int dimension, Class<? extends Teleporter> t) {
+			dim = dimension;
+			teleporter = t;
+		}
+
+		public int getDimension() {
+			return dim;
+		}
+
+		public Class<? extends Teleporter> getTeleporter() {
+			return teleporter;
+		}
+
 	}
 
 	private static class TeleportLoc {
@@ -158,14 +169,6 @@ public class PortalHandlerRegistry {
 			pos = p;
 		}
 
-	}
-
-	@SubscribeEvent
-	public void update(PlayerTickEvent e) {
-		if (e.phase == Phase.END) {
-			IDimensionCapability cap = e.player.getCapability(CapabilityList.DIMENSION, null);
-			if (cap != null) cap.update(e.player);
-		}
 	}
 
 }
