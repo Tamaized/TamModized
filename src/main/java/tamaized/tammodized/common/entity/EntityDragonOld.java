@@ -1,9 +1,7 @@
 package tamaized.tammodized.common.entity;
 
-import java.util.Iterator;
-import java.util.List;
-
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
@@ -12,7 +10,9 @@ import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
@@ -21,50 +21,78 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.BossInfo;
+import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Iterator;
+import java.util.List;
+
 public class EntityDragonOld extends EntityLiving implements IEntityMultiPartOld, IMob {
 
+	private final BossInfoServer bossInfo = new BossInfoServer(new TextComponentTranslation("entity." + EntityList.getEntityString(this) + ".name"), BossInfo.Color.PINK, BossInfo.Overlay.PROGRESS);
 	public double targetX;
 	public double targetY;
 	public double targetZ;
 	public double targetXf;
 	public double targetYf;
 	public double targetZf;
-	/** Ring buffer array for the last 64 Y-positions and yaw rotations. Used to calculate offsets for the animations. */
+	/**
+	 * Ring buffer array for the last 64 Y-positions and yaw rotations. Used to calculate offsets for the animations.
+	 */
 	public double[][] ringBuffer = new double[64][3];
-	/** Index into the ring buffer. Incremented once per tick and restarts at 0 once it reaches the end of the buffer. */
+	/**
+	 * Index into the ring buffer. Incremented once per tick and restarts at 0 once it reaches the end of the buffer.
+	 */
 	public int ringBufferIndex = -1;
-	/** An array containing all body parts of this entity */
+	/**
+	 * An array containing all body parts of this entity
+	 */
 	public EntityDragonPartOld[] dragonPartArray;
-	/** The head bounding box of a entity */
+	/**
+	 * The head bounding box of a entity
+	 */
 	public EntityDragonPartOld dragonPartHead;
-	/** The body bounding box of a entity */
+	/**
+	 * The body bounding box of a entity
+	 */
 	public EntityDragonPartOld dragonPartBody;
 	public EntityDragonPartOld dragonPartTail1;
 	public EntityDragonPartOld dragonPartTail2;
 	public EntityDragonPartOld dragonPartTail3;
 	public EntityDragonPartOld dragonPartWing1;
 	public EntityDragonPartOld dragonPartWing2;
-	/** Animation time at previous tick. */
+	/**
+	 * Animation time at previous tick.
+	 */
 	public float prevAnimTime;
-	/** Animation time, used to control the speed of the animation cycles (wings flapping, jaw opening, etc.) */
+	/**
+	 * Animation time, used to control the speed of the animation cycles (wings flapping, jaw opening, etc.)
+	 */
 	public float animTime;
-	/** Force selecting a new flight target at next tick if set to true. */
+	/**
+	 * Force selecting a new flight target at next tick if set to true.
+	 */
 	public boolean forceNewTarget;
-	/** Activated if the entity is flying though obsidian, white stone or bedrock. Slows movement and animation speed. */
+	/**
+	 * Activated if the entity is flying though obsidian, white stone or bedrock. Slows movement and animation speed.
+	 */
 	public boolean slowed;
-	private Entity target;
 	public int deathTicks;
-	/** The current endercrystal that is healing this entity */
+	/**
+	 * The current endercrystal that is healing this entity
+	 */
 	public EntityEnderCrystal healingEnderCrystal;
+	private boolean hasBossBar = true;
+	private Entity target;
 
 	public EntityDragonOld(World p_i1700_1_) {
 		super(p_i1700_1_);
-		this.dragonPartArray = new EntityDragonPartOld[] { this.dragonPartHead = new EntityDragonPartOld(this, "head", 6.0F, 6.0F), this.dragonPartBody = new EntityDragonPartOld(this, "body", 8.0F, 8.0F), this.dragonPartTail1 = new EntityDragonPartOld(this, "tail", 4.0F, 4.0F), this.dragonPartTail2 = new EntityDragonPartOld(this, "tail", 4.0F, 4.0F), this.dragonPartTail3 = new EntityDragonPartOld(this, "tail", 4.0F, 4.0F), this.dragonPartWing1 = new EntityDragonPartOld(this, "wing", 4.0F, 4.0F), this.dragonPartWing2 = new EntityDragonPartOld(this, "wing", 4.0F, 4.0F) };
+		this.dragonPartArray = new EntityDragonPartOld[]{this.dragonPartHead = new EntityDragonPartOld(this, "head", 6.0F, 6.0F), this.dragonPartBody = new EntityDragonPartOld(this, "body", 8.0F, 8.0F), this.dragonPartTail1 = new EntityDragonPartOld(this, "tail", 4.0F, 4.0F), this.dragonPartTail2 = new EntityDragonPartOld(this, "tail", 4.0F, 4.0F), this.dragonPartTail3 = new EntityDragonPartOld(this, "tail", 4.0F, 4.0F), this.dragonPartWing1 = new EntityDragonPartOld(this, "wing", 4.0F, 4.0F), this.dragonPartWing2 = new EntityDragonPartOld(this, "wing", 4.0F, 4.0F)};
 		this.setHealth(this.getMaxHealth());
 		this.setSize(16.0F, 8.0F);
 		this.noClip = true;
@@ -76,7 +104,17 @@ public class EntityDragonOld extends EntityLiving implements IEntityMultiPartOld
 		this.targetX = targetXf = posX;
 		this.targetY = targetYf = posY;
 		this.targetZ = targetZf = posZ;
+		setHasBossBar(true);
+	}
 
+	public void setHasBossBar(@SuppressWarnings("SameParameterValue") boolean flag) {
+		hasBossBar = flag;
+	}
+
+	@Override
+	public void setCustomNameTag(String name) {
+		super.setCustomNameTag(name);
+		this.bossInfo.setName(this.getDisplayName());
 	}
 
 	@Override
@@ -125,11 +163,34 @@ public class EntityDragonOld extends EntityLiving implements IEntityMultiPartOld
 		return adouble;
 	}
 
+	@Override
+	public void addTrackingPlayer(EntityPlayerMP player) {
+		super.addTrackingPlayer(player);
+		if (hasBossBar)
+			this.bossInfo.addPlayer(player);
+	}
+
+	@Override
+	public void removeTrackingPlayer(EntityPlayerMP player) {
+		super.removeTrackingPlayer(player);
+		this.bossInfo.removePlayer(player);
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbttagcompound) {
+		super.readEntityFromNBT(nbttagcompound);
+		if (this.hasCustomName())
+			this.bossInfo.setName(this.getDisplayName());
+	}
+
 	/**
 	 * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons use this to react to sunlight and start to burn.
 	 */
 	@Override
 	public void onLivingUpdate() {
+		if (!world.isRemote)
+			bossInfo.setPercent(getHealth() / getMaxHealth());
+
 		float f;
 		float f1;
 
