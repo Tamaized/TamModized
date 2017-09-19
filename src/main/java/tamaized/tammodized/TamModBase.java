@@ -8,23 +8,20 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import tamaized.tammodized.proxy.AbstractProxy;
 
 public abstract class TamModBase {
 
 	public static final int WILDCARD_VALUE = OreDictionary.WILDCARD_VALUE;
 
-	public Logger logger;
-
-	private int modEntityID = 0;
-
 	static {
 		FluidRegistry.enableUniversalBucket();
 	}
+
+	public Logger logger;
+	private int modEntityID = 0;
 
 	protected abstract AbstractProxy getProxy();
 
@@ -63,12 +60,12 @@ public abstract class TamModBase {
 	protected abstract void postInit(FMLPostInitializationEvent event);
 
 	protected void registerEntity(Class<? extends Entity> entityClass, String entityName, Object mod, String modid, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates) {
-		EntityRegistry.registerModEntity(new ResourceLocation(modid, entityName), entityClass, entityName, modEntityID, mod, trackingRange, updateFrequency, sendsVelocityUpdates);
+		EntityRegistry.registerModEntity(new ResourceLocation(modid, entityName), entityClass, modid + "." + entityName, modEntityID, mod, trackingRange, updateFrequency, sendsVelocityUpdates);
 		modEntityID++;
 	}
 
 	protected void registerEntityWithEgg(Class<? extends Entity> entityClass, String entityName, Object mod, String modid, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, int eggPrimaryColor, int eggSecondaryColor) {
-		EntityRegistry.registerModEntity(new ResourceLocation(modid, entityName), entityClass, entityName, modEntityID, mod, trackingRange, updateFrequency, sendsVelocityUpdates, eggPrimaryColor, eggSecondaryColor);
+		EntityRegistry.registerModEntity(new ResourceLocation(modid, entityName), entityClass, modid + "." + entityName, modEntityID, mod, trackingRange, updateFrequency, sendsVelocityUpdates, eggPrimaryColor, eggSecondaryColor);
 		modEntityID++;
 	}
 
