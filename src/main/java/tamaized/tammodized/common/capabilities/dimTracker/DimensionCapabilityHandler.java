@@ -1,32 +1,21 @@
 package tamaized.tammodized.common.capabilities.dimTracker;
 
-import io.netty.buffer.ByteBufInputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import tamaized.tammodized.TamModized;
 import tamaized.tammodized.common.config.ConfigHandler;
-import tamaized.tammodized.common.helper.PacketHelper;
-import tamaized.tammodized.network.ClientPacketHandler;
 import tamaized.tammodized.registry.PortalHandlerRegistry;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 public class DimensionCapabilityHandler implements IDimensionCapability {
 
 	public static final ResourceLocation ID = new ResourceLocation(TamModized.modid, "DimensionCapabilityHandler");
 	private static final int teleportTick = 20 * 5;
-	private boolean markDirty = false;
 	private int lastDim = 0;
 	private boolean hasTeleported = false;
 	private int tick = 0;
-
-	@Override
-	public void markDirty() {
-		markDirty = true;
-	}
 
 	@Override
 	public void update(EntityPlayer player) {
@@ -48,15 +37,6 @@ public class DimensionCapabilityHandler implements IDimensionCapability {
 					tick -= Math.min(2, tick);
 				else
 					hasTeleported = false;
-			}
-		}
-		if (markDirty && player instanceof EntityPlayerMP) {
-			try {
-				PacketHelper.PacketWrapper packet = PacketHelper.createPacket(TamModized.channel, TamModized.networkChannelName, ClientPacketHandler.DimensionCap);
-				encodePacket(packet.getStream());
-				packet.sendPacket((EntityPlayerMP) player);
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 	}
@@ -87,15 +67,4 @@ public class DimensionCapabilityHandler implements IDimensionCapability {
 		tick = cap.getTick();
 		hasTeleported = cap.hasTeleported();
 	}
-
-	@Override
-	public void decodePacket(ByteBufInputStream stream) throws IOException {
-		lastDim = stream.readInt();
-	}
-
-	@Override
-	public void encodePacket(DataOutputStream stream) throws IOException {
-		stream.writeInt(lastDim);
-	}
-
 }

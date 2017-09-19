@@ -1,10 +1,8 @@
 package tamaized.tammodized.proxy;
 
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import tamaized.tammodized.TamModized;
 import tamaized.tammodized.client.entity.render.RenderDragonOld;
 import tamaized.tammodized.common.entity.EntityDragonOld;
-import tamaized.tammodized.network.ClientPacketHandler;
 
 public class ClientProxy extends AbstractProxy {
 
@@ -29,7 +27,7 @@ public class ClientProxy extends AbstractProxy {
 
 	@Override
 	public void postInit() {
-		TamModized.channel.register(new ClientPacketHandler());
+
 	}
 
 }

@@ -1,6 +1,6 @@
 package tamaized.tammodized.common.particles.network;
 
-import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -12,38 +12,45 @@ import tamaized.tammodized.common.particles.ParticleHelper;
 import tamaized.tammodized.common.particles.ParticlePacketBase;
 import tamaized.tammodized.common.particles.ParticlePacketHandlerRegistry;
 import tamaized.tammodized.common.particles.TamParticle;
+import tamaized.tammodized.registry.TamModizedParticles;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class ParticleFluffPacketHandler extends ParticlePacketBase {
 
 	public static void spawnOnServer(World world, Vec3d pos, Vec3d target, int life, float gravity, float scale, int color) {
-		ParticleFluffData data = ((ParticleFluffPacketHandler) ParticlePacketHandlerRegistry.getHandler(TamModized.particles.fluff)).new ParticleFluffData(target == null ? Vec3d.ZERO : target, life, gravity, scale, color);
-		ParticleHelper.sendPacketToClients(world, TamModized.particles.fluff, pos, 64, new ParticleHelper.ParticlePacketHelper(TamModized.particles.fluff, data));
+		ParticleFluffData data = ((ParticleFluffPacketHandler) ParticlePacketHandlerRegistry.getHandler(TamModizedParticles.fluff)).new ParticleFluffData(target == null ? Vec3d.ZERO : target, life, gravity, scale, color);
+		ParticleHelper.sendPacketToClients(world, TamModizedParticles.fluff, pos, 64, new ParticleHelper.ParticlePacketHelper(TamModizedParticles.fluff, data));
 	}
 
 	@Override
-	public void encode(DataOutputStream packet, ParticleHelper.IParticlePacketData data) throws IOException {
-		if (!(data instanceof ParticleFluffData)) throw new IOException("Incorrect IParticlePacketData type: " + data);
-		ParticleFluffData dat = (ParticleFluffData) data;
-		packet.writeDouble(dat.target.x);
-		packet.writeDouble(dat.target.y);
-		packet.writeDouble(dat.target.z);
-		packet.writeInt(dat.life);
-		packet.writeFloat(dat.gravity);
-		packet.writeFloat(dat.scale);
-		packet.writeInt(dat.color);
+	public void encode(ByteBuf packet, ParticleHelper.IParticlePacketData data) {
+		try {
+			if (!(data instanceof ParticleFluffData))
+				throw new IOException("Incorrect IParticlePacketData type: " + data);
+			packet.writeBoolean(true);
+			ParticleFluffData dat = (ParticleFluffData) data;
+			packet.writeDouble(dat.target.x);
+			packet.writeDouble(dat.target.y);
+			packet.writeDouble(dat.target.z);
+			packet.writeInt(dat.life);
+			packet.writeFloat(dat.gravity);
+			packet.writeFloat(dat.scale);
+			packet.writeInt(dat.color);
+		} catch (IOException e) {
+			packet.writeBoolean(false);
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public TamParticle decode(ByteBufInputStream packet, WorldClient world, Vec3d pos) {
-		try {
+	public TamParticle decode(ByteBuf packet, WorldClient world, Vec3d pos) {
+		if (packet.readBoolean()) {
 			return new ParticleFluff(world, pos, new Vec3d(packet.readDouble(), packet.readDouble(), packet.readDouble()), packet.readInt(), packet.readFloat(), packet.readFloat(), packet.readInt());
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
+		} else {
+			TamModized.instance.logger.error("Something went wrong, sent out a dummy particle");
+			return new ParticleFluff(world, pos, new Vec3d(0, 0, 0), 0, 0, 0, 0);
 		}
 	}
 

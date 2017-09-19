@@ -5,13 +5,13 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import tamaized.tammodized.TamModized;
-import tamaized.tammodized.common.helper.TranslateHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class FloatyTextOverlay extends Gui {
 	private static volatile FloatyText[] floatyText = new FloatyText[11];
 
 	public static void addFloatyText(String s) {
-		textSpooler.add(TranslateHelper.translate(s));
+		textSpooler.add(I18n.format(s));
 	}
 
 	@SubscribeEvent

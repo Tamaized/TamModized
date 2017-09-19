@@ -1,6 +1,6 @@
 package tamaized.tammodized.common.particles;
 
-import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
@@ -9,38 +9,12 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import tamaized.tammodized.TamModized;
-import tamaized.tammodized.common.helper.PacketHelper;
-import tamaized.tammodized.network.ClientPacketHandler;
-
-import java.io.DataOutputStream;
-import java.io.IOException;
+import tamaized.tammodized.network.client.ClientPacketHandlerParticle;
 
 public class ParticleHelper {
 
-	public static void sendPacketToClients(World world, int handlerID, Vec3d pos, int range, ParticlePacketHelper packetHelper) {
-		try {
-			PacketHelper.PacketWrapper packet = PacketHelper.createPacket(TamModized.channel, TamModized.networkChannelName, ClientPacketHandler.TYPE_PARTICLE);
-			DataOutputStream stream = packet.getStream();
-			stream.writeInt(handlerID);
-			stream.writeDouble(pos.x);
-			stream.writeDouble(pos.y);
-			stream.writeDouble(pos.z);
-			packetHelper.encode(stream);
-			packet.sendPacket(new TargetPoint(world.provider.getDimension(), pos.x, pos.y, pos.z, range));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	public static void decodePacket(ByteBufInputStream packet) {
-		try {
-			int handlerID = packet.readInt();
-			Vec3d pos = new Vec3d(packet.readDouble(), packet.readDouble(), packet.readDouble());
-			spawnParticle(ParticlePacketHandlerRegistry.getHandler(handlerID).decode(packet, Minecraft.getMinecraft().world, pos));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public static void sendPacketToClients(World world, int handlerID, Vec3d pos, @SuppressWarnings("SameParameterValue") int range, ParticlePacketHelper packetHelper) {
+		TamModized.network.sendToAllAround(new ClientPacketHandlerParticle.Packet(handlerID, pos, packetHelper), new TargetPoint(world.provider.getDimension(), pos.x, pos.y, pos.z, range));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -48,34 +22,16 @@ public class ParticleHelper {
 		Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 	}
 
+	@SuppressWarnings("unused")
 	public static void spawnVanillaParticleOnServer(World world, EnumParticleTypes particle, double x, double y, double z, double xS, double yS, double zS) {
-		try {
-			PacketHelper.PacketWrapper packet = PacketHelper.createPacket(TamModized.channel, TamModized.networkChannelName, ClientPacketHandler.TYPE_PARTICLE_VANILLA);
-			DataOutputStream stream = packet.getStream();
-			stream.writeInt(particle.getParticleID());
-			stream.writeDouble(x);
-			stream.writeDouble(y);
-			stream.writeDouble(z);
-			stream.writeDouble(xS);
-			stream.writeDouble(yS);
-			stream.writeDouble(zS);
-			packet.sendPacket(new TargetPoint(world.provider.getDimension(), x, y, z, 64));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		TamModized.network.sendToAllAround(new ClientPacketHandlerParticle.Packet(particle.getParticleID(), new Vec3d(x, y, z), new Vec3d(xS, yS, zS)), new TargetPoint(world.provider.getDimension(), x, y, z, 64));
 	}
 
-	@SideOnly(Side.CLIENT)
-	public static void decodePacketVanillaParticle(ByteBufInputStream stream) throws IOException {
-		spawnVanillaParticleOnClient(net.minecraft.client.Minecraft.getMinecraft().world, EnumParticleTypes.getParticleFromId(stream.readInt()), stream.readDouble(), stream.readDouble(), stream.readDouble(), stream.readDouble(), stream.readDouble(), stream.readDouble());
+	public static void spawnParticle(World world, EnumParticleTypes particle, Vec3d pos, Vec3d vel) {
+		world.spawnParticle(particle, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
 	}
 
-	@SideOnly(Side.CLIENT)
-	public static void spawnVanillaParticleOnClient(World world, EnumParticleTypes particle, double x, double y, double z, double xS, double yS, double zS) {
-		world.spawnParticle(particle, x, y, z, xS, yS, zS);
-	}
-
-	public static interface IParticlePacketData {
+	public interface IParticlePacketData {
 
 	}
 
@@ -93,7 +49,7 @@ public class ParticleHelper {
 			this(ParticlePacketHandlerRegistry.getHandler(packetBase), dat);
 		}
 
-		public final void encode(DataOutputStream stream) throws IOException {
+		public final void encode(ByteBuf stream) {
 			packetHandler.encode(stream, data);
 		}
 
