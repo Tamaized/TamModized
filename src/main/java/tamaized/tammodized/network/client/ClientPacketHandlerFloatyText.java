@@ -40,12 +40,12 @@ public class ClientPacketHandlerFloatyText implements IMessageHandler<ClientPack
 
 		@Override
 		public void fromBytes(ByteBuf buf) {
-			ByteBufUtils.writeUTF8String(buf, text);
+			text = ByteBufUtils.readUTF8String(buf);
 		}
 
 		@Override
 		public void toBytes(ByteBuf buf) {
-			text = ByteBufUtils.readUTF8String(buf);
+			ByteBufUtils.writeUTF8String(buf, text);
 		}
 	}
 }
