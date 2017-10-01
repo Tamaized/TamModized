@@ -278,7 +278,7 @@ public class EntityDragonOld extends EntityLiving implements IEntityMultiPartOld
 					this.targetZ += this.rand.nextGaussian() * 2.0D;
 				}
 
-				if (this.forceNewTarget || d2 < 100.0D || d2 > 22500.0D || this.isCollidedHorizontally || this.isCollidedVertically) {
+				if (this.forceNewTarget || d2 < 100.0D || d2 > 22500.0D || this.collidedHorizontally || this.collidedVertically) {
 					this.setNewTarget();
 				}
 
@@ -435,7 +435,7 @@ public class EntityDragonOld extends EntityLiving implements IEntityMultiPartOld
 
 			while (iterator.hasNext()) {
 				EntityEnderCrystal entityendercrystal1 = (EntityEnderCrystal) iterator.next();
-				double d1 = entityendercrystal1.getDistanceSqToEntity(this);
+				double d1 = entityendercrystal1.getDistanceSq(this);
 
 				if (d1 < d0) {
 					d0 = d1;
