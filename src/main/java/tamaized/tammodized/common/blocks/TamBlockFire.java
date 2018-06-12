@@ -1,6 +1,5 @@
 package tamaized.tammodized.common.blocks;
 
-import tamaized.tammodized.registry.ITamRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFire;
 import net.minecraft.block.BlockTNT;
@@ -17,6 +16,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
+import tamaized.tammodized.registry.ITamRegistry;
 
 import java.util.Random;
 
@@ -26,7 +28,8 @@ public abstract class TamBlockFire extends BlockFire implements ITamRegistry {
 
 	public TamBlockFire(CreativeTabs tab, String n, SoundType sound) {
 		name = n;
-		setUnlocalizedName(name);
+		ModContainer container = Loader.instance().activeModContainer();
+		setUnlocalizedName(container == null ? name : (container.getModId().toLowerCase() + "." + name));
 		setRegistryName(name);
 		setCreativeTab(tab);
 		setSoundType(sound);

@@ -14,6 +14,8 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.BlockFluidFinite;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import tamaized.tammodized.registry.ITamRegistry;
@@ -32,7 +34,8 @@ public class TamFluidFiniteBlock extends BlockFluidFinite implements ITamRegistr
 		this.name = name;
 		damageSource = source;
 		damage = dmg;
-		setUnlocalizedName(name);
+		ModContainer container = Loader.instance().activeModContainer();
+		setUnlocalizedName(container == null ? name : (container.getModId().toLowerCase() + "." + name));
 		setRegistryName(name);
 		this.setCreativeTab(tab);
 	}

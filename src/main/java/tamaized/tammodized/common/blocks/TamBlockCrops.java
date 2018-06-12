@@ -1,6 +1,5 @@
 package tamaized.tammodized.common.blocks;
 
-import tamaized.tammodized.registry.ITamRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
@@ -24,6 +23,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
+import tamaized.tammodized.registry.ITamRegistry;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -37,7 +39,8 @@ public abstract class TamBlockCrops extends BlockBush implements IGrowable, ITam
 	public TamBlockCrops(CreativeTabs tab, Material material, String n, float hardness, SoundType sound) {
 		super();
 		name = n;
-		setUnlocalizedName(name);
+		ModContainer container = Loader.instance().activeModContainer();
+		setUnlocalizedName(container == null ? name : (container.getModId().toLowerCase() + "." + name));
 		setHardness(hardness);
 		setRegistryName(name);
 		setCreativeTab(tab);

@@ -1,6 +1,5 @@
 package tamaized.tammodized.common.items;
 
-import tamaized.tammodized.registry.ITamRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -9,6 +8,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
+import tamaized.tammodized.registry.ITamRegistry;
 
 public class TamItem extends Item implements ITamRegistry {
 
@@ -17,7 +19,8 @@ public class TamItem extends Item implements ITamRegistry {
 	public TamItem(CreativeTabs tab, String n, int maxStackSize) {
 		super();
 		name = n;
-		setUnlocalizedName(name);
+		ModContainer container = Loader.instance().activeModContainer();
+		setUnlocalizedName(container == null ? name : (container.getModId().toLowerCase() + "." + name));
 		setMaxStackSize(maxStackSize);
 		setRegistryName(name);
 		this.setCreativeTab(tab);

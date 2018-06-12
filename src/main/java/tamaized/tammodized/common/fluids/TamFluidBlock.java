@@ -9,6 +9,8 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import tamaized.tammodized.registry.ITamRegistry;
@@ -21,7 +23,8 @@ public class TamFluidBlock extends BlockFluidClassic implements ITamRegistry {
 	public TamFluidBlock(CreativeTabs tab, Fluid fluid, Material material, String name) {
 		super(fluid, material);
 		this.name = name;
-		setUnlocalizedName(name);
+		ModContainer container = Loader.instance().activeModContainer();
+		setUnlocalizedName(container == null ? name : (container.getModId().toLowerCase() + "." + name));
 		setRegistryName(name);
 		setCreativeTab(tab);
 	}

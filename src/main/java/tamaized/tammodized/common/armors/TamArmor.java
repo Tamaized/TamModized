@@ -1,6 +1,5 @@
 package tamaized.tammodized.common.armors;
 
-import tamaized.tammodized.registry.ITamRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -11,6 +10,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
+import tamaized.tammodized.registry.ITamRegistry;
 
 public class TamArmor extends ItemArmor implements ITamRegistry {
 
@@ -19,7 +21,8 @@ public class TamArmor extends ItemArmor implements ITamRegistry {
 	public TamArmor(CreativeTabs tab, ArmorMaterial armorMaterial, int par3, EntityEquipmentSlot par4, String type, String n) {
 		super(armorMaterial, par3, par4);
 		name = n;
-		setUnlocalizedName(name);
+		ModContainer container = Loader.instance().activeModContainer();
+		setUnlocalizedName(container == null ? name : (container.getModId().toLowerCase() + "." + name));
 		setRegistryName(n);
 		this.setMaxStackSize(1);
 		this.setCreativeTab(tab);
