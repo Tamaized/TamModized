@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -69,7 +70,6 @@ public class TamModized extends TamModBase {
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
 		logger.info("All your base belong to \uD835\uDCAF\uD835\uDCB6\uD835\uDCC2\uD835\uDCB6");
-		// TODO: IMC messages between my mods for sillyness
 
 		NetworkMessages.register(network = NetworkRegistry.INSTANCE.newSimpleChannel(modid));
 
@@ -88,6 +88,14 @@ public class TamModized extends TamModBase {
 	@Override
 	public void init(FMLInitializationEvent event) {
 
+	}
+
+	@EventHandler
+	public void imcHandler(FMLInterModComms.IMCEvent e) {
+		for (FMLInterModComms.IMCMessage message : e.getMessages()) {
+			if (message.isStringMessage() && message.key.equals("silly|echo"))
+				logger.info(message.getStringValue());
+		}
 	}
 
 	@Override
