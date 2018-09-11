@@ -68,7 +68,7 @@ public class RayTraceHelper {
 				}
 			}
 		}
-		if (closestHitEntity != null) {
+		if (closestHitEntity != null && (blockHit == null || blockHit.typeOfHit != RayTraceResult.Type.BLOCK || closestHitEntity.getDistance(x, y, z) <= startVec.distanceTo(blockHit.hitVec))) {
 			blockHit = new RayTraceResult(closestHitEntity);
 		}
 		return blockHit;
