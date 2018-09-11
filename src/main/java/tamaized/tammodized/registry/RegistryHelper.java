@@ -17,7 +17,7 @@ public class RegistryHelper {
 	public static void registerFluidModel(BlockFluidBase fluid) {
 		final Item item = Item.getItemFromBlock(fluid);
 		net.minecraft.client.renderer.block.model.ModelBakery.registerItemVariants(item);
-		String domain = fluid.getRegistryName() == null ? "minecraft" : fluid.getRegistryName().getResourceDomain();
+		String domain = fluid.getRegistryName() == null ? "minecraft" : fluid.getRegistryName().getNamespace();
 		ModelResourceLocation modelResourceLocation = new ModelResourceLocation(new ResourceLocation(domain, "blocks/fluids"), fluid.getFluid().getName());
 		ModelLoader.setCustomMeshDefinition(item, tamaized.tammodized.client.MeshDefinitionFix.create(stack -> modelResourceLocation));
 		ModelLoader.setCustomStateMapper(fluid, new net.minecraft.client.renderer.block.statemap.StateMapperBase() {

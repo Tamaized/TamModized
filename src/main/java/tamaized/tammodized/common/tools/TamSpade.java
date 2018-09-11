@@ -13,16 +13,14 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import tamaized.tammodized.registry.ITamRegistry;
 
+@SuppressWarnings("unused")
 public class TamSpade extends ItemSpade implements ITamRegistry {
 
-	private final String name;
-
-	public TamSpade(CreativeTabs tab, ToolMaterial material, String n) {
+	public TamSpade(CreativeTabs tab, ToolMaterial material, String name) {
 		super(material);
-		name = n;
 		ModContainer container = Loader.instance().activeModContainer();
-		setUnlocalizedName(container == null ? name : (container.getModId().toLowerCase() + "." + name));
-		setRegistryName(n);
+		setTranslationKey(container == null ? name : (container.getModId().toLowerCase() + "." + name));
+		setRegistryName(name);
 		setCreativeTab(tab);
 	}
 
@@ -42,7 +40,8 @@ public class TamSpade extends ItemSpade implements ITamRegistry {
 
 	@Override
 	public void registerModel(ModelRegistryEvent e) {
-		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(new ResourceLocation(getRegistryName().getResourceDomain(), getModelDir() + "/" + getRegistryName().getResourcePath()), "inventory"));
+		if (getRegistryName() != null)
+			ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(new ResourceLocation(getRegistryName().getNamespace(), getModelDir() + "/" + getRegistryName().getPath()), "inventory"));
 	}
 
 }

@@ -14,18 +14,16 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import tamaized.tammodized.registry.ITamRegistry;
 
+@SuppressWarnings("unused")
 public class TamArmor extends ItemArmor implements ITamRegistry {
 
-	private final String name;
-
-	public TamArmor(CreativeTabs tab, ArmorMaterial armorMaterial, int par3, EntityEquipmentSlot par4, String type, String n) {
+	public TamArmor(CreativeTabs tab, ArmorMaterial armorMaterial, int par3, EntityEquipmentSlot par4, String type, String name) {
 		super(armorMaterial, par3, par4);
-		name = n;
 		ModContainer container = Loader.instance().activeModContainer();
-		setUnlocalizedName(container == null ? name : (container.getModId().toLowerCase() + "." + name));
-		setRegistryName(n);
-		this.setMaxStackSize(1);
-		this.setCreativeTab(tab);
+		setTranslationKey(container == null ? name : (container.getModId().toLowerCase() + "." + name));
+		setRegistryName(name);
+		setMaxStackSize(1);
+		setCreativeTab(tab);
 	}
 
 	public String getModelDir() {
@@ -44,7 +42,8 @@ public class TamArmor extends ItemArmor implements ITamRegistry {
 
 	@Override
 	public void registerModel(ModelRegistryEvent e) {
-		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(new ResourceLocation(getRegistryName().getResourceDomain(), getModelDir() + "/" + getRegistryName().getResourcePath()), "inventory"));
+		if (getRegistryName() != null)
+			ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(new ResourceLocation(getRegistryName().getNamespace(), getModelDir() + "/" + getRegistryName().getPath()), "inventory"));
 	}
 
 }

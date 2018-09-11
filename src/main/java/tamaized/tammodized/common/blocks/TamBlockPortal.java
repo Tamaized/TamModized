@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockBreakable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -30,9 +29,10 @@ import tamaized.tammodized.registry.ITamRegistry;
 
 import java.util.Random;
 
+@SuppressWarnings("unused")
 public abstract class TamBlockPortal extends BlockBreakable implements ITamRegistry {
 
-	public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.<EnumFacing.Axis>create("axis", EnumFacing.Axis.class, new EnumFacing.Axis[]{EnumFacing.Axis.X, EnumFacing.Axis.Z});
+	public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.create("axis", EnumFacing.Axis.class, EnumFacing.Axis.X, EnumFacing.Axis.Z);
 	private final String name;
 
 	public TamBlockPortal(CreativeTabs tab, String n, boolean hasAxis, SoundType sound) {
@@ -43,7 +43,7 @@ public abstract class TamBlockPortal extends BlockBreakable implements ITamRegis
 		this.setLightLevel(0.75F);
 		name = n;
 		ModContainer container = Loader.instance().activeModContainer();
-		setUnlocalizedName(container == null ? name : (container.getModId().toLowerCase() + "." + name));
+		setTranslationKey(container == null ? name : (container.getModId().toLowerCase() + "." + name));
 		setRegistryName(name);
 		setCreativeTab(tab);
 		setSoundType(sound);
@@ -59,7 +59,8 @@ public abstract class TamBlockPortal extends BlockBreakable implements ITamRegis
 
 	@Override
 	public void registerModel(ModelRegistryEvent e) {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(new ResourceLocation(getRegistryName().getResourceDomain(), getModelDir() + "/" + getRegistryName().getResourcePath()), "inventory"));
+		if (getRegistryName() != null)
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(new ResourceLocation(getRegistryName().getNamespace(), getModelDir() + "/" + getRegistryName().getPath()), "inventory"));
 	}
 
 	@Override
@@ -76,6 +77,7 @@ public abstract class TamBlockPortal extends BlockBreakable implements ITamRegis
 	 * Override this and return getDefaultState() if hasAxis is false
 	 */
 	@Override
+	@SuppressWarnings("deprecation")
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(AXIS, (meta & 3) == 2 ? EnumFacing.Axis.Z : EnumFacing.Axis.X);
 	}
@@ -85,7 +87,7 @@ public abstract class TamBlockPortal extends BlockBreakable implements ITamRegis
 	 */
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return getMetaForAxis((EnumFacing.Axis) state.getValue(AXIS));
+		return getMetaForAxis(state.getValue(AXIS));
 	}
 
 	/**
@@ -94,26 +96,7 @@ public abstract class TamBlockPortal extends BlockBreakable implements ITamRegis
 	 */
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[]{AXIS});
-	}
-
-	/**
-	 * Ticks the block if it's been scheduled
-	 */
-	@Override
-	public void updateTick(World par1World, BlockPos pos, IBlockState state, Random par5Random) {
-		super.updateTick(par1World, pos, state, par5Random);
-		if (par1World.provider.isSurfaceWorld()) {
-			int l;
-			int x = pos.getX();
-			int y = pos.getY();
-			int z = pos.getZ();
-			for (l = y; !par1World.isSideSolid(new BlockPos(x, l, z), EnumFacing.UP) && l > 0; --l) {
-				;
-			}
-			if (l > 0 && !par1World.isBlockNormalCube(new BlockPos(x, l + 1, z), false)) {
-			} // Prevent pigmen from spawning
-		}
+		return new BlockStateContainer(this, AXIS);
 	}
 
 	/**
@@ -121,6 +104,7 @@ public abstract class TamBlockPortal extends BlockBreakable implements ITamRegis
 	 * box can change after the pool has been cleared to be reused)
 	 */
 	@Override
+	@SuppressWarnings("deprecation")
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		return null;
 	}
@@ -131,18 +115,20 @@ public abstract class TamBlockPortal extends BlockBreakable implements ITamRegis
 	 * the player can attach torches, redstone wire, etc to this block.
 	 */
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		// We handle this elsewhere
 	}
 
 	public abstract boolean tryToCreatePortal(World par1World, BlockPos pos);
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public abstract void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos p_189540_5_);
 
 	/**
@@ -160,11 +146,13 @@ public abstract class TamBlockPortal extends BlockBreakable implements ITamRegis
 	 */
 	@SideOnly(Side.CLIENT)
 	@Override
+	@SuppressWarnings("deprecation")
 	public abstract boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side);
 
 	/**
 	 * Returns the quantity of items to drop on block destruction.
 	 */
+	@Override
 	public int quantityDropped(Random par1Random) {
 		return 0;
 	}

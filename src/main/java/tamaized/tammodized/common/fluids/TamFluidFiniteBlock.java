@@ -23,6 +23,7 @@ import tamaized.tammodized.registry.RegistryHelper;
 
 import java.util.Random;
 
+@SuppressWarnings("unused")
 public class TamFluidFiniteBlock extends BlockFluidFinite implements ITamRegistry {
 
 	private final String name;
@@ -35,7 +36,7 @@ public class TamFluidFiniteBlock extends BlockFluidFinite implements ITamRegistr
 		damageSource = source;
 		damage = dmg;
 		ModContainer container = Loader.instance().activeModContainer();
-		setUnlocalizedName(container == null ? name : (container.getModId().toLowerCase() + "." + name));
+		setTranslationKey(container == null ? name : (container.getModId().toLowerCase() + "." + name));
 		setRegistryName(name);
 		this.setCreativeTab(tab);
 	}
@@ -50,8 +51,8 @@ public class TamFluidFiniteBlock extends BlockFluidFinite implements ITamRegistr
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-		super.onEntityCollidedWithBlock(worldIn, pos, state, entityIn);
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+		super.onEntityCollision(worldIn, pos, state, entityIn);
 		entityIn.attackEntityFrom(damageSource, damage);
 	}
 

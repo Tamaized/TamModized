@@ -16,26 +16,25 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import tamaized.tammodized.registry.ITamRegistry;
 
+@SuppressWarnings("unused")
 public abstract class TamItemFood extends ItemFood implements ITamRegistry {
 
-	private final String name;
 
-	public TamItemFood(CreativeTabs tab, String n, int maxStackSize, int hungerAmount, boolean isWolfFood) {
+	public TamItemFood(CreativeTabs tab, String name, int maxStackSize, int hungerAmount, boolean isWolfFood) {
 		super(hungerAmount, isWolfFood);
-		name = n;
 		ModContainer container = Loader.instance().activeModContainer();
-		setUnlocalizedName(container == null ? name : (container.getModId().toLowerCase() + "." + name));
+		setTranslationKey(container == null ? name : (container.getModId().toLowerCase() + "." + name));
 		setMaxStackSize(maxStackSize);
 		setRegistryName(name);
 		this.setCreativeTab(tab);
 	}
-	
+
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
 		doneEating(stack, worldIn, entityLiving);
 		return super.onItemUseFinish(stack, worldIn, entityLiving);
 	}
-	
+
 	protected abstract void doneEating(ItemStack stack, World worldIn, EntityLivingBase entityLiving);
 
 	public String getModelDir() {
@@ -54,7 +53,8 @@ public abstract class TamItemFood extends ItemFood implements ITamRegistry {
 
 	@Override
 	public void registerModel(ModelRegistryEvent e) {
-		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(new ResourceLocation(getRegistryName().getResourceDomain(), getModelDir() + "/" + getRegistryName().getResourcePath()), "inventory"));
+		if (getRegistryName() != null)
+			ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(new ResourceLocation(getRegistryName().getNamespace(), getModelDir() + "/" + getRegistryName().getPath()), "inventory"));
 	}
 
 }

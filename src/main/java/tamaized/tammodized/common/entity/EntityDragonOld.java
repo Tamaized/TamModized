@@ -148,8 +148,8 @@ public class EntityDragonOld extends EntityLiving implements IEntityMultiPartOld
 		}
 
 		p_70974_2_ = 1.0F - p_70974_2_;
-		int j = this.ringBufferIndex - p_70974_1_ * 1 & 63;
-		int k = this.ringBufferIndex - p_70974_1_ * 1 - 1 & 63;
+		int j = this.ringBufferIndex - p_70974_1_ & 63;
+		int k = this.ringBufferIndex - p_70974_1_ - 1 & 63;
 		double[] adouble = new double[3];
 		double d0 = this.ringBuffer[j][0];
 		double d1 = MathHelper.wrapDegrees(this.ringBuffer[k][0] - d0);
@@ -209,7 +209,7 @@ public class EntityDragonOld extends EntityLiving implements IEntityMultiPartOld
 			f = (this.rand.nextFloat() - 0.5F) * 8.0F;
 			f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
 			f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
-			this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX + (double) f, this.posY + 2.0D + (double) f1, this.posZ + (double) f2, 0.0D, 0.0D, 0.0D, new int[0]);
+			this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.posX + (double) f, this.posY + 2.0D + (double) f1, this.posZ + (double) f2, 0.0D, 0.0D, 0.0D);
 		} else {
 			this.updateDragonEnderCrystal();
 			f = 0.2F / (MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ) * 10.0F + 1.0F);
@@ -278,7 +278,7 @@ public class EntityDragonOld extends EntityLiving implements IEntityMultiPartOld
 					this.targetZ += this.rand.nextGaussian() * 2.0D;
 				}
 
-				if (this.forceNewTarget || d2 < 100.0D || d2 > 22500.0D || this.isCollidedHorizontally || this.isCollidedVertically) {
+				if (this.forceNewTarget || d2 < 100.0D || d2 > 22500.0D || this.collidedHorizontally || this.collidedVertically) {
 					this.setNewTarget();
 				}
 
@@ -435,7 +435,7 @@ public class EntityDragonOld extends EntityLiving implements IEntityMultiPartOld
 
 			while (iterator.hasNext()) {
 				EntityEnderCrystal entityendercrystal1 = (EntityEnderCrystal) iterator.next();
-				double d1 = entityendercrystal1.getDistanceSqToEntity(this);
+				double d1 = entityendercrystal1.getDistanceSq(this);
 
 				if (d1 < d0) {
 					d0 = d1;
@@ -471,8 +471,8 @@ public class EntityDragonOld extends EntityLiving implements IEntityMultiPartOld
 	 * Attacks all entities inside this list, dealing 5 hearts of damage.
 	 */
 	private void attackEntitiesInList(List p_70971_1_) {
-		for (int i = 0; i < p_70971_1_.size(); ++i) {
-			Entity entity = (Entity) p_70971_1_.get(i);
+		for (Object aP_70971_1_ : p_70971_1_) {
+			Entity entity = (Entity) aP_70971_1_;
 
 			if (entity instanceof EntityLivingBase) {
 				entity.attackEntityFrom(DamageSource.causeMobDamage(this), getDamage());
@@ -491,9 +491,9 @@ public class EntityDragonOld extends EntityLiving implements IEntityMultiPartOld
 		this.forceNewTarget = false;
 
 		if (this.rand.nextInt(2) == 0 && !this.world.playerEntities.isEmpty()) {
-			this.target = (Entity) this.world.playerEntities.get(this.rand.nextInt(this.world.playerEntities.size()));
+			this.target = this.world.playerEntities.get(this.rand.nextInt(this.world.playerEntities.size()));
 		} else {
-			boolean flag = false;
+			boolean flag;
 
 			do {
 				this.targetX = targetXf;
@@ -521,7 +521,7 @@ public class EntityDragonOld extends EntityLiving implements IEntityMultiPartOld
 	/**
 	 * Destroys all blocks that aren't associated with 'The End' inside the given bounding box.
 	 */
-	private boolean destroyBlocksInAABB(AxisAlignedBB p_70972_1_) {
+	protected boolean destroyBlocksInAABB(AxisAlignedBB p_70972_1_) {
 		return false;
 	}
 
@@ -569,7 +569,7 @@ public class EntityDragonOld extends EntityLiving implements IEntityMultiPartOld
 			float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
 			float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
 			float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
-			this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + (double) f, this.posY + 2.0D + (double) f1, this.posZ + (double) f2, 0.0D, 0.0D, 0.0D, new int[0]);
+			this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + (double) f, this.posY + 2.0D + (double) f1, this.posZ + (double) f2, 0.0D, 0.0D, 0.0D);
 		}
 
 		int i = 500;

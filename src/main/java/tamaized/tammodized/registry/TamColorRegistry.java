@@ -9,6 +9,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SuppressWarnings("unused")
 public class TamColorRegistry {
 
 	@SideOnly(Side.CLIENT)
@@ -17,7 +18,7 @@ public class TamColorRegistry {
 		net.minecraft.client.renderer.color.ItemColors itemColors = net.minecraft.client.Minecraft.getMinecraft().getItemColors();
 
 		final net.minecraft.client.renderer.color.IItemColor itemBlockColourHandler = (stack, tintIndex) -> {
-			IBlockState iblockstate = ((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata());
+			@SuppressWarnings("deprecation") IBlockState iblockstate = ((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata());
 			return blockColors.colorMultiplier(iblockstate, null, null, tintIndex);
 		};
 

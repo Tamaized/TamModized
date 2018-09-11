@@ -16,6 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import tamaized.tammodized.registry.ITamRegistry;
 import tamaized.tammodized.registry.RegistryHelper;
 
+@SuppressWarnings("unused")
 public class TamFluidBlock extends BlockFluidClassic implements ITamRegistry {
 
 	private final String name;
@@ -24,7 +25,7 @@ public class TamFluidBlock extends BlockFluidClassic implements ITamRegistry {
 		super(fluid, material);
 		this.name = name;
 		ModContainer container = Loader.instance().activeModContainer();
-		setUnlocalizedName(container == null ? name : (container.getModId().toLowerCase() + "." + name));
+		setTranslationKey(container == null ? name : (container.getModId().toLowerCase() + "." + name));
 		setRegistryName(name);
 		setCreativeTab(tab);
 	}

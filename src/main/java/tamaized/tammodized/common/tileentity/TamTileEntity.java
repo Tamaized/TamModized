@@ -41,7 +41,7 @@ public abstract class TamTileEntity extends TileEntity implements ITickable {
 	public void update() {
 		onUpdate();
 		if (!world.isRemote) {
-			world.markAndNotifyBlock(getPos(), world.getChunkFromBlockCoords(getPos()), world.getBlockState(getPos()), world.getBlockState(getPos()), 3);
+			world.markAndNotifyBlock(getPos(), world.getChunk(getPos()), world.getBlockState(getPos()), world.getBlockState(getPos()), 3);
 		}
 	}
 	

@@ -3,7 +3,6 @@ package tamaized.tammodized.common.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -35,12 +34,13 @@ public abstract class TamBlockFarmland extends TamBlockContainer {
 
 	public TamBlockFarmland(CreativeTabs tab, Material material, String n, float hardness, SoundType sound) {
 		super(tab, material, n, hardness, sound);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(MOISTURE, Integer.valueOf(0)));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(MOISTURE, 0));
 		this.setTickRandomly(true);
 		this.setLightOpacity(255);
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return FARMLAND_AABB;
 	}
@@ -49,11 +49,13 @@ public abstract class TamBlockFarmland extends TamBlockContainer {
 	 * Used to determine ambient occlusion and culling when rebuilding chunks for render
 	 */
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
@@ -62,20 +64,20 @@ public abstract class TamBlockFarmland extends TamBlockContainer {
 
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		int i = ((Integer) state.getValue(MOISTURE)).intValue();
+		int i = state.getValue(MOISTURE);
 
 		if (!this.hasWater(worldIn, pos) && (getWaterBlock() != Blocks.WATER || !worldIn.isRainingAt(pos.up()))) {
 			if (i > 0) {
-				updateState(worldIn, pos, state.withProperty(MOISTURE, Integer.valueOf(i - 1)), 2);
+				updateState(worldIn, pos, state.withProperty(MOISTURE, i - 1), 2);
 			} else if (!this.hasCrops(worldIn, pos)) {
 				updateState(worldIn, pos, getParentBlockState());
 			}
 		} else if (i < 7) {
-			updateState(worldIn, pos, state.withProperty(MOISTURE, Integer.valueOf(7)), 2);
+			updateState(worldIn, pos, state.withProperty(MOISTURE, 7), 2);
 		}
 	}
 
-	private void updateState(World world, BlockPos pos, IBlockState newState, int flag) {
+	private void updateState(World world, BlockPos pos, IBlockState newState, @SuppressWarnings("SameParameterValue") int flag) {
 		TileEntity te1 = world.getTileEntity(pos);
 		world.setBlockState(pos, newState, flag);
 		TileEntity te2 = world.getTileEntity(pos);
@@ -117,7 +119,7 @@ public abstract class TamBlockFarmland extends TamBlockContainer {
 
 	@Override
 	public boolean isFertile(World world, BlockPos pos) {
-		return ((Integer) world.getBlockState(pos).getValue(MOISTURE)) > 0;
+		return world.getBlockState(pos).getValue(MOISTURE) > 0;
 	}
 
 	private boolean hasWater(World worldIn, BlockPos pos) {
@@ -136,6 +138,7 @@ public abstract class TamBlockFarmland extends TamBlockContainer {
 	 * Called when a neighboring block was changed and marks that this state should perform any checks during a neighbor change. Cases may include when redstone power is updated, cactus blocks popping off due to a neighboring solid block, etc.
 	 */
 	@Override
+	@SuppressWarnings("deprecation")
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos p_189540_5_) {
 		super.neighborChanged(state, worldIn, pos, blockIn, p_189540_5_);
 
@@ -146,6 +149,7 @@ public abstract class TamBlockFarmland extends TamBlockContainer {
 
 	@SideOnly(Side.CLIENT)
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		switch (side) {
 			case UP:
@@ -172,6 +176,7 @@ public abstract class TamBlockFarmland extends TamBlockContainer {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
 		return new ItemStack(getParentBlockState().getBlock());
 	}
@@ -180,8 +185,9 @@ public abstract class TamBlockFarmland extends TamBlockContainer {
 	 * Convert the given metadata into a BlockState for this Block
 	 */
 	@Override
+	@SuppressWarnings("deprecation")
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(MOISTURE, Integer.valueOf(meta & 7));
+		return this.getDefaultState().withProperty(MOISTURE, meta & 7);
 	}
 
 	/**
@@ -189,12 +195,12 @@ public abstract class TamBlockFarmland extends TamBlockContainer {
 	 */
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((Integer) state.getValue(MOISTURE)).intValue();
+		return state.getValue(MOISTURE);
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[]{MOISTURE});
+		return new BlockStateContainer(this, MOISTURE);
 	}
 
 }

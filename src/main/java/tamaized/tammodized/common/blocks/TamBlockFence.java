@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import tamaized.tammodized.registry.ITamRegistry;
 
+@SuppressWarnings("unused")
 public class TamBlockFence extends BlockFence implements ITamRegistry {
 
 	private final String name;
@@ -25,11 +26,12 @@ public class TamBlockFence extends BlockFence implements ITamRegistry {
 		super(materialIn, mapColor);
 		name = n;
 		ModContainer container = Loader.instance().activeModContainer();
-		setUnlocalizedName(container == null ? name : (container.getModId().toLowerCase() + "." + name));
+		setTranslationKey(container == null ? name : (container.getModId().toLowerCase() + "." + name));
 		setRegistryName(name);
 		setCreativeTab(tab);
 		setSoundType(sound);
 	}
+
 	public String getModelDir() {
 		return "blocks";
 	}
@@ -46,7 +48,8 @@ public class TamBlockFence extends BlockFence implements ITamRegistry {
 
 	@Override
 	public void registerModel(ModelRegistryEvent e) {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(new ResourceLocation(getRegistryName().getResourceDomain(), getModelDir() + "/" + getRegistryName().getResourcePath()), "inventory"));
+		if (getRegistryName() != null)
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(new ResourceLocation(getRegistryName().getNamespace(), getModelDir() + "/" + getRegistryName().getPath()), "inventory"));
 	}
 
 }

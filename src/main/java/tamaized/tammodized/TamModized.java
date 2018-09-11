@@ -81,7 +81,7 @@ public class TamModized extends TamModBase {
 
 		MinecraftForge.EVENT_BUS.register(new PortalHandlerRegistry());
 
-		CapabilityManager.INSTANCE.register(IDimensionCapability.class, new DimensionCapabilityStorage(), DimensionCapabilityHandler.class);
+		CapabilityManager.INSTANCE.register(IDimensionCapability.class, new DimensionCapabilityStorage(), DimensionCapabilityHandler::new);
 		MinecraftForge.EVENT_BUS.register(new tamaized.tammodized.common.capabilities.EventHandler());
 	}
 

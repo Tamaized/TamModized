@@ -5,7 +5,6 @@ import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -36,11 +35,11 @@ public abstract class TamBlockCrops extends BlockBush implements IGrowable, ITam
 	public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 7);
 	private final String name;
 
-	public TamBlockCrops(CreativeTabs tab, Material material, String n, float hardness, SoundType sound) {
+	public TamBlockCrops(CreativeTabs tab, @SuppressWarnings("unused") Material material, String n, float hardness, SoundType sound) {
 		super();
 		name = n;
 		ModContainer container = Loader.instance().activeModContainer();
-		setUnlocalizedName(container == null ? name : (container.getModId().toLowerCase() + "." + name));
+		setTranslationKey(container == null ? name : (container.getModId().toLowerCase() + "." + name));
 		setHardness(hardness);
 		setRegistryName(name);
 		setCreativeTab(tab);
@@ -97,8 +96,9 @@ public abstract class TamBlockCrops extends BlockBush implements IGrowable, ITam
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return getBounds()[((Integer) state.getValue(this.getAgeProperty())).intValue()];
+		return getBounds()[state.getValue(this.getAgeProperty())];
 	}
 
 	protected abstract AxisAlignedBB[] getBounds();
@@ -128,15 +128,15 @@ public abstract class TamBlockCrops extends BlockBush implements IGrowable, ITam
 	}
 
 	protected int getAge(IBlockState state) {
-		return ((Integer) state.getValue(this.getAgeProperty())).intValue();
+		return state.getValue(this.getAgeProperty());
 	}
 
 	public IBlockState withAge(int age) {
-		return this.getDefaultState().withProperty(this.getAgeProperty(), Integer.valueOf(age));
+		return this.getDefaultState().withProperty(this.getAgeProperty(), age);
 	}
 
 	public boolean isMaxAge(IBlockState state) {
-		return ((Integer) state.getValue(this.getAgeProperty())).intValue() >= this.getMaxAge();
+		return state.getValue(this.getAgeProperty()) >= this.getMaxAge();
 	}
 
 	@Override
@@ -158,7 +158,7 @@ public abstract class TamBlockCrops extends BlockBush implements IGrowable, ITam
 
 	private boolean isCorrectLightLevel(World world, BlockPos pos) {
 		int light = 0;
-		int a = 0;
+		int a;
 		a = world.getLight(pos.down());
 		light = a > light ? a : light;
 		a = world.getLight(pos.up());
@@ -187,18 +187,19 @@ public abstract class TamBlockCrops extends BlockBush implements IGrowable, ITam
 		worldIn.setBlockState(pos, this.withAge(i), 2);
 	}
 
-	protected int getBonemealAgeIncrease(World worldIn, BlockPos pos, IBlockState state) {
+	protected int getBonemealAgeIncrease(World worldIn, BlockPos pos, @SuppressWarnings("unused") IBlockState state) {
 		return isCorrectLightLevel(worldIn, pos) ? MathHelper.getInt(worldIn.rand, 2, 5) : 0;
 	}
 
 	@Override
 	public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
 		IBlockState soil = worldIn.getBlockState(pos.down());
-		return canSustainBush(soil) ? soil.getBlock().canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this) : false;
+		return canSustainBush(soil) && soil.getBlock().canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this);
 	}
 
 	protected abstract Item getSeed();
 
+	@SuppressWarnings("unused")
 	protected abstract Item getCrop();
 
 	/**
@@ -209,6 +210,7 @@ public abstract class TamBlockCrops extends BlockBush implements IGrowable, ITam
 	public abstract Item getItemDropped(IBlockState state, Random rand, int fortune);
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
 		return new ItemStack(this.getSeed());
 	}
@@ -233,6 +235,7 @@ public abstract class TamBlockCrops extends BlockBush implements IGrowable, ITam
 	 * Convert the given metadata into a BlockState for this Block
 	 */
 	@Override
+	@SuppressWarnings("deprecation")
 	public IBlockState getStateFromMeta(int meta) {
 		return this.withAge(meta);
 	}
@@ -247,7 +250,7 @@ public abstract class TamBlockCrops extends BlockBush implements IGrowable, ITam
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[]{AGE});
+		return new BlockStateContainer(this, AGE);
 	}
 
 	@Override
@@ -262,7 +265,8 @@ public abstract class TamBlockCrops extends BlockBush implements IGrowable, ITam
 
 	@Override
 	public void registerModel(ModelRegistryEvent e) {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(new ResourceLocation(getRegistryName().getResourceDomain(), getModelDir() + "/" + getRegistryName().getResourcePath()), "inventory"));
+		if (getRegistryName() != null)
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(new ResourceLocation(getRegistryName().getNamespace(), getModelDir() + "/" + getRegistryName().getPath()), "inventory"));
 	}
 
 }

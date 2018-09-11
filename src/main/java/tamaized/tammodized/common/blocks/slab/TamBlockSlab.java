@@ -22,18 +22,17 @@ import tamaized.tammodized.registry.ITamRegistry;
 
 import java.util.Random;
 
+@SuppressWarnings("unused")
 public abstract class TamBlockSlab extends BlockSlab implements ITamRegistry {
 
 	private static final PropertyEnum<TamBlockSlab.Variant> VARIANT = PropertyEnum.create("variant", TamBlockSlab.Variant.class);
 	private static final int HALF_META_BIT = 8;
-	private final String name;
 
-	public TamBlockSlab(CreativeTabs tab, Material materialIn, String n) {
+	public TamBlockSlab(CreativeTabs tab, Material materialIn, String name) {
 		super(materialIn);
-		name = n;
 		setRegistryName(name);
 		ModContainer container = Loader.instance().activeModContainer();
-		setUnlocalizedName(container == null ? name : (container.getModId().toLowerCase() + "." + name));
+		setTranslationKey(container == null ? name : (container.getModId().toLowerCase() + "." + name));
 		IBlockState blockState = this.blockState.getBaseState();
 		if (!isDouble()) {
 			blockState = blockState.withProperty(HALF, EnumBlockHalf.BOTTOM);
@@ -55,7 +54,8 @@ public abstract class TamBlockSlab extends BlockSlab implements ITamRegistry {
 
 	@Override
 	public void registerModel(ModelRegistryEvent e) {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(new ResourceLocation(getRegistryName().getResourceDomain(), getModelDir() + "/" + getRegistryName().getResourcePath()), "inventory"));
+		if(getRegistryName() != null)
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(new ResourceLocation(getRegistryName().getNamespace(), getModelDir() + "/" + getRegistryName().getPath()), "inventory"));
 	}
 
 	public String getModelDir() {
@@ -67,8 +67,8 @@ public abstract class TamBlockSlab extends BlockSlab implements ITamRegistry {
 	}
 
 	@Override
-	public String getUnlocalizedName(int meta) {
-		return super.getUnlocalizedName();
+	public String getTranslationKey(int meta) {
+		return super.getTranslationKey();
 	}
 
 	@Override
@@ -85,6 +85,7 @@ public abstract class TamBlockSlab extends BlockSlab implements ITamRegistry {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public final IBlockState getStateFromMeta(final int meta) {
 		IBlockState blockState = this.getDefaultState();
 		blockState = blockState.withProperty(VARIANT, TamBlockSlab.Variant.DEFAULT);
@@ -115,10 +116,10 @@ public abstract class TamBlockSlab extends BlockSlab implements ITamRegistry {
 
 	@Override
 	protected final BlockStateContainer createBlockState() {
-		return this.isDouble() ? new BlockStateContainer(this, new IProperty[]{VARIANT}) : new BlockStateContainer(this, new IProperty[]{HALF, VARIANT});
+		return this.isDouble() ? new BlockStateContainer(this, VARIANT) : new BlockStateContainer(this, HALF, VARIANT);
 	}
 
-	public static enum Variant implements IStringSerializable {
+	public enum Variant implements IStringSerializable {
 		DEFAULT;
 
 		@Override

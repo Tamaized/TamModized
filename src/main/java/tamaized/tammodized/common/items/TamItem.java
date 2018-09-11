@@ -14,13 +14,10 @@ import tamaized.tammodized.registry.ITamRegistry;
 
 public class TamItem extends Item implements ITamRegistry {
 
-	private final String name;
-
-	public TamItem(CreativeTabs tab, String n, int maxStackSize) {
+	public TamItem(CreativeTabs tab, String name, int maxStackSize) {
 		super();
-		name = n;
 		ModContainer container = Loader.instance().activeModContainer();
-		setUnlocalizedName(container == null ? name : (container.getModId().toLowerCase() + "." + name));
+		setTranslationKey(container == null ? name : (container.getModId().toLowerCase() + "." + name));
 		setMaxStackSize(maxStackSize);
 		setRegistryName(name);
 		this.setCreativeTab(tab);
@@ -42,6 +39,7 @@ public class TamItem extends Item implements ITamRegistry {
 
 	@Override
 	public void registerModel(ModelRegistryEvent e) {
-		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(new ResourceLocation(getRegistryName().getResourceDomain(), getModelDir() + "/" + getRegistryName().getResourcePath()), "inventory"));
+		if (getRegistryName() != null)
+			ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(new ResourceLocation(getRegistryName().getNamespace(), getModelDir() + "/" + getRegistryName().getPath()), "inventory"));
 	}
 }

@@ -57,36 +57,36 @@ public class PortalHandlerRegistry {
 	public static void doTeleport(IDimensionCapability cap, EntityPlayerMP player, TeleporterWrapper teleporter) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		if (player.dimension != teleporter.getDimension() && player.dimension != 1) {
 			cap.setLastDimension(player.dimension);
-			TeleportLoc port = new TeleportLoc(teleporter.getTeleporter().getConstructor(WorldServer.class).newInstance(player.mcServer.getWorld(teleporter.getDimension())));
-			transferPlayerToDimension(player.mcServer, player, teleporter.getDimension(), port);
+			TeleportLoc port = new TeleportLoc(teleporter.getTeleporter().getConstructor(WorldServer.class).newInstance(player.server.getWorld(teleporter.getDimension())));
+			transferPlayerToDimension(player.server, player, teleporter.getDimension(), port);
 		} else if (player.dimension == 1) { // From end
 			cap.setLastDimension(player.dimension);
-			TeleportLoc port = new TeleportLoc(teleporter.getTeleporter().getConstructor(WorldServer.class).newInstance(player.mcServer.getWorld(teleporter.getDimension())));
-			transferPlayerToDimension(player.mcServer, player, teleporter.getDimension(), port);
-			transferPlayerToDimension(player.mcServer, player, teleporter.getDimension(), port);
+			TeleportLoc port = new TeleportLoc(teleporter.getTeleporter().getConstructor(WorldServer.class).newInstance(player.server.getWorld(teleporter.getDimension())));
+			transferPlayerToDimension(player.server, player, teleporter.getDimension(), port);
+			transferPlayerToDimension(player.server, player, teleporter.getDimension(), port);
 		} else {
-			TeleportLoc port = new TeleportLoc(teleporter.getTeleporter().getConstructor(WorldServer.class).newInstance(player.mcServer.getWorld(cap.getLastDimension() == teleporter.getDimension() ? 0 : cap.getLastDimension())));
-			transferPlayerToDimension(player.mcServer, player, cap.getLastDimension() == teleporter.getDimension() ? 0 : cap.getLastDimension(), port);
+			TeleportLoc port = new TeleportLoc(teleporter.getTeleporter().getConstructor(WorldServer.class).newInstance(player.server.getWorld(cap.getLastDimension() == teleporter.getDimension() ? 0 : cap.getLastDimension())));
+			transferPlayerToDimension(player.server, player, cap.getLastDimension() == teleporter.getDimension() ? 0 : cap.getLastDimension(), port);
 			cap.setLastDimension(teleporter.getDimension());
 		}
 	}
 
-	private static void transferPlayerToDimension(MinecraftServer mcServer, EntityPlayerMP player, int dimId, TeleportLoc teleporter) { // Custom Made to handle teleporting to and from The End (DIM 1)
+	private static void transferPlayerToDimension(MinecraftServer server, EntityPlayerMP player, int dimId, TeleportLoc teleporter) { // Custom Made to handle teleporting to and from The End (DIM 1)
 		int j = player.dimension;
-		WorldServer worldserver = mcServer.getWorld(player.dimension);
+		WorldServer worldserver = server.getWorld(player.dimension);
 		player.dimension = dimId;
-		WorldServer worldserver1 = mcServer.getWorld(player.dimension);
+		WorldServer worldserver1 = server.getWorld(player.dimension);
 		player.connection.sendPacket(new SPacketRespawn(player.dimension, worldserver1.getDifficulty(), worldserver1.getWorldInfo().getTerrainType(), player.interactionManager.getGameType())); // Forge: Use new dimensions information
-		mcServer.getPlayerList().updatePermissionLevel(player);
+		server.getPlayerList().updatePermissionLevel(player);
 		worldserver.removeEntityDangerously(player);
 		player.isDead = false;
 		transferEntityToWorld(player, j, worldserver, worldserver1, teleporter);
-		mcServer.getPlayerList().preparePlayer(player, worldserver);
+		server.getPlayerList().preparePlayer(player, worldserver);
 		player.connection.setPlayerLocation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
 		player.interactionManager.setWorld(worldserver1);
 		player.connection.sendPacket(new SPacketPlayerAbilities(player.capabilities));
-		mcServer.getPlayerList().updateTimeAndWeatherForPlayer(player, worldserver1);
-		mcServer.getPlayerList().syncPlayerInventory(player);
+		server.getPlayerList().updateTimeAndWeatherForPlayer(player, worldserver1);
+		server.getPlayerList().syncPlayerInventory(player);
 		Iterator iterator = player.getActivePotionEffects().iterator();
 		while (iterator.hasNext()) {
 			PotionEffect potioneffect = (PotionEffect) iterator.next();
@@ -95,15 +95,12 @@ public class PortalHandlerRegistry {
 		FMLCommonHandler.instance().firePlayerChangedDimensionEvent(player, j, dimId);
 	}
 
-	private static void transferEntityToWorld(Entity p_82448_1_, int p_82448_2_, WorldServer p_82448_3_, WorldServer p_82448_4_, TeleportLoc teleporter) { // Custom Made to handle teleporting to and from The End (DIM 1)
+	private static void transferEntityToWorld(Entity p_82448_1_, @SuppressWarnings("unused") int p_82448_2_, WorldServer p_82448_3_, WorldServer p_82448_4_, TeleportLoc teleporter) { // Custom Made to handle teleporting to and from The End (DIM 1)
 		WorldProvider pOld = p_82448_3_.provider;
 		WorldProvider pNew = p_82448_4_.provider;
 		double moveFactor = pOld.getMovementFactor() / pNew.getMovementFactor();
 		double d0 = p_82448_1_.posX * moveFactor;
 		double d1 = p_82448_1_.posZ * moveFactor;
-		double d3 = p_82448_1_.posX;
-		double d4 = p_82448_1_.posY;
-		double d5 = p_82448_1_.posZ;
 		float f = p_82448_1_.rotationYaw;
 		p_82448_3_.profiler.startSection("moving");
 		p_82448_3_.profiler.endSection();
@@ -164,6 +161,7 @@ public class PortalHandlerRegistry {
 			teleporter = tele;
 		}
 
+		@SuppressWarnings("unused")
 		public TeleportLoc(BlockPos p) {
 			teleporter = null;
 			pos = p;
