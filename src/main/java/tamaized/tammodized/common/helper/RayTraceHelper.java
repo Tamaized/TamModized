@@ -43,7 +43,7 @@ public class RayTraceHelper {
 		float maxX = x > tx ? x : tx;
 		float maxY = y > ty ? y : ty;
 		float maxZ = z > tz ? z : tz;
-		AxisAlignedBB bb = new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ).expand(size, size, size);
+		AxisAlignedBB bb = new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ).grow(size, size, size);
 		List<Entity> allEntities = excluded == null ? Lists.newArrayList() : world.getEntitiesWithinAABBExcludingEntity(null, bb);
 		RayTraceResult blockHit = world.rayTraceBlocks(startVec, endVec);
 		startVec = new Vec3d(x, y, z);
@@ -57,7 +57,7 @@ public class RayTraceHelper {
 			if (ent.canBeCollidedWith() && !excluded.contains(ent)) {
 				float entBorder = ent.getCollisionBorderSize();
 				entityBb = ent.getEntityBoundingBox();
-				entityBb = entityBb.expand(entBorder, entBorder, entBorder);
+				entityBb = entityBb.grow(entBorder, entBorder, entBorder);
 				intercept = entityBb.calculateIntercept(startVec, endVec);
 				if (intercept != null) {
 					currentHit = (float) intercept.hitVec.distanceTo(startVec);
