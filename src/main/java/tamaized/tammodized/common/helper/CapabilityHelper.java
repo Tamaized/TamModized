@@ -1,8 +1,8 @@
 package tamaized.tammodized.common.helper;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 public class CapabilityHelper {
 
@@ -10,8 +10,8 @@ public class CapabilityHelper {
 
 	}
 
-	public static <T> T getCap(Entity entity, Capability<T> cap, EnumFacing face) {
-		return entity != null && entity.hasCapability(cap, face) ? entity.getCapability(cap, face) : null;
+	public static <T> T getCap(ICapabilityProvider provider, Capability<T> cap, EnumFacing face) {
+		return provider != null && provider.hasCapability(cap, face) ? provider.getCapability(cap, face) : null;
 	}
 
 }
