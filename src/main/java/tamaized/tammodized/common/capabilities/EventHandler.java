@@ -1,7 +1,5 @@
 package tamaized.tammodized.common.capabilities;
 
-import tamaized.tammodized.common.capabilities.dimTracker.DimensionCapabilityHandler;
-import tamaized.tammodized.common.capabilities.dimTracker.IDimensionCapability;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,6 +9,9 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import tamaized.tammodized.common.capabilities.dimTracker.DimensionCapabilityHandler;
+import tamaized.tammodized.common.capabilities.dimTracker.IDimensionCapability;
+import tamaized.tammodized.common.helper.CapabilityHelper;
 
 public class EventHandler {
 
@@ -28,7 +29,7 @@ public class EventHandler {
 
 				@Override
 				public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-					return capability == CapabilityList.DIMENSION ? CapabilityList.DIMENSION.<T> cast(inst) : null;
+					return capability == CapabilityList.DIMENSION ? CapabilityList.DIMENSION.<T>cast(inst) : null;
 				}
 
 				@Override
@@ -47,9 +48,10 @@ public class EventHandler {
 
 	@SubscribeEvent
 	public void updateClone(PlayerEvent.Clone e) {
-		EntityPlayer oldPlayer = e.getOriginal();
-		EntityPlayer newPlayer = e.getEntityPlayer();
-		newPlayer.getCapability(CapabilityList.DIMENSION, null).copyFrom(oldPlayer.getCapability(CapabilityList.DIMENSION, null));
+		IDimensionCapability oldCap = CapabilityHelper.getCap(e.getOriginal(), CapabilityList.DIMENSION, null);
+		IDimensionCapability newCap = CapabilityHelper.getCap(e.getEntityPlayer(), CapabilityList.DIMENSION, null);
+		if (oldCap != null && newCap != null)
+			newCap.copyFrom(oldCap);
 	}
 
 }

@@ -20,6 +20,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import tamaized.tammodized.common.capabilities.CapabilityList;
 import tamaized.tammodized.common.capabilities.dimTracker.IDimensionCapability;
+import tamaized.tammodized.common.helper.CapabilityHelper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -125,7 +126,7 @@ public class PortalHandlerRegistry {
 	@SubscribeEvent
 	public void update(PlayerTickEvent e) {
 		if (e.phase == Phase.END) {
-			IDimensionCapability cap = e.player.getCapability(CapabilityList.DIMENSION, null);
+			IDimensionCapability cap = CapabilityHelper.getCap(e.player, CapabilityList.DIMENSION, null);
 			if (cap != null)
 				cap.update(e.player);
 		}
